@@ -13,7 +13,7 @@ router.route("/")
         } else {
             request({
                 url: 'https://slack.com/api/oauth.v2.access',
-                qs: { code: req.query.code, client_id: slack.clientID, client_secret: slack.clientSecret, redirect_uri: "http://da77515d.ngrok.io/oauth/" },
+                qs: { code: req.query.code, client_id: slack.clientID, client_secret: slack.clientSecret, redirect_uri: "http://65f57c43.ngrok.io/oauth/" },
                 method: 'GET',
             }, function(error, response, body) {
                 if (error) {

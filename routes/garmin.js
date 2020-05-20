@@ -1,21 +1,25 @@
 const router = require('express').Router();
 const axios = require('axios');
-const config = { header: { 'Content-Type': 'application/json' } }
+const config = { 'Content-Type': 'application / json' }
 
-const url = 'https://hooks.slack.com/services/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';
-const post = { "text": "wassup, bitches" }
+const url = process.env.WEBHOOK;
+
+const post = { "text": "booga booga" }
+
 router.route('/')
-    .post(test)
+    .post((req, res) => {
+        const request = axios.post(url, post, config)
+        res.json(request);
+    })
 
 
-
-
-
-
-
- function test() {
-    axios.post(url, post, config)
-
+function test() {
+    axios.post(url, post, config).then(function(response) {
+            console.log(response)
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
 }
 /*const requestOptions = {
       method: 'POST',

@@ -1,11 +1,12 @@
 const express = require("express");
 require('dotenv').config();
 const request = require('request');
+const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 4390;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(require('./routes'));
 

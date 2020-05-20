@@ -1,20 +1,29 @@
 const router = require('express').Router();
 const axios = require('axios');
+const config = { header: { 'Content-Type': 'application/json' } }
 
-
+const url = 'https://hooks.slack.com/services/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';
+const post = { "text": "wassup, bitches" }
 router.route('/')
-    .post((req, res) => {
-        res.send({ text: 'joeblow' });
+    .post(test)
 
-    });
 
-function test() {
-    axios.get('https://api.nytimes.com/svc/search/v2/articlesearch.json?q=election&api-key=Qc34ZiQff5svU6MOiAumx5JMevW5mDKb')
-        .then(res => {
-            console.log(res.data.response.docs[0].abstract);
-return res.data.response.docs[0].abstract
-        })
+
+
+
+
+
+ function test() {
+    axios.post(url, post, config)
+
 }
-
+/*const requestOptions = {
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      }
+    };
+    axios.post(url)
+*/
 
 module.exports = router;

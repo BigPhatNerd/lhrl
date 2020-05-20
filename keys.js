@@ -5,6 +5,6 @@ module.exports = {
         clientID: process.env.SLACK_CLIENT_ID,
         clientSecret: process.env.SLACK_CLIENT_SECRET,
         botToken: process.env.SLACK_BOT_TOKEN,
-        webHook: process.env.WEBHOOK,
+        GarminWebHook: process.env.GARMIN_WEBHOOK,
     }
 }

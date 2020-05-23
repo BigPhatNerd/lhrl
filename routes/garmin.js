@@ -13,11 +13,16 @@ router.route('/')
         const input = req.body.text;
         res.send((req.body.response_url, { "text": "Fetching Garmin Data" }));
         axios.get(webAddress).then(response => {
+            const listing = (response.data.response.docs).map(url => url.web_url)
+            const test = listing.join();
+            console.log(listing);
+
             axios.post(url, {
                 mkdwn: true,
-                text: response.data.response.docs[0].web_url,
+                text: test,
                 attachments: ''
             }, config)
+
         }).catch((e) => console.log(e))
     })
 

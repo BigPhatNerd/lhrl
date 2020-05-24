@@ -1,30 +1,28 @@
 const router = require('express').Router();
+const { slack, strava } = require('../lib/keys');
 const axios = require('axios');
-const { slack } = require('../lib/keys')
 const config = { 'Content-Type': 'application / json' }
-
 const url = slack.webHook;
-const nyTimesKey = process.env.NYTIMES_KEY;
-const webAddress = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=election&api-key=' + nyTimesKey;
+const stravaToken = strava.accessToken;
+
+const webAddress = 'https://www.strava.com/api/v3/athlete';
 
 const post = { "text": "booga booga" }
 
 router.route('/')
-    .post((req, res) => {
-        const input = req.body.text;
-        res.send((req.body.response_url, { "text": "Fetching Garmin Data" }));
-        axios.get(webAddress).then(response => {
 
+    .post((req, res) => {
+
+        res.send((req.body.response_url, { "text": "Fetching Strava Data" }));
+        axios.get(webAddress, { headers: { Authorization: `Bearer ${stravaToken}` } }, ).then(response => {
+            const info = response.data;
             axios.post(url, {
                 mkdwn: true,
-                text: "Yo Garmin!",
-
+                text: info.firstname + ' ' + info.lastname,
                 attachments: ''
             }, config).catch((e) => console.log(e))
 
         }).catch((e) => console.log(e))
     })
-
-
 
 module.exports = router;

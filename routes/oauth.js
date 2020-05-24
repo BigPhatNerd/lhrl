@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { slack } = require('../keys');
+const { slack } = require('../lib/keys');
 const request = require('request');
 
 

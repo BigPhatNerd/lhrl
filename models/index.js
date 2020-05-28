@@ -1,4 +1,4 @@
 module.exports = {
-    StravaToken: require('./StravaToken'),
+    User: require('./User'),
 
 }

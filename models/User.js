@@ -18,11 +18,15 @@ const userSchema = new Schema({
     stravaId: {
         type: String,
         required: false
-    }
+    },
     sugarWodId: {
         type: String,
         required: false
-    }
+    },
+    twitterId: {
+        type: String,
+        required: false
+    },
 
 });
 const User = mongoose.model('user', userSchema)

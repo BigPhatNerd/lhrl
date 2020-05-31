@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username: {
+    twitterUsername: {
         type: String,
-        required: true
+        required: false
     },
     email: {
         type: String,
-        required: true
+        required: false
     },
     garminId: {
         type: String,
@@ -27,6 +27,14 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
+    twitterDisplayName: {
+        type: String,
+        required: false
+    },
+    twitterProfileImage: {
+        type: String,
+        required: false
+    }
 
 });
 const User = mongoose.model('user', userSchema)

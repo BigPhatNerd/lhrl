@@ -9,8 +9,9 @@ const connectDB = require('./config/db');
 
 require('dotenv').config();
 
-const passportSetup = require('./config/passport-setup');
-const { twitter, Session } = require('./lib/keys');
+const twitterPassportSetup = require('./config/twitter-passport-setup');
+const garminPassportSetup = require('./config/garmin-passport-setup');
+const { twitter, garmin, Session } = require('./lib/keys');
 const path = require('path');
 const request = require('request');
 const bodyParser = require("body-parser");

@@ -3,7 +3,7 @@ var User = require('../models/User')
 var passport = require('passport'),
     TwitterStrategy = require('passport-twitter').Strategy;
 
-console.log('here');
+
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
@@ -22,7 +22,7 @@ passport.use('twitter', new TwitterStrategy({
         userAuthorizationURL: 'https://api.twitter.com/oauth/authorize',
         consumerKey: twitter.apiKey,
         consumerSecret: twitter.apiSecretKey,
-        callbackURL: ' http://982bd44f.ngrok.io/twitter/redirect',
+        oauth_callback: ' http://b3173f69301b.ngrok.io/twitter/redirect',
         //'slack://slack.com/app_redirect?app=A0132K3RRHC',
         include_email: true
     },

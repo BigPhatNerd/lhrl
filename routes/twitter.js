@@ -8,11 +8,6 @@ const config = { 'Content-Type': 'application / json' }
 const { User } = require('../models');
 
 const url = slack.webHook;
-const nyTimesKey = process.env.NYTIMES_KEY;
-const webAddress = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=election&api-key=' + nyTimesKey;
-
-const post = { "text": "booga booga" }
-
 router.get("/login/success", (req, res) => {
     if (req.user) {
         res.json({
@@ -35,6 +30,7 @@ router.get("/", (req, res) => {
 router.get('/redirect', passport.authenticate('twitter'), (req, res) => {
     res.send(req.username);
     res.redirect('https://app.slack.com/client/T012RRU3P3R/C0136HYBVFU');
+    console.log(res);
 })
 
 

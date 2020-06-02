@@ -18,8 +18,15 @@ router.get("/login/success", (req, res) => {
         });
     }
 });
+//Login to Twitter using the '/login' command
+router.route('/loginfromslack')
+    .post((req, res) => {
+        opn('http://lhrlslacktest.ngrok.io/twitter/login');
+        res.send("Taking you to the Twitter login page");
+    });
 
 
+// First step in the Oauth process.
 router.get('/login', passport.authenticate('twitter'));
 
 router.get("/", (req, res) => {

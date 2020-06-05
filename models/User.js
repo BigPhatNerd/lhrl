@@ -15,6 +15,10 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
+    garminRequestToken: {
+        type: String,
+        required: false
+    },
     stravaId: {
         type: String,
         required: false

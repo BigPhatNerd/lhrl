@@ -8,18 +8,6 @@ const { User } = require('../models');
 const signature_base_string = require("../config/garmin-passport-setup");
 
 const url = slack.webHook;
-router.get("/login/success", (req, res) => {
-    if (req.user) {
-        res.json({
-            success: true,
-            message: "user has successfully authenticated",
-            user: req.user,
-            cookies: req.cookies
-        });
-    } else {
-        res.json({ message: "user not logged in" });
-    }
-});
 
 
 router.get('/login', passport.authenticate('oauth'));

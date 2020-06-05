@@ -1,9 +1,9 @@
 const express = require("express");
-var cookParser = require('cookie-parser');
 const passport = require('passport');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
 const Twitter = require("./controller/TwitterFunctions/Twitter");
+const db = require('./models');
 
 const connectDB = require('./config/db');
 
@@ -30,6 +30,7 @@ app.use(session({ secret: Session.cookieKey, resave: false, saveUninitialized: t
 
 
 connectDB();
+
 app.use(
     session({
         secret: 'what the furck',

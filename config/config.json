@@ -1,0 +1,23 @@
+ {
+     "defaults":
+     {
+         "origin": "http://lhrlslacktest.ngrok.io",
+         "transport": "session"
+     },
+
+     "garmin":
+     {
+
+         "key": "68b9bd47-b1be-445a-abfd-6b3aa1fd07b0",
+         "secret": "o6eLgpb9EOF5YgL1jYPm0DdfXpvIGXYR7O3",
+         "callback": "/garmin/redirect"
+     },
+     "twitter":
+     {
+         "key": "Sf8hMorycF5LlIs4CYibzgIn0",
+         "secret": "4wIrKLF98vXiFVF7I9Cg2kSzUGTEoSq0LOwQbwcycbIbUbXH70",
+         "callback": "/twitter/redirect"
+     }
+
+
+ }

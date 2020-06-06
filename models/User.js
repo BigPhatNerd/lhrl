@@ -1,51 +1,26 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
+var schema = mongoose.Schema;
+var module = require('module');
 
-const Schema = mongoose.Schema;
+var UserSchema = new schema({
+    provider: { type: String, default: '' },
+    id: { type: String },
+    garminRequestToken: { type: String, default: '' },
+    displayName: { type: String, default: '' },
+    name: {},
 
-const userSchema = new Schema({
-    twitterUsername: {
-        type: String,
-        required: false
+    emails: {
+        value: { type: String, default: '' },
+        type: { type: String, default: '' }
     },
-    email: {
-        type: String,
-        required: false
-    },
-    garminId: {
-        type: String,
-        required: false
-    },
-    garminRequestToken: {
-        type: String,
-        required: false
-    },
-    stravaId: {
-        type: String,
-        required: false
-    },
-    sugarWodId: {
-        type: String,
-        required: false
-    },
-    twitterId: {
-        type: String,
-        required: false
-    },
-    twitterDisplayName: {
-        type: String,
-        required: false
-    },
-    twitterProfileImage: {
-        type: String,
-        required: false
-    }
+
+    photos: {},
+    created: { type: Date, default: Date.now },
+    modified: { type: Date, default: Date.now },
+    oauthtoken: { type: String }
 
 });
-const User = mongoose.model('user', userSchema)
-module.exports = User;
 
 
 
-
-
-//
+module.exports = mongoose.model('User', UserSchema, 'auth');

@@ -5,7 +5,7 @@ const { twitterMyStatus } = require('../controller/TwitterFunctions/Twitter');
 const axios = require('axios');
 const { slack } = require('../lib/keys')
 const config = { 'Content-Type': 'application / json' }
-const { User } = require('../models');
+
 
 const url = slack.webHook;
 router.get("/login/success", (req, res) => {
@@ -35,9 +35,9 @@ router.get("/", (req, res) => {
 })
 
 router.get('/redirect', passport.authenticate('twitter'), (req, res) => {
-    res.send(req.username);
+
     res.redirect('https://app.slack.com/client/T012RRU3P3R/C0136HYBVFU');
-    console.log(res);
+
 })
 
 

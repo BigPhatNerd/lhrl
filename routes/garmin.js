@@ -4,8 +4,8 @@ const opn = require('opn');
 const axios = require('axios');
 const { slack } = require('../lib/keys')
 const config = { 'Content-Type': 'application / json' }
-const { User } = require('../models');
-const signature_base_string = require("../config/garmin-passport-setup");
+
+
 
 const url = slack.webHook;
 
@@ -18,9 +18,9 @@ router.get("/", (req, res) => {
 })
 
 router.get('/redirect', passport.authenticate('oauth'), (req, res) => {
-    res.send(req.username);
+
     res.redirect('https://app.slack.com/client/T012RRU3P3R/C0136HYBVFU');
-    console.log(res);
+
 })
 
 

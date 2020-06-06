@@ -25,8 +25,8 @@ const twitterMyStatus = (screenName) => {
 const twitterFavorites = () => {
     client.get('favorites/list', (error, tweets, response) => {
         if (error) throw error;
-        console.log(response.body.text);
-        console.log(response);
+        // console.log(response.body.text);
+        // console.log(response);
     })
 }
 

@@ -9,7 +9,11 @@ const config = { 'Content-Type': 'application / json' }
 
 const url = slack.webHook;
 
-
+router.route('/loginfromslack')
+    .post((req, res) => {
+        opn('http://lhrlslacktest.ngrok.io/garmin/login');
+        res.send("Taking you to the Garmin login page");
+    });
 router.get('/login', passport.authenticate('oauth'));
 
 router.get("/", (req, res) => {

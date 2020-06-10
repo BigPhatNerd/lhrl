@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const passport = require('passport');
 var mongoose = require('mongoose');
@@ -6,51 +7,50 @@ var UserModel = require('./models/user.js');
 var User = mongoose.model('User');
 const app = express();
 const session = require('express-session');
-//var methodOverride = require('method-override')
-const cookieSession = require('cookie-session');
-const Twitter = require("./controller/TwitterFunctions/Twitter");
-const cors = require("cors");
-
-
-const connectDB = require('./config/db');
-
-require('dotenv').config();
 const path = require('path');
 const request = require('request');
 const bodyParser = require("body-parser");
-const { mongo } = require('./lib/keys');
-var MongoStore = require("connect-mongo")(session);
-//app.use(session({ secret: "my cust0m 5E5510N k3y", saveUninitialized: true, resave: false }));
+const { mongo, slack } = require('./lib/keys');
+const cookieSession = require('cookie-session');
+const Twitter = require("./controller/TwitterFunctions/Twitter");
+const Strava = require('./controller/StravaFunctions/Strava');
+const cors = require("cors");
+const connectDB = require('./config/db');
+process.env.NODE_DEBUG = 'request'
 
-const PORT = process.env.PORT || 4390;
+
+const { createMessageAdapter } = require('@slack/interactive-messages');
+const slackSigningSecret = slack.signingSecret;
+const slackInteractions = createMessageAdapter(slackSigningSecret);
+app.use('/slack/actions', slackInteractions.requestListener());
+exports.slackInteractions = slackInteractions;
+
+
+// slackInteractions.action({ type: 'button' }, (payload, respond) => {
+//     console.log('payload', payload);
+//     console.log(respond);
+
+// })
+
+
+var MongoStore = require("connect-mongo")(session);
 
 const cookieParser = require("cookie-parser");
-const sessionCookieSecureValue = process.env.NODE_ENV == "production" ? true : false;
-
-
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-
-connectDB();
-
-
-
-
+app.use(cookieParser());
 app.use(session({
     store: new MongoStore({
         url: mongo.dbURI
     }),
-    secret: 'grant',
-    resave: false,
+    secret: "my cust0m 5E5510N k3y",
     saveUninitialized: true,
-    cookie: {
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 2
-    }
+    resave: false
 }));
-app.use(cookieParser());
+
+const PORT = process.env.PORT || 4390;
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+connectDB();
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(
@@ -61,16 +61,13 @@ app.use(
     })
 );
 
-module.exports = express;
 
 passport.serializeUser(function(user, done) {
-    console.log('PIMPIN' + user._id);
     done(null, user._id);
 });
 
 
 passport.deserializeUser(function(obj, done) {
-    console.log('OBJ' + obj);
     done(null, obj);
 });
 
@@ -87,10 +84,12 @@ app.get('/', (req, res) => {
 });
 
 
+module.exports = express
 
 
 
-//app.get('/auth/twitter/callback', (req, res) => (res.send("Maybe we are getting somewhere?: " + req.url)));
+
+
 
 
 

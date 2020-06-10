@@ -31,5 +31,15 @@ const twitterFavorites = () => {
 }
 
 module.exports = {
-    twitterMyStatus
+    twitter: {
+        twitterMyStatus: twitterMyStatus,
+        twitterFavorites: twitterFavorites
+    }
 }
+
+
+
+
+
+
+//

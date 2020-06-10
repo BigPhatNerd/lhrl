@@ -4,10 +4,12 @@ var module = require('module');
 
 var UserSchema = new schema({
     provider: { type: String, default: '' },
-    id: { type: String },
+    twitterId: { type: String },
+    stravaId: { type: String },
     garminRequestToken: { type: String, default: '' },
     displayName: { type: String, default: '' },
     name: {},
+    stravaAvatar: { type: String },
 
     emails: {
         value: { type: String, default: '' },
@@ -17,7 +19,8 @@ var UserSchema = new schema({
     photos: {},
     created: { type: Date, default: Date.now },
     modified: { type: Date, default: Date.now },
-    oauthtoken: { type: String }
+    stravaAccessToken: { type: String },
+    garminAuthToken: { type: String }
 
 });
 

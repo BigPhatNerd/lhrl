@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { mongo } = require('../lib/keys');
-console.log('whatever');
+
 const connectDB = async () => {
     try {
         await mongoose.connect(mongo.dbURI, {

@@ -12,8 +12,6 @@ const request = require('request');
 const bodyParser = require("body-parser");
 const { mongo, slack } = require('./lib/keys');
 const cookieSession = require('cookie-session');
-const Twitter = require("./controller/TwitterFunctions/Twitter");
-const Strava = require('./controller/StravaFunctions/Strava');
 const cors = require("cors");
 const connectDB = require('./config/db');
 process.env.NODE_DEBUG = 'request'
@@ -25,12 +23,6 @@ const slackInteractions = createMessageAdapter(slackSigningSecret);
 app.use('/slack/actions', slackInteractions.requestListener());
 exports.slackInteractions = slackInteractions;
 
-
-// slackInteractions.action({ type: 'button' }, (payload, respond) => {
-//     console.log('payload', payload);
-//     console.log(respond);
-
-// })
 
 
 var MongoStore = require("connect-mongo")(session);
@@ -63,12 +55,14 @@ app.use(
 
 
 passport.serializeUser(function(user, done) {
-    done(null, user._id);
+    done(null, user.id);
 });
 
 
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(null, user);
+    });
 });
 
 app.use(require('./routes'));

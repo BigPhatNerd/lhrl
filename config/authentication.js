@@ -2,10 +2,10 @@ var passport = require('passport');
 var util = require('util');
 
 var StravaStrategy = require('passport-strava').Strategy;
-var UserModel = require('./models/user.js');
+var UserModel = require('../models/');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-var { garmin, twitter, strava } = require("./lib/keys");
+var { garmin, twitter, strava } = require("../lib/keys");
 
 module.exports =
     passport.use(new StravaStrategy({

@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require("express");
 const passport = require('passport');
 var mongoose = require('mongoose');
-var auth = require('./authentication.js');
-var UserModel = require('./models/user.js');
+var auth = require('./config/authentication.js');
+var UserModel = require('./models/User.js');
 var User = mongoose.model('User');
 const app = express();
 const session = require('express-session');
@@ -75,6 +75,7 @@ app.listen(PORT, () => {
 app.get('/', (req, res) => {
     // res.send("Ngrok is working! Path Hit: " + req.url);
     res.sendFile(__dirname + '/views/index.html');
+
 });
 
 

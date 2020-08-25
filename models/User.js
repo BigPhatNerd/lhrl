@@ -7,16 +7,11 @@ var UserSchema = new Schema({
         type: String,
         default: ''
     },
-    twitterId: {
-        type: String
-    },
+
     stravaId: {
         type: String
     },
-    garminRequestToken: {
-        type: String,
-        default: ''
-    },
+
     displayName: {
         type: String,
         default: ''
@@ -52,9 +47,10 @@ var UserSchema = new Schema({
     stravaAccessToken: {
         type: String
     },
-    garminAuthToken: {
+    stravaRefreshToken: {
         type: String
     }
+
 
 }, {
     toJSON: {
@@ -63,5 +59,6 @@ var UserSchema = new Schema({
 });
 
 const User = model('User', UserSchema, 'auth');
+
 
 module.exports = User;

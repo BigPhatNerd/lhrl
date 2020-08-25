@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 const { mongo } = require('../lib/keys');
 
+
 const connectDB = async () => {
     try {
         await mongoose.connect(mongo.dbURI, {
             useNewUrlParser: true,
             useFindAndModify: false,
             useUnifiedTopology: true
-        });
+        })
+
+
+
         console.log('MongoDB Connected...');
 
     } catch (err) {

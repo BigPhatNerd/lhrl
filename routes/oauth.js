@@ -6,6 +6,7 @@ const request = require('request');
 
 router.route("/")
     .get((req, res) => {
+
         if (!req.query.code) {
             res.status(500);
             res.send({ "Error": "Looks like we're not getting code." });

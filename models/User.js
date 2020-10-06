@@ -1,6 +1,7 @@
 var { Schema, model } = require('mongoose');
+passportLocalMongoose = require('passport-local-mongoose')
 
-var module = require('module');
+var moment = require('moment');
 
 var UserSchema = new Schema({
     provider: {
@@ -9,7 +10,8 @@ var UserSchema = new Schema({
     },
 
     stravaId: {
-        type: String
+        type: String,
+        unique: true
     },
 
     displayName: {
@@ -49,6 +51,13 @@ var UserSchema = new Schema({
     },
     stravaRefreshToken: {
         type: String
+    },
+    expires_at: {
+        type: Number,
+
+    },
+    accepted_scopes: {
+        type: String
     }
 
 
@@ -58,7 +67,10 @@ var UserSchema = new Schema({
     }
 });
 
-const User = model('User', UserSchema, 'auth');
+
+
+// const User = model('User', UserSchema, 'auth');
+const User = model('User', UserSchema);
 
 
 module.exports = User;

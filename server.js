@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require("express");
-const passport = require('passport');
+
 var mongoose = require('mongoose');
-var auth = require('./config/authentication.js');
+var passport = require('./config/authentication.js');
 var UserModel = require('./models/User.js');
 var User = mongoose.model('User');
 const app = express();
@@ -16,7 +16,7 @@ const cors = require("cors");
 const connectDB = require('./config/db');
 process.env.NODE_DEBUG = 'request'
 
-
+mongoose.set('debug', true);
 const { createMessageAdapter } = require('@slack/interactive-messages');
 const slackSigningSecret = slack.signingSecret;
 const slackInteractions = createMessageAdapter(slackSigningSecret);
@@ -28,19 +28,39 @@ exports.slackInteractions = slackInteractions;
 var MongoStore = require("connect-mongo")(session);
 
 const cookieParser = require("cookie-parser");
+app.use(express.static("public"));
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+
 app.use(session({
     store: new MongoStore({
         url: mongo.dbURI
     }),
     secret: "my cust0m 5E5510N k3y",
     saveUninitialized: true,
-    resave: false
+    resave: true
 }));
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    res.header('credentials', 'same-origin');
+    console.log("req.session: ", req.sessionID);
+    if('OPTIONS' == req.method) {
+        res.send(200);
+    } else {
+        req.user = req.session.user;
+        next();
+    }
+});
+
+
 const PORT = process.env.PORT || 4390;
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 connectDB();
 
 app.use(passport.initialize());
@@ -52,17 +72,10 @@ app.use(
         credentials: true
     })
 );
-
-
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
-});
-
-
-passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-        done(null, user);
-    });
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://lhrlslacktest.ngrok.io");
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
 });
 
 app.use(require('./routes'));
@@ -74,7 +87,7 @@ app.listen(PORT, () => {
 
 app.get('/', (req, res) => {
     // res.send("Ngrok is working! Path Hit: " + req.url);
-    res.sendFile(__dirname + '/views/index.html');
+    res.sendFile(path.join(__dirname + '/public/views/index.html'));
 
 });
 

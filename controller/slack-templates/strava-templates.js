@@ -1,25 +1,28 @@
+const { activityType } = require('../../utils/strava');
 const slackTemplates = {
-    stravaHook(response) {
-        response = JSON.stringify(response);
+    stravaHook(response, username) {
+        // response = JSON.stringify(response);
         const {
             athlete,
             type,
             distance,
             elapsed_time,
             average_speed,
-            max_speed
+            max_speed,
+            map
         } = response;
         return {
             "blocks": [{
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": " Athlete id: " + athlete.id + "\n" +
-                        "Type of Exercise: " + type + "\n" +
+                    "text": " Athlete: " + username + "\n" +
+                        "Type of Exercise: " + activityType(type) + "\n" +
                         "Distance: " + distance + "\n" +
                         "Elapsed Time: " + elapsed_time + "\n" +
                         "Average Speed: " + average_speed + "\n" +
-                        "Max Speed: " + max_speed
+                        "Max Speed: " + max_speed + "\n" +
+                        "Map: " + map.summary_polyline
                 }
             }]
         }

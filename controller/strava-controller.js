@@ -6,19 +6,8 @@ const { strava } = require('../lib/keys');
 
 const { clientId, clientSecret } = strava;
 
-
 const stravaController = {
-    getUsers(req, res) {
-
-        // User.find({})
-        //     .then(dbUserData => res.json(dbUserData))
-        //     .catch(err => {
-        //         console.log(err);
-        //         res.status(500).json(err);
-        //     });
-
-    },
-    async refreshToken(req, res) {
+    async refreshToken(response) {
         try {
             const user = await User.findOne({ name: "Wilson  Horrell" });
             const stravaRefresh = await axios.post("https://www.strava.com/api/v3/oauth/token", {
@@ -27,58 +16,47 @@ const stravaController = {
                 "grant_type": "refresh_token",
                 "refresh_token": user.stravaRefreshToken
             });
-            const { access_token, refresh_token, expires_at } = stravaRefresh.data;
-            const updateUser = await User.findOneAndUpdate({ name: "Wilson  Horrell" }, {
+
+            const { access_token, refresh_token, expires_at, expires_in } = stravaRefresh.data;
+            const updateUser = await User.findOneAndUpdate({ stravaId: response }, {
                 stravaAccessToken: access_token,
                 stravaRefreshToken: refresh_token,
                 expires_at: expires_at,
+                expires_in: expires_in
+            }, { returnOriginal: false })
 
-            }, { returnOriginal: false });
-            res.json(updateUser);
+            console.log("User autheticated and updated!");
+
+            //I THINK I return updateUser to have access to updateUser.accessToken?
+            console.log("access_token: ", access_token);
+            return access_token
         } catch (err) {
 
             console.error(err.message);
-            res.status(500).send('Server Error');
+            console.log("Error in the refreshToken() function")
         }
-    },
 
-    stravaAttempt() {
-        console.log("Running function to update refresh coin");
-        User.findOne({ name: "Wilson  Horrell" })
-            .then(user => {
-                axios.get("https://www.strava.com/api/v3/athlete", {
-                        headers: {
-                            Authorization: 'Bearer ' + user.stravaAccessToken
-                        }
-                    })
-                    .then(response => {
-                        console.log("strava response: ", response.data);
-                    }).catch(err => {
-                        console.log(err)
-                    })
-            })
-            .catch(err => {
-                console.log(err);
-            })
+
     }
-
 }
 
-// const newUser = new User({
-            //     stravaId: "123456",
-            //     provider: "strava",
-            //     displayName: "Test user",
-            //     name: "Test" + " " + "User",
-            //     stravaAvatar: "Some avatar",
-            //     emails: { value: "nothing" },
-            //     created: Date.now(),
-            //     modified: Date.now(),
-            //     stravaAccessToken: "123456",
-            //     stravaRefreshToken: "789123",
-            //     expires_at: Date.now() + 261600
-            // })
-            // newUser.save();
 
+
+// const newUser = new User({
+//     stravaId: "filter test (should not be here)",
+//     provider: "strava",
+//     displayName: "Another Test user",
+//     name: "Another" + " " + "User",
+//     stravaAvatar: "Some avatar",
+//     emails: { value: "nothing" },
+//     created: Date.now(),
+//     modified: Date.now(),
+//     stravaAccessToken: "123456",
+//     stravaRefreshToken: "789123",
+//     expires_at: Date.now() + 261600
+// })
+// newUser.save();
+// stravaController.stravaRefresh();
 //stravaController.refreshToken()
 //Sets strava refresh to run every 5 hours
 //setInterval(stravaController.refreshToken(), 18000000);

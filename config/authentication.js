@@ -19,7 +19,7 @@ passport.use(new StravaStrategy({
 
     },
     function(accessToken, refreshToken, profile, done) {
-
+        console.log("Strava profile, looking for scope: ", profile);
         User.findOne({ stravaId: profile.id }, function(err, user) {
 
             if(!err && user != null) {

@@ -83,6 +83,9 @@ var UserSchema = new Schema({
     elapsed_time: {
         type: Number
     },
+    moving_time: {
+        type: Number
+    },
     start_date: {
         type: Date
     },

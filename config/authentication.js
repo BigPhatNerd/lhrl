@@ -15,11 +15,14 @@ passport.use(new StravaStrategy({
         tokenURL: 'https://www.strava.com/oauth/token',
         clientID: strava.clientId,
         clientSecret: strava.clientSecret,
-        callbackURL: 'http://lhrlslacktest.ngrok.io/strava/redirect'
+        callbackURL: 'http://lhrlslacktest.ngrok.io/strava/redirect',
+        passReqToCallback: true
 
     },
-    function(accessToken, refreshToken, profile, done) {
-        console.log("Strava profile, looking for scope: ", profile);
+    function(req, accessToken, refreshToken, profile, done) {
+        console.log("\nIs there a req here?: ", req.user);
+
+
         User.findOne({ stravaId: profile.id }, function(err, user) {
 
             if(!err && user != null) {
@@ -39,13 +42,11 @@ passport.use(new StravaStrategy({
                         expires_at: Date.now() + 261600
                     }
                 }).exec();
-                console.log("\n\nUser updated?: ", user);
-                console.log("\n\nStrava ID: ", profile.id);
-                console.log("\n\nStrava access token: ", accessToken);
-                console.log("\n\nStrava refresh token: ", refreshToken);
+
             }
             //Should not ever get here if initial slack user creation works correctly
             else {
+                console.log("req.user in the else of passport: ", req.user);
                 user = new User({
                     stravaId: profile.id,
                     provider: profile.provider,
@@ -75,22 +76,17 @@ passport.use(new StravaStrategy({
 
     }));
 
-passport.use(new BearerStrategy(
-    function(token, done) {
-        User.findOne({ stravaAccessToken: token }, function(err, user) {
-            if(err) { return done(err); }
-            if(!user) { return done(null, false); }
-            return done(null, user, { scope: 'all' });
-        });
-    }
-));
+
 
 passport.serializeUser(function(user, done) {
     done(null, user._id);
 });
 
 passport.deserializeUser(async function(id, done) {
-    done(null, id);
+    // done(null, id);
+    const user = await User.findOne({ id }, done)
+    console.log("User in deserializeUser: ", user)
+
 });
 
 module.exports = passport;

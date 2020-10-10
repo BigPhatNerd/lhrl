@@ -85,11 +85,7 @@ app.listen(PORT, () => {
 
 });
 
-app.get('/', (req, res) => {
-    // res.send("Ngrok is working! Path Hit: " + req.url);
-    res.sendFile(path.join(__dirname + '/public/views/index.html'));
 
-});
 
 
 module.exports = express

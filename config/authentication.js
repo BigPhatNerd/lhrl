@@ -1,14 +1,37 @@
 var passport = require('passport');
 var util = require('util');
-var BearerStrategy = require('passport-http-bearer').Strategy;
+var LocalStrategy = require("passport-local");
 var StravaStrategy = require('passport-strava').Strategy;
 var UserModel = require('../models/');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 var { strava } = require("../lib/keys");
-
-
+//Telling passport we want to use a Local Strategy aka login with an email and password
+passport.use(new LocalStrategy(
+    //Our user will sign in using an email, rather than a "username"
+    {
+        usernameField: "email"
+    },
+    function(email, password, done) {
+        User.findOne({
+            where: {
+                email: email
+            }
+        }).then(function(dbUser) {
+            if(!dbUser) {
+                return done(null, false, {
+                    message: "Incorrect email."
+                });
+            } else if(!dbUser.validPassword(password)) {
+                return done(null, false, {
+                    message: "Incorrect password."
+                });
+            }
+            return done(null, dbUser);
+        });
+    }
+));
 
 passport.use(new StravaStrategy({
         authorizationURL: 'https://www.strava.com/oauth/authorize',
@@ -37,7 +60,6 @@ passport.use(new StravaStrategy({
                         displayName: profile.displayName,
                         name: profile.name.first + " " + profile.name.last,
                         stravaAvatar: profile.avatar,
-                        emails: { value: profile.email },
                         created: Date.now(),
                         expires_at: Date.now() + 261600
                     }

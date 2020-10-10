@@ -19,7 +19,6 @@ const post = { "text": "booga booga" }
 
 //Testing a route from strava webhook 
 //THIS IS BRILLIANT
-
 router.get("/testing", async (req, res) => {
 
 })
@@ -107,7 +106,7 @@ router.route('/loginfromslack')
     .post((req, res) => {
         //First I need to get the user requesting the login from slack and store it.
 
-        opn('http://lhrlslacktest.ngrok.io/strava/login');
+        opn('http://lhrlslacktest.ngrok.io/signup.html');
         res.send("Taking you to the Strava login page");
     });
 
@@ -117,15 +116,11 @@ router.get('/login', passport.authenticate('strava', {
 
 }));
 router.get('/redirect', passport.authenticate('strava', {
-    failureRedirect: '../views/'
+    //I need to flash a failure message if login fails.
+    failureRedirect: '/members'
 }), function(req, res) {
-    console.log("req in the /redirect route: ", req.user);
-    console.log("res: ", res.user);
+
 });
 
-router.get('/test', function(req, res) {
-    console.log("req.user", req.user);;
-    res.json(req.user);
-});
 
 module.exports = router;

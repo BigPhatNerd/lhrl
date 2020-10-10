@@ -24,15 +24,16 @@ var UserSchema = new Schema({
     stravaAvatar: {
         type: String
     },
-    emails: {
-        value: {
-            type: String,
-            default: ''
-        },
-        type: {
-            type: String,
-            default: ''
-        }
+    email: {
+        type: String,
+        allowNull: false,
+        unique: true,
+
+    },
+    // The password cannot be null
+    password: {
+        type: String,
+        allowNull: false
     },
 
     photos: {},

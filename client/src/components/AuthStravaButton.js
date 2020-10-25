@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 
-const StravaButton = (props) => {
+const AuthStravaButton = (props) => {
     const stravaLogin = () => {
         window.open('http://lhrlslacktest.ngrok.io/strava/login')
     }
@@ -11,4 +11,4 @@ const StravaButton = (props) => {
     )
 }
 
-export default StravaButton
+export default AuthStravaButton

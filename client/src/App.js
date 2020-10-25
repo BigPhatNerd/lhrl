@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
+import AuthFailed from './components/AuthFailed';
 import { UserContext } from './context/userContext';
 
 import './App.css';
@@ -12,7 +13,8 @@ function App() {
         stravaId: '',
         email: '',
         password: '',
-        isAuthenticated: false
+        isAuthenticated: false,
+        stravaAuthenticated: false
     });
 
     const providerValue = useMemo(() => ({ user, setUser }), [user, setUser]);
@@ -23,7 +25,8 @@ function App() {
          <UserContext.Provider value={providerValue}>
          <Route exact path="/" component={Home} /> 
          <Route exact path="/login" component={Login} />
-       <Route exact path="/signup" component={Signup} /> 
+       <Route exact path="/signup" component={Signup} />
+       <Route exact path="/failed" component={AuthFailed} /> 
      </UserContext.Provider>
          </Switch>
        </Router>

@@ -74,7 +74,8 @@ passport.use(new StravaStrategy({
                         name: profile.name.first + " " + profile.name.last,
                         stravaAvatar: profile.avatar,
                         created: Date.now(),
-                        expires_at: Date.now() + 261600
+                        expires_at: Date.now() + 261600,
+                        authorizeStrava: true
                     }
                 }).exec();
 

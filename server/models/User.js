@@ -13,6 +13,10 @@ var UserSchema = new Schema({
         type: String,
 
     },
+    authorizeStrava: {
+        type: Boolean,
+        default: false
+    },
 
     displayName: {
         type: String,

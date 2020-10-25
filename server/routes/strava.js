@@ -22,7 +22,12 @@ const post = { "text": "booga booga" }
 router.get("/testing", async (req, res) => {
 
 })
+router.get('/find', async (req, res) => {
 
+    const findUser = await User.findOne({ "email": req.query.email });
+
+    res.json(findUser);
+})
 
 //Create route for STRAVA webhook
 router.post('/webhook', async (req, res) => {
@@ -118,11 +123,13 @@ router.get('/login', passport.authenticate('strava', {
 router.get('/redirect', passport.authenticate('strava', {
     successRedirect: 'http://localhost:3000/',
     //I need to flash a failure message if login fails.
-    failureRedirect: '/members'
+    failureRedirect: 'http://localhost:3000/failed'
 }), function(req, res) {
     console.log("req.user: ", req.user);
     console.log("response from authenticate: ", res);
 });
+
+
 
 
 module.exports = router;

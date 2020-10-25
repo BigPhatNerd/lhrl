@@ -66,7 +66,7 @@ app.use(function(req, res, next) {
 // require("./routes/html-routes.js")(app);
 require("./routes/api-routes.js")(app);
 app.use(require('./routes'));
-
+app.get('/', (req, res) => res.json({ msg: "Welcome to the contact_keeper API" }));
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 

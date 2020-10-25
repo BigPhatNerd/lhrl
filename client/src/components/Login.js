@@ -1,21 +1,53 @@
 import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
+import axios from 'axios';
+import { Alert } from 'react-alert';
+import { useAlert } from 'react-alert';
 
 const Login = (props) => {
+    const alert = useAlert();
     const { user, setUser } = useContext(UserContext);
     const { email, password, isAuthenticated } = user;
     const handleChange = e => {
         setUser({
             ...user,
             [e.target.name]: e.target.value,
-            isAuthenticated: true
         })
     }
     const onSubmit = async e => {
         e.preventDefault();
-        console.log("Here!!");
-        props.history.push('/');
+        try {
+            const res = await axios.post('/api/login', {
+
+                email: email,
+                password: password
+            }, {
+                withCredentials: true
+            });
+            console.log("res inside of signup")
+            console.log("res: ", res.statusText);
+            if(res.statusText === "OK") {
+                setUser({
+                    ...user,
+                    isAuthenticated: true
+                })
+                return props.history.push("/");
+
+            }
+            console.log("Something went wrong with login.")
+
+        } catch (err) {
+            alert.show("Invalid Credentials!");
+            setUser({
+                ...user,
+                email: '',
+                password: ''
+            })
+            console.error(err.message);
+
+        }
+
 
     }
     return (

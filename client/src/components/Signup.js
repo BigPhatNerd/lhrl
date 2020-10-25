@@ -2,9 +2,11 @@ import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context/userContext';
-
+import { Alert } from 'react-alert';
+import { useAlert } from 'react-alert';
 
 const Signup = (props) => {
+    const alert = useAlert();
     const { user, setUser } = useContext(UserContext);
     const { stravaId, email, password, isAuthenticated } = user;
     const handleChange = e => {
@@ -38,7 +40,13 @@ const Signup = (props) => {
             console.log("Something went wrong with login.")
 
         } catch (err) {
-            console.log("Something went wrong while signing up");
+            alert.show("There was a problem signing you up!");
+            setUser({
+                ...user,
+                stravaid: '',
+                email: '',
+                password: ''
+            })
             console.error(err.message);
 
         }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -9,13 +9,35 @@ import { UserContext } from './context/userContext';
 import './App.css';
 
 function App() {
-    const [user, setUser] = useState({
+    function setLocalStorage(key, value) {
+        try {
+            window.localStorage.setItem(key, JSON.stringify(value))
+        } catch (e) {
+            console.log("error: ", e);
+            console.error(e);
+        }
+    }
+
+    function getLocalStorage(key, initialValue) {
+        try {
+            const value = window.localStorage.getItem(key);
+            return value ? JSON.parse(value) : initialValue;
+        } catch (e) {
+            return initialValue;
+        }
+    }
+    const [user, setUser] = useState(() => getLocalStorage('user', {
         stravaId: '',
         email: '',
         password: '',
         isAuthenticated: false,
         stravaAuthenticated: false
-    });
+    }));
+
+    useEffect(() => {
+        setLocalStorage('user', user);
+        console.log("wassup");
+    }, [user]);
 
     const providerValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 

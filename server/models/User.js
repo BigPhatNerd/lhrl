@@ -13,6 +13,10 @@ var UserSchema = new Schema({
         type: String,
 
     },
+    isAuthenticated: {
+        type: Boolean,
+        default: false
+    },
     authorizeStrava: {
         type: Boolean,
         default: false

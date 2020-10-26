@@ -5,6 +5,7 @@ import logo from '../img/lhrl.png';
 import AuthStravaButton from './AuthStravaButton';
 import DeAuthStravaButton from './DeAuthStravaButton';
 import axios from 'axios';
+import Logout from './Logout';
 
 const Home = () => {
     const { user, setUser } = useContext(UserContext);
@@ -12,16 +13,24 @@ const Home = () => {
 
     const getUser = async () => {
         try {
-            const checkStrava = await axios.get('/strava/find', { params: { email: email } });
-            console.log("checkStrava: ", checkStrava);
-            if(checkStrava.stravaRefreshToken) {
-                setUser({
-                    ...user,
-                    stravaAuthenticated: true
-                })
 
-            }
-            return checkStrava
+            //     const localUser = JSON.parse(localStorage.getItem('user'));
+            const checkStrava = await axios.get('/strava/find', { params: { email: email } });
+            console.log("checkStrava: ", checkStrava)
+            console.log("checkStrava.data: ", checkStrava.data);
+            console.log("checkStrava.data.isAuthenticated: ", checkStrava.data.isAuthenticated);
+            console.log("checkStrava.data.authorizeStrava: ", checkStrava.data.authorizeStrava);
+            console.log("checkStrava.isAuthenticated: ", checkStrava.isAuthenticated);
+
+
+            setUser({
+                ...user,
+                stravaAuthenticated: checkStrava.data.authorizeStrava,
+                isAuthenticated: checkStrava.data.isAuthenticated
+            })
+            console.log("User in getUser(): ", user);
+            // localStorage.setItem('user', JSON.stringify(user));
+            return user
         } catch (err) {
             console.error(err.message);
 
@@ -29,13 +38,10 @@ const Home = () => {
 
     }
     useEffect(() => {
-        localStorage.setItem("StateInLocalStorage", user)
-        if(email !== '') {
-            getUser();
-        } else {
-            return
-        }
-    }, [user])
+        getUser()
+    }, [])
+    console.log("user(not sure why isAuthenticated is undefined): ", user);
+    console.log("isAuthenticated???: ", isAuthenticated);
     const showSignup = () => {
         if(!isAuthenticated) {
             return <Fragment>
@@ -46,6 +52,7 @@ const Home = () => {
             return <Fragment>
 {stravaAuthenticated ? <DeAuthStravaButton /> : <AuthStravaButton  /> }
 <a href="https://www.espn.com/" className="btn btn-primary">Authorize SugarWOD</a>
+<Logout />
 </Fragment>
         }
     }

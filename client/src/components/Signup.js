@@ -14,8 +14,6 @@ const Signup = (props) => {
             ...user,
             [e.target.name]: e.target.value,
         })
-        console.log("user: ", user);
-
     }
     const onSubmit = async e => {
         e.preventDefault();
@@ -23,19 +21,18 @@ const Signup = (props) => {
             const res = await axios.post('/api/signup', {
                 stravaId: stravaId,
                 email: email,
-                password: password
+                password: password,
+                isAuthenticated: true
             }, {
                 withCredentials: true
             });
-            console.log("res inside of signup")
-            console.log("res: ", res.statusText);
+          
             if(res.statusText === "OK") {
                 setUser({
                     ...user,
                     isAuthenticated: true
                 })
-                return props.history.push("/");
-
+                return props.history.push("/")
             }
             console.log("Something went wrong with login.")
 

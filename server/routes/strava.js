@@ -27,6 +27,21 @@ router.get('/find', async (req, res) => {
     const findUser = await User.findOne({ "email": req.query.email });
 
     res.json(findUser);
+});
+
+router.put('/deauth/:stravaId', async (req, res) => {
+    console.log("req.params.stravaId: ", req.params.stravaId);
+    const stravaId = req.params.stravaId;
+    const update = {
+        stravaAccessToken: '',
+        stravaRefreshToken: '',
+        authorizeStrava: false
+    }
+    let user = await User.findOneAndUpdate(stravaId, update, {
+        new: true
+    });
+    res.json(user)
+
 })
 
 //Create route for STRAVA webhook

@@ -13,9 +13,9 @@ module.exports = function(app) {
 
     app.post("/api/signup", (req, res) => {
 
-        const { stravaId, email, password } = req.body;
+        const { stravaId, email, password, isAuthenticated } = req.body;
 
-        User.create({ stravaId: stravaId, email: email, password: password })
+        User.create({ stravaId: stravaId, email: email, password: password, isAuthenticated: isAuthenticated })
             .then(user => {
                 console.log("user: ", user);
                 res.redirect(307, "/api/login");

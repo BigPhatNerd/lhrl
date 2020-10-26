@@ -19,14 +19,12 @@ const Login = (props) => {
         e.preventDefault();
         try {
             const res = await axios.post('/api/login', {
-
                 email: email,
                 password: password
             }, {
                 withCredentials: true
             });
-            console.log("res inside of signup")
-            console.log("res: ", res.statusText);
+
             if(res.statusText === "OK") {
                 setUser({
                     ...user,

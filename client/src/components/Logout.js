@@ -11,6 +11,8 @@ const Logout = () => {
             console.log("res in logout: ", res);
             setUser({
                 ...user,
+                email: '',
+                password: '',
                 isAuthenticated: false
             })
         } catch (err) {

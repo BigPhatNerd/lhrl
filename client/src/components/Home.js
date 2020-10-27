@@ -20,7 +20,7 @@ const Home = () => {
             console.log("checkStrava.data: ", checkStrava.data);
             console.log("checkStrava.data.isAuthenticated: ", checkStrava.data.isAuthenticated);
             console.log("checkStrava.data.authorizeStrava: ", checkStrava.data.authorizeStrava);
-            console.log("checkStrava.isAuthenticated: ", checkStrava.isAuthenticated);
+
 
 
             setUser({

@@ -44,7 +44,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
 
 })
 
-//Create route for STRAVA webhook
+//Create route for STRAVA webhook to go to Slack
 router.post('/webhook', async (req, res) => {
     try {
         console.log("Strave webhook event received!", req.query, req.body);
@@ -94,7 +94,7 @@ router.post('/webhook', async (req, res) => {
         console.log("saveActivity.stravaAvatar: ", saveActivity.stravaAvatar);
         console.log("stravaHook(stravaData): ", stravaHook(stravaData.data[0]));
         const { name, stravaAvatar } = saveActivity
-        axios.post(slack.webHook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
+        axios.post(slack.stravaWebHook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
         res.status(200).send("EVENT_RECEIVED");
     } catch (err) {
         console.error(err.message);

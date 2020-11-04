@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require("express");
-
 var mongoose = require('mongoose');
 var passport = require('./config/authentication.js');
 var UserModel = require('./models/User.js');
@@ -9,21 +8,36 @@ const app = express();
 const session = require('express-session');
 const path = require('path');
 const request = require('request');
-const bodyParser = require("body-parser");
 const { mongo, slack } = require('./lib/keys');
 const cookieSession = require('cookie-session');
 const cors = require("cors");
 const connectDB = require('./config/db');
-process.env.NODE_DEBUG = 'request'
+const routes = (require('./routes'))
+process.env.NODE_DEBUG = 'request';
+const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
+
+
+// ///Figure this out and the export in slack routes!!!!
+// const slackInteractions = require('./routes/slack.js');
+//DEBUG=@slack/interactive-messages:* nodemon server.js
 
 mongoose.set('debug', true);
-const { createMessageAdapter } = require('@slack/interactive-messages');
-const slackSigningSecret = slack.signingSecret;
-const slackInteractions = createMessageAdapter(slackSigningSecret);
-app.use('/slack/actions', slackInteractions.requestListener());
-exports.slackInteractions = slackInteractions;
+// const { createMessageAdapter } = require('@slack/interactive-messages');
+// const slackSigningSecret = slack.signingSecret;
+// const slackInteractions = createMessageAdapter(slackSigningSecret);
+// app.use('/slack/actions', slackInteractions.requestListener());
+// exports.slackInteractions = slackInteractions;
 
+app.use('/slack/actions', slackInteractions.middleware);
 
+// slackInteractions.action({ actionId: 'actionId-0' }, async (payload) => {
+//     try {
+//         console.log("button click recieved", payload)
+//     } catch (e) {
+//         console.log("errors: ", e)
+//     }
+
+// })
 
 var MongoStore = require("connect-mongo")(session);
 
@@ -32,6 +46,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 
 
 app.use(session({
@@ -58,22 +73,17 @@ app.use(
     })
 );
 app.use(function(req, res, next) {
-
     res.header("Access-Control-Allow-Origin", "http://lhrlslacktest.ngrok.io");
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
-// require("./routes/html-routes.js")(app);
-require("./routes/api-routes.js")(app);
-app.use(require('./routes'));
-app.get('/', (req, res) => res.json({ msg: "Welcome to the contact_keeper API" }));
+
+app.use('/', routes);
+app.get('/', (req, res) => res.json({ msg: "Welcome to the Lift Heavy Run Long® API" }));
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 
 });
-
-
-
 
 module.exports = express
 

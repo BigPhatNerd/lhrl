@@ -5,8 +5,11 @@ module.exports = {
         clientID: process.env.SLACK_CLIENT_ID,
         clientSecret: process.env.SLACK_CLIENT_SECRET,
         botToken: process.env.SLACK_BOT_TOKEN,
-        webHook: process.env.WEBHOOK,
-        signingSecret: process.env.SLACK_SIGNING_SECRET
+        stravaWebHook: process.env.STRAVA_WEBHOOK,
+        signingSecret: process.env.SLACK_SIGNING_SECRET,
+        sugarwodWebhook: process.env.SUGARWOD_WEBHOOK,
+        cf_wodWebhook: process.env.CF_WOD_WEBHOOK,
+        verificationToken: process.env.SLACK_VERIFICATION_TOKEN
 
     },
     mongo: {
@@ -20,7 +23,9 @@ module.exports = {
         clubId: process.env.STRAVA_CLUB_ID
 
     },
-
+    sugarwod: {
+        sugarwodKey: process.env.SUGARWOD_KEY
+    },
     Session: {
         cookieKey: process.env.COOKIE_KEY
     }

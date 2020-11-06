@@ -3,9 +3,10 @@ const createWorkout = (trigger_id) => {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
+            "callback_id": "create_workout",
             "title": {
                 "type": "plain_text",
-                "text": "LHRL®",
+                "text": "Create Workout",
                 "emoji": true
             },
             "submit": {
@@ -19,104 +20,132 @@ const createWorkout = (trigger_id) => {
                 "emoji": true
             },
             "blocks": [{
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Create a workout",
-                        "emoji": true
-                    }
-                },
-                {
                     "type": "input",
+                    "block_id": "crossfit",
                     "element": {
                         "type": "static_select",
+
                         "placeholder": {
                             "type": "plain_text",
-                            "text": "Choose type",
+                            "text": "Select an item",
                             "emoji": true
                         },
                         "options": [{
                                 "text": {
                                     "type": "plain_text",
-                                    "text": "Crossfit",
+                                    "text": "CrossFit 🏃‍♂️🏋️‍♀️🏊‍♀️",
                                     "emoji": true
                                 },
-                                "value": "value-0"
+                                "value": "crossFit"
                             },
                             {
                                 "text": {
                                     "type": "plain_text",
-                                    "text": "Running",
+                                    "text": "Weightlifting 🏋️‍♀️",
                                     "emoji": true
                                 },
-                                "value": "value-1"
+                                "value": "weightlifting"
                             },
                             {
                                 "text": {
                                     "type": "plain_text",
-                                    "text": "Weights",
+                                    "text": "Cardio ❤️🤮",
                                     "emoji": true
                                 },
-                                "value": "value-2"
+                                "value": "cardio"
+                            },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "Running 🏃‍♂️",
+                                    "emoji": true
+                                },
+                                "value": "running"
                             }
                         ],
-                        "action_id": "static_select-action"
+                        "action_id": "choose_type"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Select Workout Type",
+                        "text": "Label",
                         "emoji": true
                     }
                 },
                 {
-                    "dispatch_action": true,
                     "type": "input",
+                    "block_id": "name",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "plain_text_input-action"
+                        "action_id": "name"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Enter Rounds",
+                        "text": "Name",
                         "emoji": true
                     }
                 },
                 {
                     "type": "input",
+                    "block_id": "duration",
                     "element": {
                         "type": "plain_text_input",
-                        "multiline": true,
-                        "action_id": "plain_text_input-action"
+                        "action_id": "duration"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Describe Workout",
+                        "text": "Duration",
                         "emoji": true
                     }
                 },
                 {
                     "type": "input",
+                    "block_id": "weight",
                     "element": {
-                        "type": "datepicker",
-                        "initial_date": "2020-04-28",
-                        "placeholder": {
-                            "type": "plain_text",
-                            "text": "Select a date",
-                            "emoji": true
-                        },
-                        "action_id": "datepicker-action"
+                        "type": "plain_text_input",
+                        "action_id": "weight"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Date of Workout",
+                        "text": "Weight",
                         "emoji": true
                     }
                 },
                 {
-                    "type": "section",
-                    "text": {
+                    "type": "input",
+                    "block_id": "reps",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "reps"
+                    },
+                    "label": {
                         "type": "plain_text",
-                        "text": "This is a plain text section block.",
+                        "text": "Reps",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "input",
+                    "block_id": "sets",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "sets"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Sets",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "input",
+                    "block_id": "distance",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "distance"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Distance",
                         "emoji": true
                     }
                 }

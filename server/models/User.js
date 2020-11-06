@@ -32,6 +32,12 @@ var UserSchema = new Schema({
     stravaAvatar: {
         type: String
     },
+    username: {
+        type: String,
+        allowNull: false,
+        unique: true,
+
+    },
     email: {
         type: String,
         allowNull: false,
@@ -43,6 +49,10 @@ var UserSchema = new Schema({
         type: String,
         allowNull: false
     },
+    workouts: [{
+        type: Schema.Types.ObjectId,
+        ref: "Workout"
+    }],
 
     photos: {},
     created: {

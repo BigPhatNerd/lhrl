@@ -17,27 +17,13 @@ process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
 
 
-// ///Figure this out and the export in slack routes!!!!
-// const slackInteractions = require('./routes/slack.js');
-//DEBUG=@slack/interactive-messages:* nodemon server.js
+
 
 mongoose.set('debug', true);
-// const { createMessageAdapter } = require('@slack/interactive-messages');
-// const slackSigningSecret = slack.signingSecret;
-// const slackInteractions = createMessageAdapter(slackSigningSecret);
-// app.use('/slack/actions', slackInteractions.requestListener());
-// exports.slackInteractions = slackInteractions;
 
 app.use('/slack/actions', slackInteractions.middleware);
 
-// slackInteractions.action({ actionId: 'actionId-0' }, async (payload) => {
-//     try {
-//         console.log("button click recieved", payload)
-//     } catch (e) {
-//         console.log("errors: ", e)
-//     }
 
-// })
 
 var MongoStore = require("connect-mongo")(session);
 
@@ -77,7 +63,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
-
+require("./routes/api-routes.js")(app);
 app.use('/', routes);
 app.get('/', (req, res) => res.json({ msg: "Welcome to the Lift Heavy Run Long® API" }));
 app.listen(PORT, () => {

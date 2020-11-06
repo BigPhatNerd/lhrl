@@ -28,6 +28,7 @@ function App() {
     }
     const [user, setUser] = useState(() => getLocalStorage('user', {
         stravaId: '',
+        username: '',
         email: '',
         password: '',
         isAuthenticated: false,

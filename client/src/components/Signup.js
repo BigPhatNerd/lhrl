@@ -8,7 +8,7 @@ import { useAlert } from 'react-alert';
 const Signup = (props) => {
     const alert = useAlert();
     const { user, setUser } = useContext(UserContext);
-    const { stravaId, email, password, isAuthenticated } = user;
+    const { stravaId, username, email, password, isAuthenticated } = user;
     const handleChange = e => {
         setUser({
             ...user,
@@ -20,13 +20,14 @@ const Signup = (props) => {
         try {
             const res = await axios.post('/api/signup', {
                 stravaId: stravaId,
+                username: username,
                 email: email,
                 password: password,
                 isAuthenticated: true
             }, {
                 withCredentials: true
             });
-          
+
             if(res.statusText === "OK") {
                 setUser({
                     ...user,
@@ -66,6 +67,15 @@ onChange={handleChange}
 required
     />
     </div>
+    <div className='form-group'>
+<input 
+type="username"
+placeholder="Username"
+name="username"
+value={username}
+onChange={handleChange}
+/>
+</div>
     <div className='form-group'>
 <input 
 type="email"

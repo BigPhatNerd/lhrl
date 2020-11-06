@@ -27,6 +27,7 @@
     "method-override": "^3.0.0",
     "moment": "^2.27.0",
     "mongoose": "^5.9.15",
+    "open": "^7.3.0",
     "opn": "^6.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",

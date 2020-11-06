@@ -5,7 +5,7 @@ const { slack, strava } = require('../lib/keys');
 const axios = require('axios');
 const config = { 'Content-Type': 'application / json' }
 const url = slack.webHook;
-const opn = require('opn');
+const open = require('open');
 const stravaToken = strava.accessToken;
 const { refreshToken } = require('../controller/strava-controller');
 const stravaAuth = require('../config/authentication');
@@ -125,15 +125,20 @@ router.get('/webhook', (req, res) => {
 router.route('/loginfromslack')
     .post((req, res) => {
         //First I need to get the user requesting the login from slack and store it.
+        console.log("req.body: ", req.body);
 
-        opn('http://lhrlslacktest.ngrok.io/');
-        res.send("Taking you to the Strava login page");
+        res.send(`Taking you to signup page. Your username is: \n*${req.body.user_name}*`);
+        setTimeout(function() {
+            open('http://localhost:3000/')
+        }, 3000);
+
+
+
     });
 
-router.get('/login', passport.authenticate('strava', {
-    // scope: 'activity:read_all',
-    'scope': 'activity:read_all'
 
+router.get('/login', passport.authenticate('strava', {
+    'scope': 'activity:read_all'
 }));
 router.get('/redirect', passport.authenticate('strava', {
     successRedirect: 'http://localhost:3000/',

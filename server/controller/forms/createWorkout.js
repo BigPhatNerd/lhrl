@@ -21,7 +21,7 @@ const createWorkout = (trigger_id) => {
             },
             "blocks": [{
                     "type": "input",
-                    "block_id": "crossfit",
+                    "block_id": "type",
                     "element": {
                         "type": "static_select",
 
@@ -67,7 +67,7 @@ const createWorkout = (trigger_id) => {
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Label",
+                        "text": "Workout type",
                         "emoji": true
                     }
                 },

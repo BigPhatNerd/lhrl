@@ -1,4 +1,4 @@
-var { Schema, model } = require('mongoose');
+var { Schema, model, Types } = require('mongoose');
 var bcrypt = require('bcrypt');
 
 var moment = require('moment');
@@ -53,6 +53,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Workout"
     }],
+    stravaWorkouts: [{
+        type: Schema.Types.ObjectId,
+        ref: "Strava"
+    }],
 
     photos: {},
     created: {
@@ -81,51 +85,12 @@ var UserSchema = new Schema({
     accepted_scopes: {
         type: String
     },
-    event_time: {
-        type: Number
-    },
-    object_id: {
-        type: Number
-    },
-    object_type: {
-        type: Number
-    },
-    owner_id: {
-        type: Number
-    },
-    subscription_id: {
-        type: Number
-    },
-    distance: {
-        type: Number
-    },
-    elapsed_time: {
-        type: Number
-    },
-    moving_time: {
-        type: Number
-    },
-    start_date: {
-        type: Date
-    },
-    average_temp: {
-        type: Number
-    },
-    average_speed: {
-        type: Number
-    },
-    max_speed: {
-        type: Number
-    },
-    stravaMap: {
-        type: String
-    }
-
 
 }, {
     toJSON: {
         getters: true
-    }
+    },
+    id: false
 });
 
 UserSchema.pre('save', async function(next) {

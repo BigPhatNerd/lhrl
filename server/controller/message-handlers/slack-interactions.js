@@ -20,10 +20,12 @@ slackInteractions.viewSubmission('create_form', async (payload, respond) => {
 
 });
 
+//buttons pressed from the homepage view
 slackInteractions.action({ type: 'button' }, async (payload, respond) => {
-    //buttons pressed from the homepage view
+
     try {
         const { trigger_id } = payload;
+        console.log("payload: ", payload)
         web.views.open(createWorkout(trigger_id));
     } catch (err) {
         console.error(err.message);
@@ -34,9 +36,24 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
     try {
 
         console.log("Are we hitting this one yet?!");
+        console.log("payload: ", payload);
+        const params = payload.user.username;
+        console.log("params: ", params);
         const { trigger_id } = payload;
-        const { name, duration, weight, reps, sets, distance } = payload.view.state.values;
+        var { type, name, duration, weight, reps, sets, distance } = payload.view.state.values;
+        console.log("payload.view.state.values: ", payload.view.state.values);
+
+        type = type.choose_type.selected_option.value;
+        name = name.name.value;
+        duration = duration.duration.value;
+        weight = weight.weight.value;
+        reps = reps.reps.value;
+        sets = sets.sets.value;
+        distance = distance.distance.value;
+
+
         const data = {
+            type: type,
             name: name,
             duration: parseInt(duration),
             weight: parseInt(weight),
@@ -44,7 +61,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
             sets: parseInt(sets),
             distance: parseInt(distance)
         }
-        const sendWorkout = await axios.post(`/slack/create-workout/`, data);
+        const sendWorkout = await axios.post(`http://lhrlslacktest.ngrok.io/slack/create-workout/${params}`, data);
         console.log("sendWorkout.data: ", sendWorkout.data);
         console.log("payload.state.values: ", payload.view.state.values);
     } catch (err) {

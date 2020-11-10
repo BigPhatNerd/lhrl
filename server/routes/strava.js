@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const { User, Strava } = require('../models');
 const passport = require('../config/authentication');
 const { slack, strava } = require('../lib/keys');
 const axios = require('axios');
@@ -23,12 +23,11 @@ router.get("/testing", async (req, res) => {
 
 })
 router.get('/find', async (req, res) => {
-
     const findUser = await User.findOne({ "email": req.query.email });
-
     res.json(findUser);
 });
 
+//deauthorize strava by removing access and refresh tokens
 router.put('/deauth/:stravaId', async (req, res) => {
     console.log("req.params.stravaId: ", req.params.stravaId);
     const stravaId = req.params.stravaId;
@@ -41,7 +40,6 @@ router.put('/deauth/:stravaId', async (req, res) => {
         new: true
     });
     res.json(user)
-
 })
 
 //Create route for STRAVA webhook to go to Slack
@@ -78,7 +76,7 @@ router.post('/webhook', async (req, res) => {
         } = stravaData.data[0];
         //Save the information to mongoose by searching for stravaId
         console.log("stravaData(inside strava webhook): ", stravaData.data[0]);
-        const saveActivity = await User.findOneAndUpdate({ stravaId: owner_id }, {
+        const body = {
             type: type,
             owner_id: athlete.id,
             distance: distance,
@@ -88,13 +86,26 @@ router.post('/webhook', async (req, res) => {
             average_speed: average_speed,
             max_speed: max_speed,
             stravaMap: map.summary_polyline
-        })
-        //Need to send the info back to Slack below
-        //Send Slack Webhook 
-        console.log("saveActivity.stravaAvatar: ", saveActivity.stravaAvatar);
-        console.log("stravaHook(stravaData): ", stravaHook(stravaData.data[0]));
-        const { name, stravaAvatar } = saveActivity
-        axios.post(slack.stravaWebHook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
+        };
+        Strava.create(body)
+            .then(({ _id }) => {
+                return User.findOneAndUpdate({ stravaId: owner_id }, { $addToSet: { stravaWorkouts: _id } }, { new: true })
+            })
+            .then(activityData => {
+                if(!stravaData) {
+                    res.status(404).json({ message: 'No user found with that id!' });
+                    return
+                }
+                //Need to send the info back to Slack below
+                //Send Slack Webhook
+                console.log("activityData: ", activityData);
+                const { name, stravaAvatar } = activityData;
+                console.log("name: ", name);
+                console.log("stravaAvatar: ", stravaAvatar);
+                axios.post(slack.stravaWebHook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
+
+            })
+
         res.status(200).send("EVENT_RECEIVED");
     } catch (err) {
         console.error(err.message);
@@ -131,8 +142,6 @@ router.route('/loginfromslack')
         setTimeout(function() {
             open('http://localhost:3000/')
         }, 3000);
-
-
 
     });
 

@@ -42,12 +42,51 @@ router.get('/webhook', async (req, res) => {
 
 })
 
-router.get('/test', async (req, res) => {
+router.get('/obcf-wod', async (req, res) => {
     //Eventually set this to run once a day in a setInterval function using moment.js
     try {
+        //OBCF Workout of the Day
+
+
+        const wod = await axios.get('https://api.sugarwod.com/v2/workouts', { headers: config });
+        const jumbled = ["What the heck", "I wish this would work", "Why won't this work?"];
+        const test = jumbled.map(info => {
+            return info;
+        });
+
+        console.log("test:", test.join(' '));
+
+        const display = wod.data.data.map(info => {
+            return ("🏋️‍♀️ *Title:* " + info.attributes.title + " 🏋️‍♀️\n" +
+                "💪 *Description:* " + info.attributes.description + " 💪\n" +
+                "📝 *Score Type:* " + info.attributes.score_type + " 📝\n\n\n" +
+                "*------------------------*")
+
+        });
+
+
+        await axios.post(slack.cf_wodWebhook, {
+            "text": display.join(' ')
+        }, slackHeader);
+
+        // res.json(wod.data)
+        res.json(display.join(' '));
+    } catch (err) {
+
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+})
+
+router.get('/cf-wod', async (req, res) => {
+    //Eventually set this to run once a day in a setInterval function using moment.js
+    try {
+        //CrossFit HQ Workout of the Day
         const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: config });
-        const { title, description, score_type } = wod.data.data[0].attributes
-        console.log('wod.data.data[0].title: ', wod.data.data[0].title);
+        // const { title, description, score_type } = wod.data.data[0].attributes
+        const { title, description, score_type } = wod.data.data.map(info => info.attributes);
+        console.log('wod.data.data[0].title: ', wod.data.data[0].attributes.title);
         await axios.post(slack.cf_wodWebhook, {
             "text": "🏋️‍♀️ " + title + " 🏋️‍♀️\n" +
                 "💪 " + description + " 💪\n" +

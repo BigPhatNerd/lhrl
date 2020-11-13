@@ -1,6 +1,7 @@
 const slackInteractions = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
 const createWorkout = require('../forms/createWorkout.js');
+const viewWorkouts = require('../forms/viewWorkouts.js');
 const homepage = require('../homepage/homeview.js');
 const { User, Workout } = require('../../models/');
 const axios = require('axios');
@@ -22,11 +23,18 @@ slackInteractions.viewSubmission('create_form', async (payload, respond) => {
 
 //buttons pressed from the homepage view
 slackInteractions.action({ type: 'button' }, async (payload, respond) => {
-
+    var buttonPressed = payload.actions[0].action_id;
+    console.log("buttonPressed: ", buttonPressed);
     try {
-        const { trigger_id } = payload;
-        console.log("payload: ", payload)
-        web.views.open(createWorkout(trigger_id));
+        var { trigger_id } = payload;
+        var username = payload.user.username;
+
+        if(buttonPressed === "save_workout") {
+            web.views.open(createWorkout(trigger_id));
+        } else if(buttonPressed = "view_workout") {
+            const workoutIndex = await viewWorkouts(trigger_id, username);
+            web.views.open(workoutIndex);
+        }
     } catch (err) {
         console.error(err.message);
     }
@@ -68,7 +76,9 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         console.error(err.message);
     }
 
-})
+});
+
+
 
 
 module.exports = {

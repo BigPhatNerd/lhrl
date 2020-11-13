@@ -98,10 +98,9 @@ router.post('/webhook', async (req, res) => {
                 }
                 //Need to send the info back to Slack below
                 //Send Slack Webhook
-                console.log("activityData: ", activityData);
+
                 const { name, stravaAvatar } = activityData;
-                console.log("name: ", name);
-                console.log("stravaAvatar: ", stravaAvatar);
+
                 axios.post(slack.stravaWebHook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
 
             })

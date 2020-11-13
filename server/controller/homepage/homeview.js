@@ -28,15 +28,26 @@ const homepage = (user) => {
                 {
                     "type": "actions",
                     "elements": [{
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Create Workout",
-                            "emoji": true
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Create Workout",
+                                "emoji": true
+                            },
+                            "value": "save_workout",
+                            "action_id": "save_workout"
                         },
-                        "value": "click_me_123",
-                        "action_id": "actionId-0"
-                    }]
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "View Workouts",
+                                "emoji": true
+                            },
+                            "value": "view_workout",
+                            "action_id": "view_workout"
+                        }
+                    ]
                 }
             ]
         }

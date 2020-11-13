@@ -46,8 +46,6 @@ router.get('/obcf-wod', async (req, res) => {
     //Eventually set this to run once a day in a setInterval function using moment.js
     try {
         //OBCF Workout of the Day
-
-
         const wod = await axios.get('https://api.sugarwod.com/v2/workouts', { headers: config });
         const jumbled = ["What the heck", "I wish this would work", "Why won't this work?"];
         const test = jumbled.map(info => {

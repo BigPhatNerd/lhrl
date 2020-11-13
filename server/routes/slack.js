@@ -8,15 +8,19 @@ const { User, Workout } = require('../models');
 const mongoose = require('mongoose');
 
 
-router.get("/get-workouts", (req, res) => {
-    User.find({})
+router.get("/get-workouts/:username", (req, res) => {
+    const username = req.params.username
+    User.find({ username })
         .populate({
             path: 'workouts',
             select: '-__v'
         })
         .select('-__v')
         .sort({ _id: -1 })
-        .then(dbPizzaData => res.json(dbPizzaData))
+        .then(dbRes => {
+            console.log("dbRes: ", dbRes);
+            res.json(dbRes)
+        })
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
@@ -51,9 +55,7 @@ router.post('/events', (req, res) => {
     web.views.publish(homepage(user));
 })
 
-router.post('/create-workout', async (req, res) => {
 
-})
 router.post('/slash-commands/send-me-buttons', (req, res) => {
 
 })

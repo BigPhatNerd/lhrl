@@ -1,12 +1,16 @@
-const createWorkout = (trigger_id) => {
-    const workoutModal = {
+const editWorkout = (trigger_id, workoutSelected) => {
+    const { _id, type, name, duration, weight, reps, sets, distance } = workoutSelected;
+    console.log("type in the editWorkout: ", type);
+    const editWorkoutModal = {
         "trigger_id": trigger_id,
+        "external_id": _id,
         view: {
             "type": "modal",
-            "callback_id": "create_workout",
+            "callback_id": "edit_workout",
+            "private_metadata": _id,
             "title": {
                 "type": "plain_text",
-                "text": "Create Workout",
+                "text": "Edit Workout",
                 "emoji": true
             },
             "submit": {
@@ -21,14 +25,17 @@ const createWorkout = (trigger_id) => {
             },
             "blocks": [{
                     "type": "input",
+                    "optional": true,
                     "block_id": "type",
                     "element": {
                         "type": "static_select",
-
-                        "placeholder": {
-                            "type": "plain_text",
-                            "text": "Select an item",
-                            "emoji": true
+                        "initial_option": {
+                            "text": {
+                                "type": "plain_text",
+                                "emoji": true,
+                                "text": type
+                            },
+                            "value": type
                         },
                         "options": [{
                                 "text": {
@@ -73,9 +80,11 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "name",
                     "element": {
                         "type": "plain_text_input",
+                        "initial_value": name,
                         "action_id": "name"
                     },
                     "label": {
@@ -86,9 +95,11 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "duration",
                     "element": {
                         "type": "plain_text_input",
+                        "initial_value": duration.toString(),
                         "action_id": "duration"
                     },
                     "label": {
@@ -99,9 +110,11 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "weight",
                     "element": {
                         "type": "plain_text_input",
+                        "initial_value": weight.toString(),
                         "action_id": "weight"
                     },
                     "label": {
@@ -112,9 +125,11 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "reps",
                     "element": {
                         "type": "plain_text_input",
+                        "initial_value": reps.toString(),
                         "action_id": "reps"
                     },
                     "label": {
@@ -125,10 +140,13 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
+
                     "block_id": "sets",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "sets"
+                        "initial_value": sets.toString(),
+                        "action_id": "sets",
                     },
                     "label": {
                         "type": "plain_text",
@@ -138,9 +156,11 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "distance",
                     "element": {
                         "type": "plain_text_input",
+                        "initial_value": distance.toString(),
                         "action_id": "distance"
                     },
                     "label": {
@@ -152,7 +172,18 @@ const createWorkout = (trigger_id) => {
             ]
         }
     }
-    return workoutModal
-}
 
-module.exports = createWorkout;
+    return editWorkoutModal
+
+
+};
+
+
+
+module.exports = editWorkout;
+
+
+
+
+
+//

@@ -8,6 +8,24 @@ const { User, Workout } = require('../models');
 const mongoose = require('mongoose');
 
 
+router.put("/edit-workout/:workoutId", async ({ body, params }, res) => {
+    try {
+        const workoutId = params.workoutId
+        console.log("params: ", params);
+        console.log("Edit Wrokout route is being hit!");
+        console.log("workoutId: ", workoutId);
+        console.log(typeof workoutId);
+        const workout = await Workout.findByIdAndUpdate(workoutId, body, { new: true, runValidators: true });
+        res.json(workout)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+
+
+})
 router.get("/get-workouts/:username", (req, res) => {
     const username = req.params.username
     User.find({ username })
@@ -18,7 +36,6 @@ router.get("/get-workouts/:username", (req, res) => {
         .select('-__v')
         .sort({ _id: -1 })
         .then(dbRes => {
-            console.log("dbRes: ", dbRes);
             res.json(dbRes)
         })
         .catch(err => {

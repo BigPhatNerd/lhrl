@@ -4,7 +4,20 @@ const viewWorkouts = async (trigger_id, username) => {
     const shortData = workouts.data[0].workouts;
     const array = []
     const blockData = (info) => {
+        if(shortData.length === 0) {
+            array.push({
+
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": "You have not created any workouts yet.",
+                    "emoji": true
+                }
+
+            })
+        }
         for(var i = 0; i < shortData.length; i++) {
+
             array.push({
                 type: "section",
                 text: {
@@ -55,6 +68,7 @@ const viewWorkouts = async (trigger_id, username) => {
                 type: "divider"
             })
 
+
         }
         return array;
     }
@@ -69,12 +83,7 @@ const viewWorkouts = async (trigger_id, username) => {
             "callback_id": "view_workouts",
             "title": {
                 "type": "plain_text",
-                "text": "My App",
-                "emoji": true
-            },
-            "submit": {
-                "type": "plain_text",
-                "text": "Submit",
+                "text": "Workouts Created: ",
                 "emoji": true
             },
             "close": {

@@ -34,8 +34,8 @@ const homepage = (user) => {
                                 "text": "Create Workout",
                                 "emoji": true
                             },
-                            "value": "save_workout",
-                            "action_id": "save_workout"
+                            "value": "create_workout",
+                            "action_id": "create_workout"
                         },
                         {
                             "type": "button",

@@ -1,12 +1,9 @@
 const axios = require('axios');
-var dayjs = require("dayjs");
-
-const viewWorkouts = async (trigger_id, workouts) => {
-
+const updatedWorkouts = async (viewId, username) => {
+    const workouts = await axios.get(`https://lhrlslacktest.ngrok.io/slack/get-workouts/${username}`)
     const shortData = workouts.data[0].workouts;
     const array = []
     const blockData = (info) => {
-        const date = dayjs(info.day).format('MMMM D YYYY, h:mm:ss a')
         if(shortData.length === 0) {
             array.push({
 
@@ -21,21 +18,11 @@ const viewWorkouts = async (trigger_id, workouts) => {
         }
         for(var i = 0; i < shortData.length; i++) {
 
-
             array.push({
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Date Created: " + date,
-                    emoji: true
-                },
-
-
-            }, {
-                type: "section",
-                text: {
-                    type: "plain_text",
-                    text: "Type: " + info[i].type,
+                    text: "Date Created: " + info[i].day,
                     emoji: true
                 },
 
@@ -74,8 +61,8 @@ const viewWorkouts = async (trigger_id, workouts) => {
                             text: "Edit Workout",
                             emoji: true
                         },
-                        value: "edit",
-                        action_id: info[i]._id
+                        value: "updated" + info[i]._id,
+                        action_id: "updated" + info[i]._id
                     },
                     {
                         type: "button",
@@ -102,7 +89,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
 
 
     const mapWorkouts = {
-        "trigger_id": trigger_id,
+        "view_id": viewId,
         view: {
             "type": "modal",
             "callback_id": "view_workouts",
@@ -125,4 +112,4 @@ const viewWorkouts = async (trigger_id, workouts) => {
     return mapWorkouts
 }
 
-module.exports = viewWorkouts;
+module.exports = updatedWorkouts;

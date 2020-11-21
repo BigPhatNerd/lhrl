@@ -12,10 +12,9 @@ const { mongo, slack } = require('./lib/keys');
 const cookieSession = require('cookie-session');
 const cors = require("cors");
 const connectDB = require('./config/db');
-const routes = (require('./routes'))
+const routes = (require('./routes'));
 process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
-
 
 
 

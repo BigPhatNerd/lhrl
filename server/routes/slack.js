@@ -59,6 +59,19 @@ router.post('/create-workout/:username', async ({ params, body }, res) => {
             console.error(err.message);
             res.status(500).send('Server Error');
         })
+});
+
+router.delete("/delete-workout/:workoutId", async ({ params, body }, res) => {
+    try {
+        const id = params.workoutId;
+        const deletedWorkout = await Workout.findByIdAndDelete(id);
+        res.json("Workout Deleted")
+    } catch (err) {
+
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
 })
 
 router.post('/play', (req, res) => {

@@ -20,7 +20,7 @@ const editWorkout = (trigger_id, workoutSelected) => {
             },
             "close": {
                 "type": "plain_text",
-                "text": "Cancel",
+                "text": "Close",
                 "emoji": true
             },
             "blocks": [{

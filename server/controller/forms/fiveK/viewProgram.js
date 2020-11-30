@@ -1,33 +1,49 @@
-const axios = require('axios');
 var dayjs = require("dayjs");
 
-const viewWorkouts = async (trigger_id, workouts) => {
+const view5KProgram = async (trigger_id, workouts) => {
 
-    const shortData = workouts.data[0].workouts;
-    const array = []
-    const blockData = (info) => {
-        console.log("info.day: ", info);
-        const date = dayjs(info.day).format('MMMM D YYYY, h:mm:ss a')
-        if(shortData.length === 0) {
-            array.push({
-
-                "type": "section",
-                "text": {
+    const shortData = workouts.data;
+    const array = [{
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "Select a date when you would like your program to begin.",
+                "emoji": true
+            }
+        },
+        {
+            "type": "input",
+            "block_id": "date",
+            "element": {
+                "type": "datepicker",
+                "initial_date": dayjs().format('YYYY-MM-D'),
+                "placeholder": {
                     "type": "plain_text",
-                    "text": "You have not created any workouts yet.",
+                    "text": "Select a date",
                     "emoji": true
-                }
-
-            })
+                },
+                "action_id": "date"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Start date:",
+                "emoji": true
+            }
+        },
+        {
+            type: "divider"
         }
+    ]
+    const blockData = (info) => {
+        // const date = dayjs(info.day).format('MMMM D YYYY, h:mm:ss a')
+
         for(var i = 0; i < shortData.length; i++) {
-            const date = dayjs(info[i].day).format('MMMM D YYYY, h:mm:ss a')
 
             array.push({
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Date Created: " + date,
+                    text: "Week " + (info[i].week) + " Day " + info[i].day,
                     emoji: true
                 },
 
@@ -45,26 +61,10 @@ const viewWorkouts = async (trigger_id, workouts) => {
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Name: " + info[i].name,
+                    text: "Description: " + info[i].description,
                     emoji: true
                 },
 
-
-            }, {
-                type: "section",
-                text: {
-                    type: "plain_text",
-                    text: "Sets: " + info[i].sets,
-                    emoji: true
-                },
-
-            }, {
-                type: "section",
-                text: {
-                    type: "plain_text",
-                    text: "Reps: " + info[i].reps,
-                    emoji: true
-                },
 
             }, {
                 type: "actions",
@@ -106,10 +106,15 @@ const viewWorkouts = async (trigger_id, workouts) => {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "view_workouts",
+            "callback_id": "subscribe_to_5k",
             "title": {
                 "type": "plain_text",
-                "text": "Workouts Created: ",
+                "text": "5K Workouts: ",
+                "emoji": true
+            },
+            "submit": {
+                "type": "plain_text",
+                "text": "Subscribe to plan",
                 "emoji": true
             },
             "close": {
@@ -126,4 +131,4 @@ const viewWorkouts = async (trigger_id, workouts) => {
     return mapWorkouts
 }
 
-module.exports = viewWorkouts;
+module.exports = view5KProgram;

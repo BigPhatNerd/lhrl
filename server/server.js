@@ -13,6 +13,7 @@ const cookieSession = require('cookie-session');
 const cors = require("cors");
 const connectDB = require('./config/db');
 const routes = (require('./routes'));
+const programRoutes = require('./routes/programs');
 process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
 
@@ -64,6 +65,8 @@ app.use(function(req, res, next) {
 });
 require("./routes/api-routes.js")(app);
 app.use('/', routes);
+app.use('/programs', programRoutes);
+
 app.get('/', (req, res) => res.json({ msg: "Welcome to the Lift Heavy Run Long® API" }));
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);

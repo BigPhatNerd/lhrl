@@ -1,7 +1,7 @@
 var { Schema, model, Types } = require('mongoose');
 var bcrypt = require('bcrypt');
 
-var moment = require('moment');
+var dayjs = require("dayjs");
 
 var UserSchema = new Schema({
     provider: {
@@ -57,17 +57,21 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Strava"
     }],
+    fiveK: [{
+        type: Schema.Types.ObjectId,
+        ref: "FiveK"
+    }],
 
     photos: {},
     created: {
         type: Date,
         default: Date.now,
-        get: (createdAtVal) => moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a")
+        get: (createdAtVal) => dayjs(createdAtVal).format("MMM DD, YYYY [at] hh:mm a")
     },
     modified: {
         type: Date,
         default: Date.now,
-        get: (createdAtVal) => moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
+        get: (createdAtVal) => dayjs(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
     },
     stravaAccessToken: {
         type: String

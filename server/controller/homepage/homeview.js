@@ -18,12 +18,12 @@ const homepage = (user) => {
                     "alt_text": "logo"
                 },
                 {
-                    "type": "context",
-                    "elements": [{
+                    "type": "header",
+                    "text": {
                         "type": "plain_text",
-                        "text": "Select action that you wish to take:",
+                        "text": "Create or View Custom Workouts",
                         "emoji": true
-                    }]
+                    }
                 },
                 {
                     "type": "actions",
@@ -48,7 +48,42 @@ const homepage = (user) => {
                             "action_id": "view_workout"
                         }
                     ]
-                }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Subscribe to Program",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "actions",
+                    "elements": [{
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "6-Weeks to 5K",
+                                "emoji": true
+                            },
+                            "value": "5K",
+                            "action_id": "5K"
+                        },
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "6-Weeks to 10K",
+                                "emoji": true
+                            },
+                            "value": "10K",
+                            "action_id": "10K"
+                        }
+                    ]
+                },
             ]
         }
     }

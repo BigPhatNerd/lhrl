@@ -3,10 +3,15 @@ const web = require('../../config/slack-web-api.js');
 const createWorkout = require('../forms/createWorkout.js');
 const viewWorkouts = require('../forms/viewWorkouts.js');
 const editWorkout = require('../forms/editWorkout.js');
+
 const homepage = require('../homepage/homeview.js');
 const { User, Workout } = require('../../models/');
 const editWorkoutResponse = require('../responses/successful-edit');
-const updatedWorkouts = require('../forms/updatedWorkouts.js')
+const updatedWorkouts = require('../forms/updatedWorkouts.js');
+
+const view5KProgram = require('../forms/fiveK/viewProgram');
+
+
 const axios = require('axios');
 
 var viewId;
@@ -17,7 +22,7 @@ slackInteractions.viewSubmission('create_form', async (payload, respond) => {
         console.log("We are hitting here!");
         const { trigger_id } = payload;
         web.views.open(createWorkout(trigger_id))
-        console.log("payload: ", payload);
+        console.log("payload::: ", payload);
         return
     } catch (err) {
         console.error(err.message);
@@ -38,36 +43,52 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
 
         console.log("value: ", value);
 
-        viewId = payload.container.view_id;
+        // viewId = payload.container.view_id;
         var { trigger_id } = payload;
         var username = payload.user.username;
-        console.log("LINE 40 ");
         if(value === "create_workout") {
             web.views.open(createWorkout(trigger_id));
         } else if(value === "view_workout") {
-            console.log("I am being pressed on edit");
             const workouts = await axios.get(`https://lhrlslacktest.ngrok.io/slack/get-workouts/${username}`)
             const workoutIndex = await viewWorkouts(trigger_id, workouts);
             //this is what I want to update!!
-            console.log("viewId: ", viewId);
+
             web.views.open(workoutIndex);
         } else if(text === "Edit Workout") {
-            console.log("this shit is working!!");
+            viewId = payload.container.view_id;
             const workoutSelected = await Workout.find({ _id: buttonPressed });
-            // editValuePressed === String(workoutSelected[0]._id)
-            console.log("LINE 51");
             web.views.push(editWorkout(trigger_id, workoutSelected[0]));
         } else if(text === "Delete Workout") {
-            console.log("KILLING IT HOMIES. DELETE THAT ISH!!");
             const deleteWorkout = await axios.delete(`https://lhrlslacktest.ngrok.io/slack/delete-workout/${buttonPressed}`);
             const workouts = await axios.get(`https://lhrlslacktest.ngrok.io/slack/get-workouts/${username}`)
             const workoutIndex = await viewWorkouts(trigger_id, workouts);
             web.views.push(workoutIndex);
+        } else if(text === "6-Weeks to 5K") {
+            const workouts = await axios.get('http://lhrlslacktest.ngrok.io/programs/fiveK/view-program')
+            const fiveKIndex = await view5KProgram(trigger_id, workouts);
+
+            viewId = payload.view.id;
+
+            web.views.open(fiveKIndex);
         }
     } catch (err) {
         console.error(err.message);
     }
 });
+
+slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
+    try {
+        const { trigger_id } = payload;
+        //YEEEHAWWWW
+        const date = payload.view.state.values.date.date.selected_date;
+        console.log("payload in subscribe: ", payload.view.state.values.date.date.selected_date);
+        const username = payload.user.username;
+        const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/fiveK/subscribe/${username}`, { startDate: date });
+
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
 slackInteractions.viewSubmission('edit_workout', async (payload, respond) => {
     try {

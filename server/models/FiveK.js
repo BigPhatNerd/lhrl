@@ -1,6 +1,9 @@
 var { Schema, model, Types } = require('mongoose');
 
 const fiveKSchema = new Schema({
+    name: {
+        type: String
+    },
     startDate: {
         type: Date
     },

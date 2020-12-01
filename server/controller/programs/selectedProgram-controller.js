@@ -1,10 +1,11 @@
-const { User, FiveK } = require('../../models');
+const { User, FiveK, Program } = require('../../models');
 const { slack } = require('../../lib/keys.js');
 
 const { botToken, verificationToken } = slack;
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
-const program = require('../../programs/fiveK');
+const fiveK = require('../../programs/fiveK');
+const tenK = require("../../programs/tenK");
 var dayjs = require('dayjs');
 // var date = dayjs().format('YYYY-MM-D');
 
@@ -27,12 +28,23 @@ const selectedProgramController = {
             })
     },
     viewProgram(req, res) {
+        var program;
+        const programSelected = req.params.value;
+        console.log("programSelected: ", programSelected);
+        switch (programSelected) {
+            case "5K":
+                program = fiveK;
+                break;
+            case "10K":
+                program = tenK;
 
-        FiveK.deleteMany({})
-            .then(() => FiveK.collection.insertMany(program(Date.now())))
+        }
+        console.log("PROGRAM: ", program);
+        Program.deleteMany({})
+            .then(() => Program.collection.insertMany(program(Date.now())))
             .then(data => {
                 console.log(data.result.n + " records inserted!");
-                FiveK.find()
+                Program.find()
                     .then(data => {
                         res.json(data);
                     })
@@ -44,12 +56,23 @@ const selectedProgramController = {
             })
     },
     async subscribeToPlan({ params, body }, res) {
+        const programSelected = params.value;
+        switch (programSelected) {
+            case "5K":
+                program = fiveK;
+                break;
+            case "10K":
+                program = tenK;
+
+        }
         const startDate = body.startDate
         const insertProgram = program(startDate);
-        FiveK.deleteMany({})
-            .then(() => FiveK.collection.insertMany(insertProgram))
+        console.log("programSelected: ", programSelected);
+        console.log("insertProgram: ", insertProgram)
+        Program.deleteMany({})
+            .then(() => Program.collection.insertMany(insertProgram))
             .then((data) => {
-                return User.findOneAndUpdate({ username: params.username }, { $set: { fiveK: data.ops } }, { new: true })
+                return User.findOneAndUpdate({ username: params.username }, { $set: { selectedProgram: data.ops } }, { new: true })
             })
             .then(programData => {
                 if(!programData) {

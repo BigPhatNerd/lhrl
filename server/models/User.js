@@ -65,6 +65,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "TenK"
     }],
+    selectedProgram: [{
+        type: Schema.Types.ObjectId,
+        ref: "Program"
+    }],
 
     photos: {},
     created: {

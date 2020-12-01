@@ -1,6 +1,9 @@
 var { Schema, model, Types } = require('mongoose');
 
 const tenKSchema = new Schema({
+    name: {
+        type: String
+    },
     startDate: {
         type: Date
     },

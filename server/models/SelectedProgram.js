@@ -1,6 +1,9 @@
 var { Schema, model, Types } = require('mongoose');
 
 const selectedProgramSchema = new Schema({
+    name: {
+    type: String
+},
     startDate: {
         type: Date
     },

@@ -6,7 +6,7 @@ const {
 } = require('../../controller/programs/selectedProgram-controller');
 
 
-router.route('/subscribe/:username').post(subscribeToPlan);
+router.route('/subscribe/:username/:value').post(subscribeToPlan);
 
-router.route('/view-program').get(viewProgram)
+router.route('/view-program/:value').get(viewProgram)
 module.exports = router;

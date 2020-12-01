@@ -69,14 +69,15 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             const workoutIndex = await viewWorkouts(trigger_id, workouts);
             web.views.push(workoutIndex);
         } else if(text === "6-Weeks to 5K") {
-            const workouts = await axios.get('http://lhrlslacktest.ngrok.io/programs/fiveK/view-program')
+            // const workouts = await axios.get('http://lhrlslacktest.ngrok.io/programs/fiveK/view-program');
+            const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/view-program/${value}`);
             const fiveKIndex = await view5KProgram(trigger_id, workouts);
 
             viewId = payload.view.id;
 
             web.views.open(fiveKIndex);
         } else if(text === "6-Weeks to 10K") {
-            const workouts = await axios.get('http://lhrlslacktest.ngrok.io/programs/tenK/view-program')
+            const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/view-program/${value}`);
             const tenKIndex = await view10KProgram(trigger_id, workouts);
 
             viewId = payload.view.id;
@@ -97,8 +98,9 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
 
         const username = payload.user.username;
 
-        const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/fiveK/subscribe/${username}`, { startDate: date })
+        // const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/fiveK/subscribe/${username}`, { startDate: date })
 
+        const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/subscribe/${username}/${value}`, { startDate: date });
 
         // const confirm = await axios.post(slack.fiveK_Webhook, {  "text": `${username} just signed up for 5k`` }, config)
 
@@ -116,7 +118,7 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
 
         const username = payload.user.username;
 
-        const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/fiveK/subscribe/${username}`, { startDate: date })
+        const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/subscribe/${username}/${value}`, { startDate: date });
 
 
         // const confirm = await axios.post(slack.fiveK_Webhook, {  "text": `${username} just signed up for 5k`` }, config)

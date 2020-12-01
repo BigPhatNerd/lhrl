@@ -1,4 +1,6 @@
+const { test } = require('./helper');
 const homepage = (user) => {
+    console.log("test: ", test);
     const view = {
         "user_id": user,
         view: {
@@ -81,9 +83,15 @@ const homepage = (user) => {
                             },
                             "value": "10K",
                             "action_id": "10K"
-                        }
-                    ]
+                        },
+
+                    ],
+
                 },
+                {
+                    "type": "divider"
+                },
+                test("oogidie moogoodie")
             ]
         }
     }

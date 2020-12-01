@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const program = require('../../programs/fiveK');
-const FiveK = require('../../models/FiveK');
+const program = require('../../programs/tenK');
+const FiveK = require('../../models/TenK');
 const {
     subscribeToPlan,
     viewProgram
-} = require('../../controller/programs/fiveK-controller');
+} = require('../../controller/programs/tenK-controller');
 
 
 router.route('/subscribe/:username').post(subscribeToPlan);

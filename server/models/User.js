@@ -61,6 +61,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "FiveK"
     }],
+    tenK: [{
+        type: Schema.Types.ObjectId,
+        ref: "TenK"
+    }],
 
     photos: {},
     created: {

@@ -9,7 +9,8 @@ module.exports = {
         signingSecret: process.env.SLACK_SIGNING_SECRET,
         sugarwodWebhook: process.env.SUGARWOD_WEBHOOK,
         cf_wodWebhook: process.env.CF_WOD_WEBHOOK,
-        verificationToken: process.env.SLACK_VERIFICATION_TOKEN
+        verificationToken: process.env.SLACK_VERIFICATION_TOKEN,
+        fiveK_Webhook: process.env.FIVEK_WEBHOOK,
 
     },
     mongo: {

@@ -1,6 +1,6 @@
 var dayjs = require("dayjs");
 
-const view5KProgram = async (trigger_id, workouts) => {
+const view10KProgram = async (trigger_id, workouts) => {
 
     const shortData = workouts.data;
     const array = [{
@@ -106,10 +106,10 @@ const view5KProgram = async (trigger_id, workouts) => {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "subscribe_to_5k",
+            "callback_id": "subscribe_to_10k",
             "title": {
                 "type": "plain_text",
-                "text": "5K Workouts: ",
+                "text": "10K Workouts: ",
                 "emoji": true
             },
             "submit": {
@@ -132,4 +132,4 @@ const view5KProgram = async (trigger_id, workouts) => {
     return mapWorkouts
 }
 
-module.exports = view5KProgram;
+module.exports = view10KProgram;

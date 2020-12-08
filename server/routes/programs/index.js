@@ -1,10 +1,9 @@
-const fiveK = require('./fiveK');
-const tenK = require('./tenK');
 const selectedProgram = require('./selectedProgram');
+const viewProgram = require('./viewProgram');
 const router = require('express').Router();
 
 router.use('/selectedProgram', selectedProgram);
-router.use('/fiveK', fiveK);
-router.use('/tenK', tenK);
+router.use('/viewProgram', viewProgram);
+
 
 module.exports = router;

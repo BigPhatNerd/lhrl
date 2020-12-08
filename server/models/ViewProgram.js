@@ -1,6 +1,6 @@
 var { Schema, model, Types } = require('mongoose');
 
-const fiveKSchema = new Schema({
+const viewProgramSchema = new Schema({
     name: {
         type: String
     },
@@ -29,6 +29,6 @@ const fiveKSchema = new Schema({
 
 });
 
-const FiveK = model("FiveK", fiveKSchema);
+const ViewProgram = model("ViewProgram", viewProgramSchema);
 
-module.exports = FiveK;
+module.exports = ViewProgram;

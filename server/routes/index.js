@@ -1,3 +1,5 @@
+const router = require('express').Router();
+
 const ngrok = require('./ngrok');
 const oAuthRoutes = require('./oauth');
 const strava = require('./strava');
@@ -6,7 +8,7 @@ const slack = require('./slack');
 const sugarwod = require('./sugarwod');
 
 
-const router = require('express').Router();
+
 
 router.use('/oauth', oAuthRoutes);
 router.use('/ngrok', ngrok);

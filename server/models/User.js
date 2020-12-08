@@ -57,14 +57,7 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Strava"
     }],
-    fiveK: [{
-        type: Schema.Types.ObjectId,
-        ref: "FiveK"
-    }],
-    tenK: [{
-        type: Schema.Types.ObjectId,
-        ref: "TenK"
-    }],
+
     selectedProgram: [{
         type: Schema.Types.ObjectId,
         ref: "Program"

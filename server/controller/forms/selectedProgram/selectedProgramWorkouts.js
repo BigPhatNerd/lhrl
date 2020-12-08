@@ -1,32 +1,32 @@
 var dayjs = require("dayjs");
 
-const viewWorkouts = async (trigger_id, workouts) => {
+const selectedProgramWorkouts = async (trigger_id, workouts) => {
 
-    const shortData = workouts.data[0].workouts;
+    const shortData = workouts.data[0].selectedProgram;
+    console.log("SHORTDATA[0].name: ", shortData);
+
     const array = []
     const blockData = (info) => {
-        console.log("info.day: ", info);
-        const date = dayjs(info.day).format('MMMM D YYYY, h:mm:ss a')
-        if(shortData.length === 0) {
-            array.push({
 
-                "type": "section",
-                "text": {
-                    "type": "plain_text",
-                    "text": "You have not created any workouts yet.",
-                    "emoji": true
-                }
+        const date = dayjs(info.day).format('dddd MMMM D YYYY')
 
-            })
-        }
         for(var i = 0; i < shortData.length; i++) {
-            const date = dayjs(info[i].day).format('MMMM D YYYY, h:mm:ss a')
+            const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
 
             array.push({
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Date Created: " + date,
+                    text: "Workout for: " + date,
+                    emoji: true
+                },
+
+
+            }, {
+                type: "section",
+                text: {
+                    type: "plain_text",
+                    text: "Week " + info[i].week + " Day " + info[i].day,
                     emoji: true
                 },
 
@@ -44,24 +44,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Name: " + info[i].name,
-                    emoji: true
-                },
-
-
-            }, {
-                type: "section",
-                text: {
-                    type: "plain_text",
-                    text: "Sets: " + info[i].sets,
-                    emoji: true
-                },
-
-            }, {
-                type: "section",
-                text: {
-                    type: "plain_text",
-                    text: "Reps: " + info[i].reps,
+                    text: "Descripton: " + info[i].description,
                     emoji: true
                 },
 
@@ -74,8 +57,8 @@ const viewWorkouts = async (trigger_id, workouts) => {
                             text: "Edit Workout",
                             emoji: true
                         },
-                        value: "edit",
-                        action_id: info[i]._id
+                        value: "selected_program_edit",
+                        action_id: "selected_program" + info[i]._id
                     },
                     {
                         type: "button",
@@ -84,8 +67,8 @@ const viewWorkouts = async (trigger_id, workouts) => {
                             text: "Delete Workout",
                             emoji: true
                         },
-                        value: "delete",
-                        action_id: "delete" + info[i]._id,
+                        value: "selected_program_delete",
+                        action_id: "selected_program_delete" + info[i]._id,
 
                     }
                 ]
@@ -105,10 +88,10 @@ const viewWorkouts = async (trigger_id, workouts) => {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "view_workouts",
+            "callback_id": "selected_program_workouts",
             "title": {
                 "type": "plain_text",
-                "text": "Workouts Created: ",
+                "text": shortData[0].name,
                 "emoji": true
             },
             "close": {
@@ -125,4 +108,4 @@ const viewWorkouts = async (trigger_id, workouts) => {
     return mapWorkouts
 }
 
-module.exports = viewWorkouts;
+module.exports = selectedProgramWorkouts;

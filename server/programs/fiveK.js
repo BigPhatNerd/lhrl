@@ -3,7 +3,7 @@ const { dateHelper } = require('./helpers');
 let program = (start) => {
 
     return [{
-        "name": "6-Weeks to 5K",
+            "name": "6-Weeks to 5K",
             "startDate": dateHelper(start, 0),
             "week": 1,
             "day": 1,
@@ -21,7 +21,7 @@ let program = (start) => {
             "subscribed": true
         },
         {
-            "startDate": dateHelper(start, 2),
+            "startDate": dateHelper(start, 4),
             "week": 1,
             "day": 3,
             "type": "Long Run",

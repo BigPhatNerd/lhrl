@@ -1,4 +1,4 @@
-const { User, FiveK, Program } = require('../../models');
+const { User, FiveK, Program, ViewProgram } = require('../../models');
 const { slack } = require('../../lib/keys.js');
 
 const { botToken, verificationToken } = slack;
@@ -10,11 +10,11 @@ var dayjs = require('dayjs');
 // var date = dayjs().format('YYYY-MM-D');
 
 const selectedProgramController = {
-    getWorkouts(req, res) {
+    getPlanWorkouts(req, res) {
         const username = req.params.username
         User.find({ username })
             .populate({
-                path: 'fiveK',
+                path: 'selectedProgram',
                 select: '-__v'
             })
             .select('-__v')
@@ -30,7 +30,7 @@ const selectedProgramController = {
     viewProgram(req, res) {
         var program;
         const programSelected = req.params.value;
-        console.log("programSelected: ", programSelected);
+
         switch (programSelected) {
             case "5K":
                 program = fiveK;
@@ -39,12 +39,12 @@ const selectedProgramController = {
                 program = tenK;
 
         }
-        console.log("PROGRAM: ", program);
-        Program.deleteMany({})
-            .then(() => Program.collection.insertMany(program(Date.now())))
+
+        ViewProgram.deleteMany({})
+            .then(() => ViewProgram.collection.insertMany(program(Date.now())))
             .then(data => {
                 console.log(data.result.n + " records inserted!");
-                Program.find()
+                ViewProgram.find()
                     .then(data => {
                         res.json(data);
                     })
@@ -67,8 +67,7 @@ const selectedProgramController = {
         }
         const startDate = body.startDate
         const insertProgram = program(startDate);
-        console.log("programSelected: ", programSelected);
-        console.log("insertProgram: ", insertProgram)
+
         Program.deleteMany({})
             .then(() => Program.collection.insertMany(insertProgram))
             .then((data) => {
@@ -84,6 +83,12 @@ const selectedProgramController = {
             .catch(err => {
                 console.error(err.message);
                 res.status(500).send("Server Error!");
+            })
+    },
+    async deleteProgram({ params, body }, res) {
+        User.findOneAndUpdate({ username: params.username }, { $set: { selectedProgram: [] } }, { new: true })
+            .then(programData => {
+                res.json(programData);
             })
     }
 

@@ -1,8 +1,24 @@
-const { test } = require('./helper');
-const homepage = (user) => {
-    console.log("test: ", test);
+const {
+    currentlySubscribed,
+    removeFromProgram,
+
+} = require('./helpers');
+var dayjs = require("dayjs");
+var weekOfYear = require('dayjs/plugin/weekOfYear')
+dayjs.extend(weekOfYear)
+// dayjs().format('YYYY-MM-D')
+const homepage = (user, userProgram) => {
+    console.log(dayjs().week())
+
+    console.log("user: ", user);
+
+
+
     const view = {
-        "user_id": user,
+
+        "user_id": user.id,
+        "external_id": "whatever",
+        "private_metadata": "something",
         view: {
             "type": "home",
             "callback_id": "homepage_menu",
@@ -91,7 +107,29 @@ const homepage = (user) => {
                 {
                     "type": "divider"
                 },
-                test("oogidie moogoodie")
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": user.real_name,
+                        "emoji": true
+                    }
+                },
+                currentlySubscribed(userProgram),
+                {
+                    "type": "divider"
+                },
+                removeFromProgram(userProgram),
+                {
+                    "type": "divider"
+                },
+
+
+
+
+
+
+
             ]
         }
     }

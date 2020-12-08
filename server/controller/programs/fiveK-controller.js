@@ -27,9 +27,9 @@ const fiveKController = {
             })
     },
     viewProgram(req, res) {
-
-        FiveK.deleteMany({})
-            .then(() => FiveK.collection.insertMany(program(Date.now())))
+// FiveK.deleteMany({})
+//             .then(() =>
+         FiveK.collection.insertMany(program(Date.now())))
             .then(data => {
                 console.log(data.result.n + " records inserted!");
                 FiveK.find()

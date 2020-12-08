@@ -4,6 +4,7 @@ const { slack } = require('../lib/keys.js');
 const { botToken, verificationToken, } = slack;
 const web = require('./../config/slack-web-api.js');
 const homepage = require('./homepage/homeview.js');
+const axios = require('axios');
 
 
 const slackController = {
@@ -64,10 +65,18 @@ const slackController = {
         }
 
     },
-    publishHomepage(req, res) {
+    async publishHomepage(req, res) {
         res.send(req.body);
+        console.log("req.body: ", req.body);
         const { user } = req.body.event;
-        web.views.publish(homepage(user));
+
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
+
+        const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${passUser.name}`);
+        // console.log("userProgram: ", userProgram.data[0].selectedProgram[0]);
+
+        web.views.publish(homepage(passUser, userProgram));
     },
 
 

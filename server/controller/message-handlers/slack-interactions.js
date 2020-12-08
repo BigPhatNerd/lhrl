@@ -11,6 +11,7 @@ const updatedWorkouts = require('../forms/updatedWorkouts.js');
 
 const view5KProgram = require('../forms/fiveK/viewProgram');
 const view10KProgram = require('../forms/tenK/viewProgram');
+const selectedProgramWorkouts = require('../forms/selectedProgram/selectedProgramWorkouts');
 
 const { slack } = require('../../lib/keys');
 
@@ -20,7 +21,7 @@ const axios = require('axios');
 const config = { 'Content-Type': 'application/json' }
 
 var viewId;
-
+var value;
 
 slackInteractions.viewSubmission('create_form', async (payload, respond) => {
     try {
@@ -41,14 +42,11 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
     try {
         var buttonPressed = payload.actions[0].action_id.replace("updated", "");
         buttonPressed = buttonPressed.replace("delete", "");
-        var value = payload.actions[0].value;
+        value = payload.actions[0].value;
         var text = payload.actions[0].text.text;
         var deleteBlockIdPressed = payload.actions[0].block_id;
-        console.log("payload looking for value: ", payload);
 
-        console.log("value: ", value);
 
-        // viewId = payload.container.view_id;
         var { trigger_id } = payload;
         var username = payload.user.username;
         if(value === "create_workout") {
@@ -83,6 +81,20 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             viewId = payload.view.id;
 
             web.views.open(tenKIndex);
+        } else if(value === "program_workouts") {
+            const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`)
+            const listWorkouts = await selectedProgramWorkouts(trigger_id, workouts);
+            web.views.open(listWorkouts)
+        } else if(value === "remove_workouts") {
+
+            const removePlan = await axios.delete(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/delete-program/${username}`);
+            const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
+
+            const user = payload.user.id;
+            const userInfo = await web.users.info({ user: user });
+
+            const passUser = userInfo.user
+            web.views.publish(homepage(passUser, workouts))
         }
     } catch (err) {
         console.error(err.message);
@@ -91,6 +103,7 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
 
 slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
     try {
+        console.log("\n\n\nWHATTTT  THE FUCKKKKK\n\n\n");
         console.log("payload looking for response_url: ", payload);
         const { trigger_id } = payload;
         //YEEEHAWWWW
@@ -98,12 +111,18 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
 
         const username = payload.user.username;
 
+
         // const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/fiveK/subscribe/${username}`, { startDate: date })
 
         const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/subscribe/${username}/${value}`, { startDate: date });
+        const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
 
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user
+        web.views.publish(homepage(passUser, userProgram))
         // const confirm = await axios.post(slack.fiveK_Webhook, {  "text": `${username} just signed up for 5k`` }, config)
-
+        // const newhomePageView = await axios.post(`http://lhrlslacktest.ngrok.io/slack/events`);
     } catch (err) {
         console.error(err.message);
     }
@@ -119,7 +138,13 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const username = payload.user.username;
 
         const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/subscribe/${username}/${value}`, { startDate: date });
+        const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
 
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+
+        const passUser = userInfo.user
+        web.views.publish(homepage(passUser, userProgram))
 
         // const confirm = await axios.post(slack.fiveK_Webhook, {  "text": `${username} just signed up for 5k`` }, config)
 

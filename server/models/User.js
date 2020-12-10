@@ -62,6 +62,12 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Program"
     }],
+    finishedWorkouts: [{
+        type: Schema.Types.ObjectId,
+        ref: "FinishedWorkout"
+    }],
+
+
 
     photos: {},
     created: {

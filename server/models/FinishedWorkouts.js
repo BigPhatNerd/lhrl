@@ -1,6 +1,6 @@
 var { Schema, model, Types } = require('mongoose');
 
-const viewProgramSchema = new Schema({
+const finishedWorkoutSchema = new Schema({
     name: {
         type: String
     },
@@ -29,6 +29,6 @@ const viewProgramSchema = new Schema({
 
 });
 
-const ViewProgram = model("ViewProgram", viewProgramSchema);
+const FinishedWorkout = model("FinishedWorkout", finishedWorkoutSchema);
 
-module.exports = ViewProgram;
+module.exports = FinishedWorkout;

@@ -1,6 +1,6 @@
 var { Schema, model, Types } = require('mongoose');
 
-const selectedProgramSchema = new Schema({
+const fiveKSchema = new Schema({
     name: {
         type: String
     },
@@ -25,14 +25,10 @@ const selectedProgramSchema = new Schema({
     subscribed: {
         type: Boolean,
         default: false
-    },
-    completed: {
-        type: Boolean,
-        default: false
     }
 
 });
 
-const Program = model("Program", selectedProgramSchema);
+const FiveK = model("FiveK", fiveKSchema);
 
-module.exports = Program;
+module.exports = FiveK;

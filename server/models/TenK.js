@@ -1,6 +1,6 @@
 var { Schema, model, Types } = require('mongoose');
 
-const selectedProgramSchema = new Schema({
+const tenKSchema = new Schema({
     name: {
         type: String
     },
@@ -25,14 +25,10 @@ const selectedProgramSchema = new Schema({
     subscribed: {
         type: Boolean,
         default: false
-    },
-    completed: {
-        type: Boolean,
-        default: false
     }
 
 });
 
-const Program = model("Program", selectedProgramSchema);
+const TenK = model("TenK", tenKSchema);
 
-module.exports = Program;
+module.exports = TenK;

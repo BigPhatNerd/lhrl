@@ -79,20 +79,20 @@ const editWorkout = (trigger_id, workoutSelected) => {
                     }
                 },
                 {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "name",
-                    "element": {
-                        "type": "plain_text_input",
-                        "initial_value": name,
-                        "action_id": "name"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Name",
-                        "emoji": true
-                    }
-                },
+    "type": "input",
+    "optional": true,
+    "block_id": "name",
+    "element": {
+        "type": "plain_text_input",
+        "initial_value": name,
+        "action_id": "name"
+    },
+    "label": {
+        "type": "plain_text",
+        "text": "Name",
+        "emoji": true
+    }
+},
                 {
                     "type": "input",
                     "optional": true,

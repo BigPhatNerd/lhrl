@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "nodemon"
+    "watch": "nodemon",
+    "seed": "node seeders/seed.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,7 +29,7 @@
     "jade": "^1.11.0",
     "luxon": "^1.25.0",
     "method-override": "^3.0.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.1",
     "mongoose": "^5.9.15",
     "open": "^7.3.0",
     "opn": "^6.0.0",

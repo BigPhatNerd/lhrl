@@ -10,7 +10,7 @@ dayjs.extend(weekOfYear)
 const homepage = (user, userProgram) => {
     console.log(dayjs().week())
 
-    console.log("user: ", user);
+
 
 
 

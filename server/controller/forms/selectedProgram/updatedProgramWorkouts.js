@@ -1,15 +1,14 @@
+const axios = require('axios');
 var dayjs = require("dayjs");
-
-
-const selectedProgramWorkouts = async (trigger_id, workouts) => {
+const updatedProgramWorkouts = async (viewId, username) => {
+    const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
 
     const shortData = workouts.data[0].selectedProgram;
 
+    const array = [];
 
-    const array = []
     const blockData = (info) => {
         for(var i = 0; i < shortData.length; i++) {
-
             const slicedDate = info[i].startDate.slice(0, -14);
             const date = dayjs(slicedDate).format('dddd MMMM D YYYY')
 
@@ -68,13 +67,11 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
 
         }
         return array;
+
     }
 
-
-
-
     const mapWorkouts = {
-        "trigger_id": trigger_id,
+        "view_id": viewId,
         view: {
             "type": "modal",
             "callback_id": "selected_program_workouts",
@@ -96,6 +93,8 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
         }
     }
     return mapWorkouts
+
+
 }
 
-module.exports = selectedProgramWorkouts;
+module.exports = updatedProgramWorkouts;

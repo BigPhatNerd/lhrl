@@ -30,6 +30,29 @@ const workoutSchema = new Schema({
     },
     distance: {
         type: Number
+    },
+    startDate: {
+        type: Date
+    },
+    week: {
+        type: Number
+    },
+    day: {
+        type: Number
+    },
+    description: {
+        type: String
+    },
+    time: {
+        type: Number
+    },
+    subscribed: {
+        type: Boolean,
+        default: false
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
 
 

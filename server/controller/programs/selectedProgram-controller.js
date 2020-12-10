@@ -1,4 +1,4 @@
-const { User, FiveK, Program, ViewProgram } = require('../../models');
+const { User, FiveK, TenK, Program } = require('../../models');
 const { slack } = require('../../lib/keys.js');
 
 const { botToken, verificationToken } = slack;
@@ -29,33 +29,35 @@ const selectedProgramController = {
     },
     viewProgram(req, res) {
         var program;
+        var Model;
         const programSelected = req.params.value;
 
         switch (programSelected) {
             case "5K":
                 program = fiveK;
+                Model = FiveK;
                 break;
             case "10K":
                 program = tenK;
+                Model = TenK
 
         }
 
-        ViewProgram.deleteMany({})
-            .then(() => ViewProgram.collection.insertMany(program(Date.now())))
+        // ViewProgram.deleteMany({})
+        //     .then(() => ViewProgram.collection.insertMany(program(Date.now())))
+        //     .then(data => {
+        //         console.log(data.result.n + " records inserted!");
+        Model.find()
             .then(data => {
-                console.log(data.result.n + " records inserted!");
-                ViewProgram.find()
-                    .then(data => {
-                        res.json(data);
-                    })
+                res.json(data);
             })
-
             .catch(err => {
                 console.error(err);
                 process.exit(1);
             })
     },
     async subscribeToPlan({ params, body }, res) {
+
         const programSelected = params.value;
         switch (programSelected) {
             case "5K":
@@ -71,14 +73,16 @@ const selectedProgramController = {
         Program.deleteMany({})
             .then(() => Program.collection.insertMany(insertProgram))
             .then((data) => {
+
+                // 
                 return User.findOneAndUpdate({ username: params.username }, { $set: { selectedProgram: data.ops } }, { new: true })
-            })
-            .then(programData => {
-                if(!programData) {
-                    res.status(404).json({ message: "No user found with this id" });
-                    return
-                }
-                res.json(programData);
+                    .then(programData => {
+                        if(!programData) {
+                            res.status(404).json({ message: "No user found with this id" });
+                            return
+                        }
+                        res.json(programData);
+                    })
             })
             .catch(err => {
                 console.error(err.message);
@@ -90,9 +94,30 @@ const selectedProgramController = {
             .then(programData => {
                 res.json(programData);
             })
+    },
+    async completePlanWorkout({ params, body }, res) {
+        try {
+            const username = params.username;
+            const id = params.id;
+            const data = {
+                completed: true,
+                time: body.time
+            }
+
+            const completeWorkout = await Program.findOneAndUpdate({ _id: id }, data, { new: true });
+            const addWorkout = await User.findOneAndUpdate({ username: username }, { $push: { workouts: completeWorkout } }, { new: true });
+
+            res.send(addWorkout);
+        } catch (err) {
+
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+
     }
-
-
 }
+
+
+
 
 module.exports = selectedProgramController;

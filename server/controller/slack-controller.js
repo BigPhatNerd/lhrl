@@ -67,7 +67,7 @@ const slackController = {
     },
     async publishHomepage(req, res) {
         res.send(req.body);
-        console.log("req.body: ", req.body);
+
         const { user } = req.body.event;
 
         const userInfo = await web.users.info({ user: user });

@@ -6,7 +6,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
     const array = []
     const blockData = (info) => {
         console.log("info.day: ", info);
-        const date = dayjs(info.day).format('MMMM D YYYY, h:mm:ss a')
+        const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(shortData.length === 0) {
             array.push({
 
@@ -20,7 +20,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
             })
         }
         for(var i = 0; i < shortData.length; i++) {
-            const date = dayjs(info[i].day).format('MMMM D YYYY, h:mm:ss a')
+            const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
 
             array.push({
                 type: "section",

@@ -9,15 +9,28 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
     const array = []
     const blockData = (info) => {
         for(var i = 0; i < shortData.length; i++) {
-
+            console.log("info[i]: ", info[i]);
             const slicedDate = info[i].startDate.slice(0, -14);
-            const date = dayjs(slicedDate).format('dddd MMMM D YYYY')
+            const date = dayjs(slicedDate).format('dddd MMMM D YYYY');
+            const completed = () => {
+                if(info[i].completed) {
+                    return "You completed this workout on " + date + " \nin " + info[i].time + " seconds!"
+                }
+                return "Workout for: " + date
+            };
+            const enterNewTime = () => {
+                if(info[i].completed) {
+                    return "Update Score"
+                }
+                return "Enter Score"
+
+            }
 
             array.push({
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Workout for: " + date,
+                    text: completed(),
                     emoji: true
                 },
 
@@ -54,7 +67,7 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
                     type: "button",
                     text: {
                         type: "plain_text",
-                        text: "Enter Score",
+                        text: enterNewTime(),
                         emoji: true
                     },
                     value: "selected_program_score",

@@ -1,4 +1,5 @@
 const axios = require('axios');
+var dayjs = require("dayjs");
 const updatedWorkouts = async (viewId, username) => {
     const workouts = await axios.get(`https://lhrlslacktest.ngrok.io/slack/get-workouts/${username}`)
     const shortData = workouts.data[0].workouts;
@@ -17,12 +18,13 @@ const updatedWorkouts = async (viewId, username) => {
             })
         }
         for(var i = 0; i < shortData.length; i++) {
-
+            console.log("info: ", info)
+            const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
             array.push({
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Date Created: " + info[i].day,
+                    text: "Date Created: " + date,
                     emoji: true
                 },
 

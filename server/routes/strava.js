@@ -101,7 +101,7 @@ router.post('/webhook', async (req, res) => {
 
                 const { name, stravaAvatar } = activityData;
 
-                axios.post(slack.stravaWebHook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
+                axios.post(slack.lhrl_Webhook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
 
             })
 

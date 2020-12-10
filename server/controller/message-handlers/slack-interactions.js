@@ -125,9 +125,6 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
 
         const username = payload.user.username;
 
-
-        // const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/fiveK/subscribe/${username}`, { startDate: date })
-
         const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/subscribe/${username}/${value}`, { startDate: date });
         const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
 
@@ -135,7 +132,7 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
         web.views.publish(homepage(passUser, userProgram))
-        // const confirm = await axios.post(slack.fiveK_Webhook, {  "text": `${username} just signed up for 5k`` }, config)
+        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🎊 ${username} just signed up for the 5k program 🎊` }, config)
         // const newhomePageView = await axios.post(`http://lhrlslacktest.ngrok.io/slack/events`);
     } catch (err) {
         console.error(err.message);
@@ -146,22 +143,15 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
     try {
 
         const { trigger_id } = payload;
-        //YEEEHAWWWW
         const date = payload.view.state.values.date.date.selected_date;
-
         const username = payload.user.username;
-
         const subscribe = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/subscribe/${username}/${value}`, { startDate: date });
         const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
-
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
-
         const passUser = userInfo.user
         web.views.publish(homepage(passUser, userProgram))
-
-        // const confirm = await axios.post(slack.fiveK_Webhook, {  "text": `${username} just signed up for 5k`` }, config)
-
+        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🥳 ${username} just signed up for the 10k program 🥳` }, config)
     } catch (err) {
         console.error(err.message);
     }
@@ -224,6 +214,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
             distance: parseInt(distance)
         }
         const sendWorkout = await axios.post(`http://lhrlslacktest.ngrok.io/slack/create-workout/${params}`, data);
+        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏋️‍♀️ ${username} just created a workout 🏋` }, config)
     } catch (err) {
         console.error(err.message);
     }

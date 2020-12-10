@@ -16,12 +16,12 @@ const routes = (require('./routes'));
 const programRoutes = require('./routes/programs');
 process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
-
+const moreSlackInteractions = require('./controller/message-handlers/more-slack-interactions.js');
 
 
 mongoose.set('debug', true);
 
-app.use('/slack/actions', slackInteractions.middleware);
+app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware]);
 
 
 

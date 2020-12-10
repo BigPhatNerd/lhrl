@@ -11,6 +11,7 @@ const updatedProgramWorkouts = async (viewId, username) => {
         for(var i = 0; i < shortData.length; i++) {
             const slicedDate = info[i].startDate.slice(0, -14);
             const date = dayjs(slicedDate).format('dddd MMMM D YYYY')
+
             const completed = () => {
                 if(info[i].completed) {
                     return "You completed this workout on " + date + " \nin " + info[i].time + " seconds!"

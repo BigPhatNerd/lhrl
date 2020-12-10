@@ -20,6 +20,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
             })
         }
         for(var i = 0; i < shortData.length; i++) {
+
             const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
 
             array.push({

@@ -20,6 +20,7 @@
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
+    "cron": "^1.8.2",
     "crypto": "^1.0.1",
     "dayjs": "^1.9.6",
     "dotenv": "^8.2.0",

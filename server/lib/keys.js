@@ -11,6 +11,7 @@ module.exports = {
         cf_wodWebhook: process.env.CF_WOD_WEBHOOK,
         verificationToken: process.env.SLACK_VERIFICATION_TOKEN,
         fiveK_Webhook: process.env.FIVEK_WEBHOOK,
+        lhrl_Webhook: process.env.LHRL_WEBHOOK
 
     },
     mongo: {

@@ -16,7 +16,7 @@ const submitTime = (trigger_id, workoutSelected) => {
 
             "title": {
                 "type": "plain_text",
-                "text": name,
+                "text": "Selected Program",
                 "emoji": true
             },
             "submit": {

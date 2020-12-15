@@ -1,8 +1,9 @@
 const { dateHelper } = require('./helpers');
 
-let program = (start) => {
+let tenK = (start, user) => {
 
     return [{
+            "userId": user,
             "name": "6-Weeks to 10K",
             "startDate": dateHelper(start, 0),
             "week": 1,
@@ -13,6 +14,7 @@ let program = (start) => {
 
         },
         {
+            "userId": user,
             "startDate": dateHelper(start, 2),
             "week": 1,
             "day": 2,
@@ -21,6 +23,7 @@ let program = (start) => {
             "subscribed": true
         },
         {
+            "userId": user,
             "startDate": dateHelper(start, 2),
             "week": 1,
             "day": 3,
@@ -31,4 +34,4 @@ let program = (start) => {
     ]
 }
 
-module.exports = program;
+module.exports = tenK;

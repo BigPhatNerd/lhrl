@@ -99,16 +99,19 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             web.views.publish(homepage(passUser, workouts))
         } else if(value === "selected_program_score") {
             viewId = payload.container.view_id;
+
             //Open modal to enter score for program workout
             buttonPressed = buttonPressed.replace("selected_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
+            const submitTimeView = await submitTime(trigger_id, workoutSelected[0]);
+            web.views.push(submitTimeView);
 
-
-            web.views.push(submitTime(trigger_id, workoutSelected[0]))
-            // viewId = payload.container.view_id;
-            // buttonPressed = buttonPressed.replace("delete", "");
-            // const workoutSelected = await Workout.find({ _id: buttonPressed });
-            // web.views.push(editWorkout(trigger_id, workoutSelected[0]));
+        } else if(value === 'daily_program_score') {
+            console.log('payload.container.view_id: ', payload.container.view_id);
+            buttonPressed = buttonPressed.replace("daily_program_score", "");
+            const workoutSelected = await Program.find({ _id: buttonPressed });
+            const submitTimeView = await submitTime(trigger_id, workoutSelected[0]);
+            web.views.open(submitTimeView);
         }
     } catch (err) {
         console.error(err.message);
@@ -117,8 +120,7 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
 
 slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
     try {
-        console.log("\n\n\nWHATTTT  THE FUCKKKKK\n\n\n");
-        console.log("payload looking for response_url: ", payload);
+
         const { trigger_id } = payload;
         //YEEEHAWWWW
         const date = payload.view.state.values.date.date.selected_date;
@@ -132,7 +134,7 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
         web.views.publish(homepage(passUser, userProgram))
-        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🎊 ${username} just signed up for the 5k program 🎊` }, config)
+        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 5k program 🏃‍♂️` }, config)
         // const newhomePageView = await axios.post(`http://lhrlslacktest.ngrok.io/slack/events`);
     } catch (err) {
         console.error(err.message);
@@ -151,7 +153,7 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
         web.views.publish(homepage(passUser, userProgram))
-        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🥳 ${username} just signed up for the 10k program 🥳` }, config)
+        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 10k program 🏃‍♂️` }, config)
     } catch (err) {
         console.error(err.message);
     }
@@ -232,7 +234,12 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
         //Taken from 'edit_workout' viewSubmission above
         const updated = await updatedProgramWorkouts(viewId, username);
         console.log("\n\n\nupdated: ", updated);
-        web.views.update(updated)
+        // web.views.update(updated)
+        const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user
+        web.views.publish(homepage(passUser, userProgram))
 
     } catch (err) {
         console.error(err.message);

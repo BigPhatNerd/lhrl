@@ -4,6 +4,22 @@ const finishedWorkoutSchema = new Schema({
     name: {
         type: String
     },
+    pushups: {
+        type: Number
+    },
+    situps: {
+        type: Number
+    },
+    squats: {
+        type: Number
+    },
+    miles: {
+        type: Number
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
     startDate: {
         type: Date
     },

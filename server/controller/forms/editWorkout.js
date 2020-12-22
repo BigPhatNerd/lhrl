@@ -1,6 +1,6 @@
 const editWorkout = (trigger_id, workoutSelected) => {
     const { _id, type, name, duration, weight, reps, sets, distance } = workoutSelected;
-    console.log("type in the editWorkout: ", type);
+    console.log("KJLLJKJKLKLJ")
     const editWorkoutModal = {
         "trigger_id": trigger_id,
         "external_id": _id,
@@ -79,20 +79,20 @@ const editWorkout = (trigger_id, workoutSelected) => {
                     }
                 },
                 {
-    "type": "input",
-    "optional": true,
-    "block_id": "name",
-    "element": {
-        "type": "plain_text_input",
-        "initial_value": name,
-        "action_id": "name"
-    },
-    "label": {
-        "type": "plain_text",
-        "text": "Name",
-        "emoji": true
-    }
-},
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "name",
+                    "element": {
+                        "type": "plain_text_input",
+                        "initial_value": name,
+                        "action_id": "name"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Name",
+                        "emoji": true
+                    }
+                },
                 {
                     "type": "input",
                     "optional": true,

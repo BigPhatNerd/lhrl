@@ -18,7 +18,7 @@ const updatedWorkouts = async (viewId, username) => {
             })
         }
         for(var i = 0; i < shortData.length; i++) {
-            console.log("info: ", info)
+
             const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
             array.push({
                 type: "section",

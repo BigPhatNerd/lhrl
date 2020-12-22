@@ -72,11 +72,11 @@ const slackController = {
 
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
+        //Add axios call to get user's finished workouts and add the call to the homepage() function
+        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
 
-        const userProgram = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${passUser.name}`);
-        // console.log("userProgram: ", userProgram.data[0].selectedProgram[0]);
 
-        web.views.publish(homepage(passUser, userProgram));
+        web.views.publish(homepage(passUser, allWorkouts));
     },
 
 

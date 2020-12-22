@@ -1,6 +1,6 @@
 const db = require('../../models')
 const router = require('express').Router();
-const selectedProgram = require('../../models/SelectedProgram');
+
 const {
     subscribeToPlan,
     viewProgram,

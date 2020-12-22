@@ -1,9 +1,4 @@
 const { User, Program } = require('../../models');
-const { slack } = require('../../lib/keys.js');
-const { Types } = require('mongoose');
-
-const { botToken, verificationToken } = slack;
-const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
 const fiveK = require('../../programs/fiveK');
 const tenK = require('../../programs/tenK');
@@ -74,14 +69,18 @@ const selectedProgramController = {
     },
     async completePlanWorkout({ params, body }, res) {
         try {
+            console.log("\n\n\n\nbody: ", body);
             const username = params.username;
             const id = params.id;
             const data = {
                 completed: true,
-                time: body.time
+                time: body.time,
+                userId: username
             }
+           
 
             const completeWorkout = await Program.findOneAndUpdate({ _id: id }, data, { new: true });
+
             const addWorkout = await User.findOneAndUpdate({ username: username }, { $push: { finishedWorkouts: completeWorkout } }, { new: true });
 
             res.send(addWorkout);

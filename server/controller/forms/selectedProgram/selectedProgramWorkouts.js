@@ -9,7 +9,7 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
     const array = []
     const blockData = (info) => {
         for(var i = 0; i < shortData.length; i++) {
-            console.log("info[i]: ", info[i]);
+
             const slicedDate = info[i].startDate.slice(0, -14);
             const date = dayjs(slicedDate).format('dddd MMMM D YYYY');
             const completed = () => {

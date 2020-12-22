@@ -3,9 +3,10 @@ var dayjs = require("dayjs");
 const viewWorkouts = async (trigger_id, workouts) => {
 
     const shortData = workouts.data[0].workouts;
+
     const array = []
     const blockData = (info) => {
-        console.log("info.day: ", info);
+
         const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(shortData.length === 0) {
             array.push({
@@ -104,6 +105,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
 
     const mapWorkouts = {
         "trigger_id": trigger_id,
+        "response_action": "clear",
         view: {
             "type": "modal",
             "callback_id": "view_workouts",
@@ -112,9 +114,16 @@ const viewWorkouts = async (trigger_id, workouts) => {
                 "text": "Workouts Created: ",
                 "emoji": true
             },
+            "submit": {
+                "type": "plain_text",
+                "text": "Submit",
+                "emoji": true,
+
+            },
+
             "close": {
                 "type": "plain_text",
-                "text": "Take Me Home",
+                "text": "Cancel",
                 "emoji": true
             },
             "blocks": (blockData(shortData))

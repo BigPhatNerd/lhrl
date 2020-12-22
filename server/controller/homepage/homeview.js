@@ -2,15 +2,13 @@ const {
     currentlySubscribed,
     removeFromProgram,
     todaysWorkout,
-    weeklyGoals
+    weeklyGoals,
+    enterGoalReps
 
 } = require('./helpers');
-var dayjs = require("dayjs");
-var weekOfYear = require('dayjs/plugin/weekOfYear')
-dayjs.extend(weekOfYear)
-// dayjs().format('YYYY-MM-D')
-const homepage = (user, userProgram) => {
-    console.log(dayjs().week())
+
+const homepage = (user, allWorkouts) => {
+
 
     //user and userProgram is set in controller/slack-controller publishHomepage
 
@@ -117,19 +115,24 @@ const homepage = (user, userProgram) => {
                         "emoji": true
                     }
                 },
-                currentlySubscribed(userProgram),
+                currentlySubscribed(allWorkouts),
                 {
                     "type": "divider"
                 },
-                todaysWorkout(userProgram),
+                todaysWorkout(allWorkouts),
                 {
                     "type": "divider"
                 },
-                removeFromProgram(userProgram),
+                removeFromProgram(allWorkouts),
                 {
                     "type": "divider"
                 },
-                weeklyGoals(),
+                weeklyGoals(allWorkouts),
+
+                {
+                    "type": "divider"
+                },
+                enterGoalReps(allWorkouts),
                 {
                     "type": "divider"
                 },

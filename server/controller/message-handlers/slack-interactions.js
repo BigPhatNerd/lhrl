@@ -16,9 +16,11 @@ const selectedProgramWorkouts = require('../forms/selectedProgram/selectedProgra
 const setGoals = require('../forms/weeklyGoals/createGoals');
 const updateGoals = require('../forms/weeklyGoals/updateGoals');
 const addRepsToGoals = require('../forms/addRepsToGoals');
-const { slack } = require('../../lib/keys');
+const submitScore = require('../forms/cfWOD/submitScore');
+const { slack, sugarwod } = require('../../lib/keys');
 const axios = require('axios');
-const config = { 'Content-Type': 'application/json' }
+const config = { 'Content-Type': 'application/json' };
+const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 
 var viewId;
 var value;
@@ -96,8 +98,9 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             const userInfo = await web.users.info({ user: user });
 
             const passUser = userInfo.user;
-            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`)
-            web.views.publish(homepage(passUser, allWorkouts))
+            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            web.views.publish(homepage(passUser, allWorkouts, wod))
         } else if(value === "selected_program_score") {
             viewId = payload.container.view_id;
 
@@ -123,6 +126,10 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             web.views.open(updateGoals(trigger_id, goalsSelected[0]))
         } else if(value === 'add_reps_to_goal') {
             web.views.open(addRepsToGoals(trigger_id));
+        } else if(value === 'cf_wod_score') {
+            console.log("I am here!");
+            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            web.views.open(submitScore(trigger_id, wod))
         }
     } catch (err) {
         console.error(err.message);
@@ -142,8 +149,9 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
-        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`)
-        web.views.publish(homepage(passUser, allWorkouts))
+        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        web.views.publish(homepage(passUser, allWorkouts, wod))
         const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 5k program 🏃‍♂️` }, config)
         // const newhomePageView = await axios.post(`http://lhrlslacktest.ngrok.io/slack/events`);
     } catch (err) {
@@ -162,7 +170,8 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
-        web.views.publish(homepage(passUser, allWorkouts))
+        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        web.views.publish(homepage(passUser, allWorkouts, wod))
 
         const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 10k program 🏃‍♂️` }, config)
     } catch (err) {
@@ -254,8 +263,9 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
 
-        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`)
-        await web.views.publish(homepage(passUser, allWorkouts))
+        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        await web.views.publish(homepage(passUser, allWorkouts, wod))
 
     } catch (err) {
         console.error(err.message);

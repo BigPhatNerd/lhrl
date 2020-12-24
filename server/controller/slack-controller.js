@@ -1,10 +1,12 @@
 const { User, Workout } = require('../models');
 const createWorkout = require('./forms/createWorkout.js');
-const { slack } = require('../lib/keys.js');
+const { slack, sugarwod } = require('../lib/keys.js');
 const { botToken, verificationToken, } = slack;
 const web = require('./../config/slack-web-api.js');
 const homepage = require('./homepage/homeview.js');
 const axios = require('axios');
+const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey }
+
 
 
 const slackController = {
@@ -74,9 +76,9 @@ const slackController = {
         const passUser = userInfo.user;
         //Add axios call to get user's finished workouts and add the call to the homepage() function
         const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
 
-
-        web.views.publish(homepage(passUser, allWorkouts));
+        web.views.publish(homepage(passUser, allWorkouts, wod));
     },
 
 

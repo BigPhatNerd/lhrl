@@ -3,11 +3,15 @@ const {
     removeFromProgram,
     todaysWorkout,
     weeklyGoals,
-    enterGoalReps
+    enterGoalReps,
+
 
 } = require('./helpers');
+const {
+    cfWOD
+} = require('./helpers/sugarWod');
 
-const homepage = (user, allWorkouts) => {
+const homepage = (user, allWorkouts, wod) => {
 
 
     //user and userProgram is set in controller/slack-controller publishHomepage
@@ -127,15 +131,33 @@ const homepage = (user, allWorkouts) => {
                 {
                     "type": "divider"
                 },
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Here is your goal summary for this week",
+                        "emoji": true
+                    }
+                },
                 weeklyGoals(allWorkouts),
 
                 {
                     "type": "divider"
                 },
+
                 enterGoalReps(allWorkouts),
                 {
                     "type": "divider"
                 },
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "CrossFit HQ Workout of the Day",
+                        "emoji": true
+                    }
+                },
+                cfWOD(wod),
 
 
 

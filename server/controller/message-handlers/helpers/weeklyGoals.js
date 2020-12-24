@@ -14,7 +14,7 @@ module.exports = {
                     return prev + cur.squats;
                     break;
                 case "miles":
-                    return prev + cur.squats;
+                    return prev + cur.miles;
                     break;
 
             }
@@ -25,24 +25,50 @@ module.exports = {
     goalSummary: (string, variable, goalCount) => {
 
         if(goalCount >= variable && variable !== null) {
-            return "👏 You have completed your goal of " + variable + " " + string + "👏 \nUpdate goals and keep going :arrow_up:\n"
+            return "\n👏 You have completed your goal of " + variable + " " + string + "\nUpdate goals and keep going 👏\n\n"
         } else if(variable !== null) {
             return goalCount + " of " + variable + " " + string + "\n"
         } else {
             return ""
         }
     },
-    // Sum all of the completed reps for each workout for the week that have a goal associated with them
-    accumulatedReps: (repsComplete, weeklyGoals) => {
-        const reduce = repsComplete.reduce((acc, obj) => {
+    goalSummaryMessage: (string, variable, goalCount, username) => {
+        if(goalCount >= variable && variable !== null) {
+            return `\n👏  Weekly goal of ${variable} ${string} is complete. 👏\n`
+        } else if(variable !== null) {
+            return `${goalCount} of ${variable} ${string}`
+        } else {
+            return ""
+        }
+    },
 
+
+    // Sum all of the completed reps for each workout for the week that have a goal associated with them
+    //if the goal has been surpassed, repsComplete only counts up to that goal.
+    accumulatedReps: (repsComplete, weeklyGoals) => {
+        var reducePushups = repsComplete.reduce((acc, obj) => {
             if(weeklyGoals.pushups === null || weeklyGoals.pushups === undefined) { obj.pushups = 0 };
-            if(weeklyGoals.situps === null || weeklyGoals.pushups === undefined) { obj.situps = 0 };
-            if(weeklyGoals.squats === null || weeklyGoals.squats === undefined) { obj.squats = 0 };
-            if(weeklyGoals.miles === null || weeklyGoals.miles === undefined) { obj.miles = 0 };
-            return acc + obj.pushups + obj.situps + obj.squats + obj.miles
+            return acc + obj.pushups
         }, 0);
-        return reduce;
+        var reduceSitups = repsComplete.reduce((acc, obj) => {
+            if(weeklyGoals.situps === null || weeklyGoals.situps === undefined) { obj.situps = 0 };
+            return acc + obj.situps
+        }, 0);
+        var reduceSquats = repsComplete.reduce((acc, obj) => {
+            if(weeklyGoals.squats === null || weeklyGoals.squats === undefined) { obj.squats = 0 };
+            return acc + obj.squats
+        }, 0);
+        var reduceMiles = repsComplete.reduce((acc, obj) => {
+            if(weeklyGoals.miles === null || weeklyGoals.miles === undefined) { obj.miles = 0 };
+            return acc + obj.miles
+        }, 0);
+
+        if(reducePushups > weeklyGoals.pushups) { reducePushups = weeklyGoals.pushups };
+        if(reduceSitups > weeklyGoals.situps) { reduceSitups = weeklyGoals.situps };
+        if(reduceSquats > weeklyGoals.squats) { reduceSquats = weeklyGoals.squats };
+        if(reduceMiles > weeklyGoals.miles) { reduceMiles = weeklyGoals.miles };
+        return reducePushups + reduceSitups + reduceSquats + reduceMiles
+
     },
     graphPercentage: (reps, weeklyGoals) => {
         const goalsTotals = weeklyGoals.pushups + weeklyGoals.situps + weeklyGoals.squats + weeklyGoals.miles;

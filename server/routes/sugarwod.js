@@ -47,35 +47,19 @@ router.get('/obcf-wod', async (req, res) => {
     try {
         //OBCF Workout of the Day
         const wod = await axios.get('https://api.sugarwod.com/v2/workouts', { headers: config });
-        const jumbled = ["What the heck", "I wish this would work", "Why won't this work?"];
-        const test = jumbled.map(info => {
-            return info;
-        });
-
-        console.log("test:", test.join(' '));
-
-        const display = wod.data.data.map(info => {
-            return ("🏋️‍♀️ *Title:* " + info.attributes.title + " 🏋️‍♀️\n" +
-                "💪 *Description:* " + info.attributes.description + " 💪\n" +
-                "📝 *Score Type:* " + info.attributes.score_type + " 📝\n\n\n" +
-                "*------------------------*")
-
-        });
+        console.log("wod.data: ", wod.data);
+        res.json(wod.data);
 
 
-        await axios.post(slack.cf_wodWebhook, {
-            "text": display.join(' ')
-        }, slackHeader);
 
-        // res.json(wod.data)
-        res.json(display.join(' '));
+
     } catch (err) {
 
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 
-})
+});
 
 router.get('/cf-wod', async (req, res) => {
     //Eventually set this to run once a day in a setInterval function using moment.js
@@ -101,17 +85,5 @@ router.get('/cf-wod', async (req, res) => {
 })
 
 
-// const test = await axios.get('https://api.sugarwod.com/v2/box', { headers: config });
-//        const athletes = await axios.get('https://api.sugarwod.com/v2/athletes', { headers: config });
-//        const workouts = await axios.get('https://api.sugarwod.com/v2/athletes', { headers: config });
-//        const tracks = await axios.get('https://api.sugarwod.com/v2/tracks', { headers: config });
-//        const home = await axios.get('https://api.sugarwod.com/v2/home', { headers: config })
-//         const resObject = {
-//            test: test.data,
-//            athletes: athletes.data,
-//            workouts: workouts.data,
-//            tracks: tracks[0].data,
-//            home: home.data
-//        }
 
 module.exports = router;

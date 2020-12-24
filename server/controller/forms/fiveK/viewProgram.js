@@ -67,30 +67,6 @@ const view5KProgram = async (trigger_id, workouts) => {
 
 
             }, {
-                type: "actions",
-                elements: [{
-                        type: "button",
-                        text: {
-                            type: "plain_text",
-                            text: "Edit Workout",
-                            emoji: true
-                        },
-                        value: "edit",
-                        action_id: info[i]._id
-                    },
-                    {
-                        type: "button",
-                        text: {
-                            type: "plain_text",
-                            text: "Delete Workout",
-                            emoji: true
-                        },
-                        value: "delete",
-                        action_id: "delete" + info[i]._id,
-
-                    }
-                ]
-            }, {
                 type: "divider"
             })
 

@@ -6,7 +6,7 @@ const addRepsToGoals = (trigger_id) => {
             "callback_id": "add_reps_to_goals",
             "title": {
                 "type": "plain_text",
-                "text": "Add Reps",
+                "text": "Add Reps To Goals",
                 "emoji": true
             },
             "submit": {

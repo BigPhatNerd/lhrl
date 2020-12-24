@@ -29,7 +29,7 @@ module.exports = {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "*Currently subscribed to:* :runner: " + program + " :runner:"
+                "text": "*Currently subscribed to:* :woman-running: " + program + " :runner:"
 
             },
             "accessory": {
@@ -150,7 +150,7 @@ module.exports = {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "*Set this weeks goals*"
+                "text": "😢 *You currently have no goals set* 😢"
 
             },
             "accessory": {
@@ -169,6 +169,7 @@ module.exports = {
             console.log("dayjs().week(): ", dayjs().week());
             const { pushups, situps, squats, miles, _id } = allWorkouts.data[0].weeklyGoals[0];
             const repsComplete = allWorkouts.data[0].finishedWorkouts.filter(goals => {
+
                 return dayjs().week() === dayjs(goals.date).week()
             });
 
@@ -189,7 +190,7 @@ module.exports = {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "*Here is your goal summary for this week:* \n" + goalSummary("pushups", pushups, pushupSummary) + goalSummary("situps", situps, situpSummary) + goalSummary("squats", squats, squatSummary) + goalSummary("miles", miles, mileSummary),
+                    "text": goalSummary("pushups", pushups, pushupSummary) + goalSummary("situps", situps, situpSummary) + goalSummary("squats", squats, squatSummary) + goalSummary("miles", miles, mileSummary),
 
                 },
                 "accessory": {
@@ -221,7 +222,7 @@ module.exports = {
                         "type": "button",
                         "text": {
                             "type": "plain_text",
-                            "text": "Add Reps",
+                            "text": "Add Completed Reps",
                             "emoji": true
 
                         },
@@ -255,6 +256,8 @@ module.exports = {
         };
         return noGoals
     },
+
+
 
 
 

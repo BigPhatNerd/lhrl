@@ -43,6 +43,16 @@ const finishedWorkoutSchema = new Schema({
     time: {
         type: Number
     },
+    score_type: {
+        type: String
+    },
+    rounds: {
+        type: Number
+    },
+    reps: {
+        type: Number
+    },
+
     subscribed: {
         type: Boolean,
         default: false

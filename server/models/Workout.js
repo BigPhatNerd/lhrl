@@ -2,8 +2,8 @@ var { Schema, model, Types } = require('mongoose');
 
 const workoutSchema = new Schema({
     userId: {
-    type: String
-},
+        type: String
+    },
     day: {
         type: Date,
         default: () => new Date()
@@ -11,25 +11,31 @@ const workoutSchema = new Schema({
     type: {
         type: String,
         trim: true,
-        required: "Enter and exercises type"
+
     },
     name: {
         type: String,
         trim: true,
-        required: "Enter and exercise name"
     },
     duration: {
         type: Number,
-        required: "Enter and exercise duration in minutes"
+
     },
     weight: {
-        type: Number
+        type: Number,
+        default: 0
     },
     reps: {
-        type: Number
+        type: Number,
+        default: 0
+    },
+    rounds: {
+        type: Number,
+        default: 0
     },
     sets: {
-        type: Number
+        type: Number,
+        default: 0
     },
     distance: {
         type: Number
@@ -44,7 +50,16 @@ const workoutSchema = new Schema({
         type: Number
     },
     description: {
-        type: String
+        type: String,
+        default: "No description entered."
+    },
+    seconds: {
+        type: Number,
+        default: 0
+    },
+    minutes: {
+        type: Number,
+        default: 0
     },
     time: {
         type: Number
@@ -56,7 +71,11 @@ const workoutSchema = new Schema({
     completed: {
         type: Boolean,
         default: false
-    }
+    },
+    notes: {
+        type: String,
+        default: "No notes recorded."
+    },
 
 
 }, {

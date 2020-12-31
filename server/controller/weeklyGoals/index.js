@@ -4,9 +4,9 @@ const weeklyGoals = {
 
     async createGoals({ params, body }, res) {
         try {
-            const username = params.username;
+            const user_id = params.user_id;
             const weeklyGoal = await WeeklyGoal.create(body);
-            const addGoal = await User.findOneAndUpdate({ username: body.userId }, { $push: { weeklyGoals: weeklyGoal } }, { new: true });
+            const addGoal = await User.findOneAndUpdate({ user_id: user_id }, { $push: { weeklyGoals: weeklyGoal } }, { new: true });
             res.json(addGoal);
         } catch (err) {
 
@@ -15,16 +15,20 @@ const weeklyGoals = {
         }
     },
     async showGoals({ params, body }, res) {
-        const username = params.username;
+        const user_id = params.user_id;
         const thisWeek = dayjs().startOf('week');
-        const userWeekGoals = await User.find({ username })
+        const userWeekGoals = await User.find({ user_id: user_id })
             .populate({
                 path: 'weeklyGoals',
                 select: '-__v'
             })
             .select('-__v');
         const goalsArray = userWeekGoals[0].weeklyGoals;
-        const filterThisWeek = goalsArray.filter(goals => goals.date >= thisWeek.toDate() && goals.date <= dayjs(thisWeek).endOf('week').toDate());
+        const filterThisWeek = goalsArray.filter(goals => {
+            console.log("goals.date: ", goals.date);
+            console.log("thisWeek.toDate(): ", thisWeek.toDate());
+            return goals.date >= thisWeek.toDate() && goals.date <= dayjs(thisWeek).endOf('week').toDate()
+        });
         res.json(filterThisWeek);
     },
     async updateGoals({ params, body }, res) {

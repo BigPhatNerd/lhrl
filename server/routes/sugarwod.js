@@ -19,7 +19,7 @@ const webhookConfig = {
 
 const slackHeader = { 'Content-Type': 'application/json' }
 const post = { "text": "booga booga" }
-console.log("sugarwod.sugarwodKey: ", sugarwod.sugarwodKey);
+
 
 router.post('/webhook', (req, res) => {
     console.log("sugarwod webhook received!", req.query, req.body);
@@ -47,7 +47,7 @@ router.get('/obcf-wod', async (req, res) => {
     try {
         //OBCF Workout of the Day
         const wod = await axios.get('https://api.sugarwod.com/v2/workouts', { headers: config });
-        console.log("wod.data: ", wod.data);
+
         res.json(wod.data);
 
 
@@ -65,16 +65,16 @@ router.get('/cf-wod', async (req, res) => {
     //Eventually set this to run once a day in a setInterval function using moment.js
     try {
         //CrossFit HQ Workout of the Day
-        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: config });
-        // const { title, description, score_type } = wod.data.data[0].attributes
-        const { title, description, score_type } = wod.data.data.map(info => info.attributes);
-        console.log('wod.data.data[0].title: ', wod.data.data[0].attributes.title);
-        await axios.post(slack.cf_wodWebhook, {
-            "text": "🏋️‍♀️ " + title + " 🏋️‍♀️\n" +
-                "💪 " + description + " 💪\n" +
-                "📝 " + score_type + " 📝"
-        }, slackHeader);
 
+        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: config });
+        if(wod.data.data.length !== 0) {
+            const { title, description, score_type } = wod.data.data[0].attributes
+            await axios.post(slack.cf_wodWebhook, {
+                "text": "🏋️‍♀️ " + title + " 🏋️‍♀️\n" +
+                    "💪 " + description + " 💪\n" +
+                    "📝 " + score_type + " 📝"
+            }, slackHeader);
+        }
         res.json(wod.data)
     } catch (err) {
 

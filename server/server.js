@@ -15,6 +15,7 @@ const connectDB = require('./config/db');
 const routes = (require('./routes'));
 const programRoutes = require('./routes/programs');
 const weeklyGoals = require('./routes/weeklyGoals');
+const homeviewRoutes = require('./routes/homeviewRoutes');
 const finishedWorkouts = require('./routes/finishedWorkouts');
 const getEverything = require('./routes/getEverything');
 process.env.NODE_DEBUG = 'request';
@@ -40,11 +41,12 @@ app.use(express.json());
 
 app.use(session({
     store: new MongoStore({
-        url: mongo.dbURI
+        url: mongo.dbURI,
+        collection: 'sessions'
     }),
     secret: "my cust0m 5E5510N k3y",
-    saveUninitialized: true,
-    resave: true
+    saveUninitialized: false,
+    resave: false
 }));
 
 
@@ -53,7 +55,7 @@ const PORT = process.env.PORT || 4390;
 connectDB();
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 app.use(
     cors({
         origin: "http://lhrlslacktest.ngrok.io",
@@ -72,6 +74,7 @@ app.use('/programs', programRoutes);
 app.use('/weeklyGoals', weeklyGoals);
 app.use('/finishedWorkouts', finishedWorkouts);
 app.use('/getEverything', getEverything);
+app.use('/homeview', homeviewRoutes)
 
 app.get('/', (req, res) => res.json({ msg: "Welcome to the Lift Heavy Run Long® API" }));
 app.listen(PORT, () => {

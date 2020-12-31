@@ -23,30 +23,30 @@ const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 
 var viewId;
 var value;
-// axios.post(slack.lhrl_Webhook, { "blocks": sendGraphView() }, config);
-console.log("\n\ntesting\n\n")
-//Basically from "Today's Workout" down on homepage
+
 moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respond) => {
     try {
         const username = payload.user.username;
+        const user_id = payload.user.id
+
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
         situps = situps.situps.value;
         squats = squats.squats.value;
         miles = miles.miles.value;
         const data = {
-            userId: username,
+            user_id: username,
             pushups: parseInt(pushups),
             situps: parseInt(situps),
             squats: parseInt(squats),
             miles: parseInt(miles)
         }
-        const sendWorkout = axios.post(`http://lhrlslacktest.ngrok.io/finishedWorkouts/${username}`, data);
+        const sendWorkout = axios.post(`http://lhrlslacktest.ngrok.io/finishedWorkouts/${user_id}`, data);
 
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
-        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
         const weeklyGoals = allWorkouts.data[0].weeklyGoals[0];
         const repsComplete = allWorkouts.data[0].finishedWorkouts.filter(goals => {
             return dayjs().week() === dayjs(goals.date).week()
@@ -90,6 +90,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
     try {
 
         const username = payload.user.username;
+        const user_id = payload.user.id;
         const { trigger_id } = payload;
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
@@ -97,18 +98,19 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         squats = squats.squats.value;
         miles = miles.miles.value;
         const data = {
-            userId: username,
+            userId: user_id,
             pushups: parseInt(pushups),
             situps: parseInt(situps),
             squats: parseInt(squats),
             miles: parseInt(miles)
         }
-        const sendGoals = await axios.post(`http://lhrlslacktest.ngrok.io/weeklyGoals/${username}`, data);
+
+        const sendGoals = await axios.post(`http://lhrlslacktest.ngrok.io/weeklyGoals/${user_id}`, data);
         const confirm = await axios.post(slack.lhrl_Webhook, { "text": `${username} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
-        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
         const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         await web.views.publish(homepage(passUser, allWorkouts, wod))
 
@@ -123,6 +125,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
 
         const weeklyGoalId = payload.view.private_metadata
         const username = payload.user.username;
+        const user_id = payload.user.id;
         const { trigger_id } = payload;
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
@@ -130,7 +133,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         squats = squats.squats.value;
         miles = miles.miles.value;
         const data = {
-            userId: username,
+            userId: user_id,
             pushups: parseInt(pushups),
             situps: parseInt(situps),
             squats: parseInt(squats),
@@ -142,7 +145,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const userInfo = await web.users.info({ user: user });
 
         const passUser = userInfo.user;
-        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
+        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
         const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         await web.views.publish(homepage(passUser, allWorkouts, wod))
     } catch (err) {
@@ -153,7 +156,61 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
 });
 
 moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
-    console.log("payload for cf_daily: ", payload);
+    try {
+
+
+        const metadata = JSON.parse(payload.view.private_metadata);
+        console.log("metadata: ", metadata);
+        const { title, description, score_type } = metadata;
+        const username = payload.user.username;
+        const user_id = payload.user.id;
+        const { trigger_id } = payload;
+        var data;
+        console.log("score_type: ", score_type);
+        var { minutes, seconds, rounds, reps, weight, notes } = payload.view.state.values;
+        if(score_type === "Rounds + Reps") {
+            rounds = rounds.rounds.value;
+            reps = reps.reps.value;
+            notes = notes.notes.value;
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                rounds: parseInt(rounds),
+                reps: parseInt(reps),
+                notes: notes
+            }
+        } else if(score_type === "Time") {
+            minutes = minutes.minutes.value;
+            seconds = seconds.seconds.value;
+            notes = notes.notes.value;
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                minutes: parseInt(minutes),
+                seconds: parseInt(seconds),
+                notes: notes
+            }
+
+        } else if(score_type === "Load") {
+            console.log("I made it here")
+            weight = weight.weight.value;
+            notes = notes.notes.value;
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                weight: parseInt(weight),
+                notes: notes
+            }
+        }
+        const sendWorkout = await axios.post(`http://lhrlslacktest.ngrok.io/finishedWorkouts/${user_id}`, data);
+        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏋️‍♀️ ${username} just finished a CrossFit workout 🏋` }, config)
+    } catch (err) {
+        console.error(err.message);
+
+    }
 
 
 })

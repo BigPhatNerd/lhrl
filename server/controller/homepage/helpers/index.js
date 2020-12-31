@@ -8,23 +8,30 @@ const {
     accumulatedReps,
     graphPercentage
 } = require('../../message-handlers/helpers/weeklyGoals');
-var weekOfYear = require('dayjs/plugin/weekOfYear')
+var weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear)
+var utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 
 module.exports = {
     currentlySubscribed: (allWorkouts) => {
 
 
-        const program = (allWorkouts.data[0].selectedProgram.length === 0) ? "" : allWorkouts.data[0].selectedProgram[0].name;
-        const noProgram = {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": ":thumbsdown: You are currently not subscribed to any programs. :thumbsdown:"
 
-            }
-        };
+        if(allWorkouts.data.length === 0 || allWorkouts.data[0].selectedProgram.length === 0) {
+            const noProgram = {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":thumbsdown: You are currently not subscribed to any programs. :thumbsdown:"
 
+                }
+            };
+            return noProgram
+        }
+
+        const program = allWorkouts.data[0].selectedProgram[0].name;
         const hasProgram = {
             "type": "section",
             "text": {
@@ -43,23 +50,24 @@ module.exports = {
                 "action_id": "program_workouts"
             }
         };
-        if(program === "") {
-            return noProgram
-        }
+
 
         return hasProgram
     },
 
     removeFromProgram: (allWorkouts) => {
         // const program = (userProgram.data[0].selectedProgram.length === 0) ? "" : userProgram.data[0].selectedProgram[0].name;
-        const program = (allWorkouts.data[0].selectedProgram.length === 0) ? "" : allWorkouts.data[0].selectedProgram[0].name;
-        const divider = {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": "Figure out how to remove later"
-            }
-        };
+        if(allWorkouts.data.length === 0 || allWorkouts.data[0].selectedProgram.length === 0) {
+            const divider = {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Select *_Choose a plan_*  above to subscribe to training plan."
+                }
+            };
+            return divider
+        }
+        const program = allWorkouts.data[0].selectedProgram[0].name
         const removeProgram = {
 
             "type": "section",
@@ -79,17 +87,24 @@ module.exports = {
                 "action_id": "remove_workouts"
             }
         };
-
-        if(program === "") {
-            return divider
-        }
-
         return removeProgram
+
 
     },
 
     todaysWorkout: (allWorkouts) => {
-        const currentDate = dayjs().format('dddd MMMM D YYYY')
+        const currentDate = dayjs().format('dddd MMMM D YYYY');
+        if(allWorkouts.data.length === 0 || allWorkouts.data[0].selectedProgram.length === 0) {
+            const noPrograms = {
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": "You are not following a specific program.",
+                    "emoji": true
+                },
+            }
+            return noPrograms;
+        }
         const findWorkout = allWorkouts.data[0].selectedProgram.filter(workout => {
             return dayjs(workout.startDate).format('dddd MMMM D YYYY') === currentDate
         });
@@ -144,7 +159,7 @@ module.exports = {
 
 
     weeklyGoals: (allWorkouts) => {
-
+        //If the week has changed, reset goals
 
         const noGoalsSet = {
             "type": "section",
@@ -165,16 +180,46 @@ module.exports = {
             }
         }
 
+        if(allWorkouts.data.length === 0 || allWorkouts.data[0].weeklyGoals.length === 0) {
+            return noGoalsSet;
+        }
+        const now = dayjs().format('MMMM D, YYYY h:mm A');
+
+        const currentDate = dayjs(allWorkouts.data[0].weeklyGoals[0].date).format('MMMM D, YYYY h:mm A');
+        if(dayjs(now).week() !== dayjs(currentDate).week()) {
+            const resetGoals = {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*It's a 🆕 week. Time to set 🆕 goals!*"
+
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Set Weekly Goals",
+                        "emoji": true
+                    },
+                    "value": "weekly_goal",
+                    "action_id": "weekly_goal"
+                }
+            }
+            return resetGoals
+        }
+
         if(allWorkouts.data[0].weeklyGoals.length !== 0) {
-            console.log("dayjs().week(): ", dayjs().week());
+
             const { pushups, situps, squats, miles, _id } = allWorkouts.data[0].weeklyGoals[0];
             const repsComplete = allWorkouts.data[0].finishedWorkouts.filter(goals => {
+                //only filter goals with pushups, situps, squats or miles
 
-                return dayjs().week() === dayjs(goals.date).week()
+                return (dayjs().week() === dayjs(goals.date).week() && (goals.pushups || goals.squats || goals.situps || goals.miles))
             });
 
             //returns a total of all of the reps completed for the week that have goals
-            const weeklyGoals = allWorkouts.data[0].weeklyGoals[0]
+            const weeklyGoals = allWorkouts.data[0].weeklyGoals[0];
+
             const reps = accumulatedReps(repsComplete, weeklyGoals);
 
             //returns percentag of goals to reps for graph
@@ -211,6 +256,17 @@ module.exports = {
     },
 
     enterGoalReps: (allWorkouts) => {
+        const noGoals = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": " *Enter weekly goals above*\n :bangbang: Weekly goals begin on _*Sunday*_ and reset at the end of the day on _*Saturday*_. :bangbang:"
+            }
+
+        };
+        if(allWorkouts.data.length === 0 || allWorkouts.data[0].weeklyGoals.length === 0) {
+            return noGoals
+        }
 
         if(typeof allWorkouts.data[0].weeklyGoals[0] !== "undefined") {
             const { _id } = allWorkouts.data[0].weeklyGoals[0]
@@ -246,14 +302,7 @@ module.exports = {
             };
             return addToGoals
         }
-        const noGoals = {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": " *Enter weekly goals above*\n :bangbang: Weekly goals begin on _*Sunday*_ and reset at the end of the day on _*Saturday*_. :bangbang:"
-            }
 
-        };
         return noGoals
     },
 

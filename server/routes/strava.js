@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Strava } = require('../models');
+const { User, Strava, Session, FinishedWorkout } = require('../models');
 const passport = require('../config/authentication');
 const { slack, strava } = require('../lib/keys');
 const axios = require('axios');
@@ -9,6 +9,7 @@ const open = require('open');
 const stravaToken = strava.accessToken;
 const { refreshToken } = require('../controller/strava-controller');
 const stravaAuth = require('../config/authentication');
+const passUser = require('../config/middleware/passUser');
 
 const webAddress = 'https://www.strava.com/api/v3/athlete';
 const {
@@ -133,14 +134,29 @@ router.get('/webhook', (req, res) => {
 
 
 router.route('/loginfromslack')
-    .post((req, res) => {
-        //First I need to get the user requesting the login from slack and store it.
-        console.log("req.body: ", req.body);
+    .post(async (req, res) => {
+        try {
+            //First I need to get the user requesting the login from slack and store it.
 
-        res.send(`Taking you to signup page. Your username is: \n*${req.body.user_name}*`);
-        setTimeout(function() {
-            open('http://localhost:3000/')
-        }, 3000);
+            const { channel_id, user_id, user_name, api_app_id } = req.body;
+            req.session.userId = user_id;
+            console.log('req.session: ', req.session);
+            console.log("user_id: ", user_id);
+
+
+            const deleteSessions = await Session.deleteMany({});
+            const createSession = await Session.create({ userId: user_id });
+            const createUser = await User.findOneAndUpdate({ channel_id: channel_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
+
+
+            open('http://lhrlslacktest.ngrok.io/strava/login');
+            res.send("Taking you to the Strava login page");
+            console.log("do I make it here?");
+            return createUser
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
 
     });
 
@@ -149,13 +165,10 @@ router.get('/login', passport.authenticate('strava', {
     'scope': 'activity:read_all'
 }));
 router.get('/redirect', passport.authenticate('strava', {
-    successRedirect: 'http://localhost:3000/',
+    successRedirect: 'https://mytestbot-workspace.slack.com',
     //I need to flash a failure message if login fails.
     failureRedirect: 'http://localhost:3000/failed'
-}), function(req, res) {
-    console.log("req.user: ", req.user);
-    console.log("response from authenticate: ", res);
-});
+}));
 
 
 

@@ -2,8 +2,8 @@ const { User } = require('../../models');
 
 const everything = {
     async getEverything({ params, body }, res) {
-        const username = params.username;
-        const everything = await User.find({ username })
+        const user_id = params.user_id;
+        const everything = await User.find({ user_id })
             .populate([
                 { path: 'workouts' },
                 { path: 'selectedProgram' },

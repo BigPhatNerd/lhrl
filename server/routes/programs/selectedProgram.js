@@ -10,15 +10,15 @@ const {
 } = require('../../controller/programs/selectedProgram-controller');
 
 
-router.route('/enter-score/:username/:id').post(completePlanWorkout);
+router.route('/enter-score/:user_id/:id').post(completePlanWorkout);
 
 
-router.route('/subscribe/:username/:value').post(subscribeToPlan);
-router.route('/get-workouts/:username').get(getPlanWorkouts);
+router.route('/subscribe/:user_id/:value').post(subscribeToPlan);
+router.route('/get-workouts/:user_id').get(getPlanWorkouts);
 router.route('/view-program/:value').get(viewProgram);
-router.route('/delete-program/:username').delete(deleteProgram);
+router.route('/delete-program/:user_id').delete(deleteProgram);
 
-router.post('/test/:username/:value', async (req, res) => {
+router.post('/test/:user_id/:value', async (req, res) => {
     const test = await db.User.find();
     res.json(test);
 

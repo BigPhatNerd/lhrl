@@ -83,6 +83,7 @@ const view5KProgram = async (trigger_id, workouts) => {
         view: {
             "type": "modal",
             "callback_id": "subscribe_to_5k",
+            "private_metadata": "5K",
             "title": {
                 "type": "plain_text",
                 "text": "5K Workouts: ",

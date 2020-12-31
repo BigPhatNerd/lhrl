@@ -86,6 +86,7 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "duration",
                     "element": {
                         "type": "plain_text_input",
@@ -99,6 +100,7 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "weight",
                     "element": {
                         "type": "plain_text_input",
@@ -112,6 +114,7 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "reps",
                     "element": {
                         "type": "plain_text_input",
@@ -125,6 +128,7 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "sets",
                     "element": {
                         "type": "plain_text_input",
@@ -138,6 +142,7 @@ const createWorkout = (trigger_id) => {
                 },
                 {
                     "type": "input",
+                    "optional": true,
                     "block_id": "distance",
                     "element": {
                         "type": "plain_text_input",

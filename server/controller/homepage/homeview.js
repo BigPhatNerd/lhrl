@@ -43,37 +43,133 @@ const homepage = (user, allWorkouts, wod) => {
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "Create or View Custom Workouts",
+                        "text": "Workouts Section",
                         "emoji": true
                     }
                 },
-                {
-                    "type": "actions",
-                    "elements": [{
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Create Workout",
-                                "emoji": true
-                            },
-                            "value": "create_workout",
-                            "action_id": "create_workout"
-                        },
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "View Workouts",
-                                "emoji": true
-                            },
-                            "value": "view_workout",
-                            "action_id": "view_workout"
-                        }
-                    ]
-                },
+
+
+
                 {
                     "type": "divider"
                 },
+                //////////////
+                ////// Insert Create Workouts with different types
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Create a Workout:"
+                    },
+                    "accessory": {
+                        "type": "static_select",
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Select workout type",
+                            "emoji": true
+                        },
+                        "options": [{
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "Rounds + Reps",
+                                    "emoji": true
+                                },
+                                "value": "rounds_plus_reps",
+                            },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "Time",
+                                    "emoji": true
+                                },
+                                "value": "time"
+                            },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "Load",
+                                    "emoji": true
+                                },
+                                "value": "load"
+                            },
+
+
+                        ],
+                        "action_id": "create"
+                    }
+                },
+                //^^ Create workouts with types
+
+                /////
+                ////////////
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "View or Complete a Workout:"
+                    },
+                    "accessory": {
+                        "type": "static_select",
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Select an item",
+                            "emoji": true
+                        },
+                        "options": [{
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "View Created Workouts",
+                                    "emoji": true
+                                },
+                                "value": "view_workout"
+                            },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "View Completed Workouts",
+                                    "emoji": true
+                                },
+                                "value": "completed_workouts"
+                            },
+
+                        ],
+                        "action_id": "create_edit_view"
+                    }
+                },
+
+                ///////////
+                //////
+
+
+                ///////
+                // {
+                //     "type": "actions",
+                //     "elements": [{
+                //             "type": "button",
+                //             "text": {
+                //                 "type": "plain_text",
+                //                 "text": "6-Weeks to 5K",
+                //                 "emoji": true
+                //             },
+                //             "value": "5K",
+                //             "action_id": "5K"
+                //         },
+                //         {
+                //             "type": "button",
+                //             "text": {
+                //                 "type": "plain_text",
+                //                 "text": "6-Weeks to 10K",
+                //                 "emoji": true
+                //             },
+                //             "value": "10K",
+                //             "action_id": "10K"
+                //         },
+
+                //     ],
+
+                // },
+
+                ////////
                 {
                     "type": "header",
                     "text": {
@@ -82,32 +178,44 @@ const homepage = (user, allWorkouts, wod) => {
                         "emoji": true
                     }
                 },
+
+                //
                 {
-                    "type": "actions",
-                    "elements": [{
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "6-Weeks to 5K",
-                                "emoji": true
-                            },
-                            "value": "5K",
-                            "action_id": "5K"
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Choose a plan:"
+                    },
+                    "accessory": {
+                        "type": "static_select",
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Select an item",
+                            "emoji": true
                         },
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "6-Weeks to 10K",
-                                "emoji": true
+                        "options": [{
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "6-Weeks to 5K",
+                                    "emoji": true
+                                },
+                                "value": "5K",
                             },
-                            "value": "10K",
-                            "action_id": "10K"
-                        },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "6-Weeks to 10K",
+                                    "emoji": true
+                                },
+                                "value": "10K"
+                            },
 
-                    ],
-
+                        ],
+                        "action_id": "choose_plan"
+                    }
                 },
+
+                ///////////
                 {
                     "type": "divider"
                 },

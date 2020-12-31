@@ -7,8 +7,8 @@ var dayjs = require('dayjs');
 
 const selectedProgramController = {
     getPlanWorkouts(req, res) {
-        const username = req.params.username
-        User.find({ username })
+        const user_id = req.params.user_id
+        User.find({ user_id })
             .populate({
                 path: 'selectedProgram',
                 select: '-__v'
@@ -38,6 +38,7 @@ const selectedProgramController = {
     },
     async subscribeToPlan({ params, body }, res) {
         try {
+            console.log("\n\n\n\nparams", params);
             const programSelected = params.value;
             switch (programSelected) {
                 case "5K":
@@ -47,10 +48,11 @@ const selectedProgramController = {
                     program = tenK;
             }
             const startDate = body.startDate;
-            const username = params.username;
-            const createProgram = await Program.create(program(startDate, username));
+            const user_id = params.user_id;
+            console.log('\n\n\n\nuser_id: ', user_id);
+            const createProgram = await Program.create(program(startDate, user_id));
 
-            const userId = await User.findOneAndUpdate({ username: params.username }, { $set: { selectedProgram: createProgram } });
+            const userId = await User.findOneAndUpdate({ user_id: user_id }, { $set: { selectedProgram: createProgram } });
 
             res.json(userId);
         } catch (err) {
@@ -62,7 +64,7 @@ const selectedProgramController = {
 
     },
     async deleteProgram({ params, body }, res) {
-        User.findOneAndUpdate({ username: params.username }, { $set: { selectedProgram: [] } }, { new: true })
+        User.findOneAndUpdate({ user_id: params.user_id }, { $set: { selectedProgram: [] } }, { new: true })
             .then(programData => {
                 res.json(programData);
             })
@@ -70,18 +72,18 @@ const selectedProgramController = {
     async completePlanWorkout({ params, body }, res) {
         try {
             console.log("\n\n\n\nbody: ", body);
-            const username = params.username;
+            const user_id = params.user_id;
             const id = params.id;
             const data = {
                 completed: true,
                 time: body.time,
-                userId: username
+                userId: user_id
             }
-           
+
 
             const completeWorkout = await Program.findOneAndUpdate({ _id: id }, data, { new: true });
 
-            const addWorkout = await User.findOneAndUpdate({ username: username }, { $push: { finishedWorkouts: completeWorkout } }, { new: true });
+            const addWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: completeWorkout } }, { new: true });
 
             res.send(addWorkout);
 

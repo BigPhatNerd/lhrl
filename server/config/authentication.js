@@ -3,10 +3,10 @@ var bcrypt = require('bcrypt');
 var util = require('util');
 var LocalStrategy = require("passport-local");
 var StravaStrategy = require('passport-strava').Strategy;
-var UserModel = require('../models/');
+var db = require('../models/');
 var mongoose = require('mongoose');
 // var User = mongoose.model('User');
-const { User } = require('../models');
+const { User, Session } = require('../models');
 
 var { strava } = require("../lib/keys");
 
@@ -55,40 +55,47 @@ passport.use(new StravaStrategy({
         passReqToCallback: true
 
     },
-    function(req, accessToken, refreshToken, profile, done) {
-        console.log("\nresuqest in authentication(look for session: ", req.sessionID);
-        console.log("profile: ", profile);
+    async function(req, accessToken, refreshToken, profile, done) {
 
-        User.findOne({ "stravaId": profile.id }, function(err, user) {
+        try {
+            const searchUser = await Session.find({});
+            console.log("\n\n\nsearchUser: ", searchUser);
+            console.log("\n\n\nsearchUser.data: ", searchUser[0]);
+            User.findOne({ "user_id": searchUser[0].userId }, function(err, user) {
 
-            if(!err && user != null) {
-                console.log("About to update user, I do believe.");
-                User.update({ "_id": user["_id"] }, {
-                    $set: {
-                        modified: new Date(),
-                        stravaAccessToken: accessToken,
-                        stravaRefreshToken: refreshToken,
-                        stravaId: profile.id,
-                        provider: profile.provider,
-                        displayName: profile.displayName,
-                        name: profile.name.first + " " + profile.name.last,
-                        stravaAvatar: profile.avatar,
-                        created: Date.now(),
-                        expires_at: Date.now() + 261600,
-                        authorizeStrava: true
-                    }
-                }).exec();
+                if(!err && user != null) {
+                    console.log("About to update user, I do believe.");
+                    User.update({ "user_id": searchUser[0].userId }, {
+                        $set: {
+                            modified: new Date(),
+                            stravaAccessToken: accessToken,
+                            stravaRefreshToken: refreshToken,
+                            stravaId: profile.id,
+                            provider: profile.provider,
+                            displayName: profile.displayName,
+                            name: profile.name.first + " " + profile.name.last,
+                            stravaAvatar: profile.avatar,
+                            created: Date.now(),
+                            expires_at: Date.now() + 261600,
+                            authorizeStrava: true
+                        }
+                    }).exec();
 
-            }
-            //Should not ever get here if initial slack user creation works correctly
-            else {
-                console.log("I should not be here!!!!! \n User should have been created in local passport strategy. \n Currently in else of passport");
-                console.log("req.user in the else of passport: ", req.user);
-            }
+                }
+                //Should not ever get here if initial slack user creation works correctly
+                else {
+                    console.log("I should not be here!!!!! \n User should have been created in local passport strategy. \n Currently in else of passport");
+                    console.log("req.user in the else of passport: ", req.user);
+                }
 
-            return done(null, user);
-        })
+                return done(null, user);
+            })
 
+        } catch (err) {
+
+            console.error(err.message);
+
+        }
     }));
 
 

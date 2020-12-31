@@ -8,7 +8,7 @@ const {
     deleteFinishedWorkouts,
 } = require('../../controller/finishedWorkouts');
 
-router.route('/:username')
+router.route('/:user_id')
     .get(showFinishedWorkouts)
     .post(createFinishedWorkouts);
 

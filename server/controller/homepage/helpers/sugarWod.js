@@ -3,40 +3,53 @@ const axios = require('axios');
 module.exports = {
     cfWOD: (wod) => {
         try {
+            console.log("\n\n\nwod.data.data[0] !== undefined", wod.data.data[0] === undefined)
+            if(wod.data.data[0] !== undefined) {
 
-            const { title, description, score_type } = wod.data.data[0].attributes;
-            console.log("\n\n\n\ntitle: ", title);
+                var { title, description, score_type } = wod.data.data[0].attributes;
+
+            } else {
+                return {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `*CrossFit HQ Workout of the Day* \n*There is no CF WOD today. Enjoy!* 🏝\n`
+
+                    },
+
+                };
+            }
 
             if(title.trim().toLowerCase().includes("rest day")) {
-     const restDay = {
-         "type": "section",
-         "text": {
-             "type": "mrkdwn",
-             "text": `*CrossFit HQ Workout of the Day* \n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${score_type}\n`
+                const restDay = {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `\n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${score_type}\n`
 
-         },
+                    },
 
-     };
-     return restDay;
- }
+                };
+                return restDay;
+            }
             const workoutOfTheDay = {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": `*CrossFit HQ Workout of the Day* \n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${score_type}\n`
+                    "text": `\n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${score_type}\n`
 
                 },
 
-                // "accessory": {
-    //     "type": "button",
-    //     "text": {
-    //         "type": "plain_text",
-    //         "text": "Enter Score",
-    //         "emoji": true
-    //     },
-    //     "value": "cf_wod_score",
-    //     "action_id": "cf_wod_score"
-    // }
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Enter Score",
+                        "emoji": true
+                    },
+                    "value": "cf_wod_score",
+                    "action_id": "cf_wod_score"
+                }
             };
 
             return workoutOfTheDay

@@ -38,16 +38,29 @@ var UserSchema = new Schema({
         unique: true,
 
     },
+    channel_id: {
+        type: String
+    },
+    user_id: {
+        type: String
+    },
+    user_name: {
+        type: String
+    },
+    api_app_id: {
+        type: String
+    },
+
     email: {
         type: String,
-        allowNull: false,
+
         unique: true,
 
     },
     // The password cannot be null
     password: {
         type: String,
-        allowNull: false
+
     },
     workouts: [{
         type: Schema.Types.ObjectId,
@@ -70,7 +83,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "WeeklyGoal"
     }],
-
+    session: [{
+        type: Schema.Types.ObjectId,
+        ref: "Session"
+    }],
 
 
     photos: {},
@@ -108,18 +124,18 @@ var UserSchema = new Schema({
     id: false
 });
 
-UserSchema.pre('save', async function(next) {
-    if(this.isNew || this.isModified('password')) {
-        const saltRounds = 10;
-        this.password = await bcrypt.hash(this.password, saltRounds);
-    }
+// UserSchema.pre('save', async function(next) {
+//     if(this.isNew || this.isModified('password')) {
+//         const saltRounds = 10;
+//         this.password = await bcrypt.hash(this.password, saltRounds);
+//     }
 
-    next();
-});
+//     next();
+// });
 
-UserSchema.methods.validPassword = async function(password) {
-    return bcrypt.compare(password, this.password);
-};
+// UserSchema.methods.validPassword = async function(password) {
+//     return bcrypt.compare(password, this.password);
+// };
 
 
 // const User = model('User', UserSchema, 'auth');

@@ -7,11 +7,10 @@ dayjs.extend(weekOfYear);
 const finishedWorkouts = {
     async createFinishedWorkouts({ params, body }, res) {
         try {
-            const username = params.username;
+            const user_id = params.user_id;
             const finishedWorkout = await FinishedWorkout.create(body);
-            console.log("username: ", username);
-            console.log("finishedWorkout: ", finishedWorkout);
-            const addFinishedWorkout = await User.findOneAndUpdate({ username: username }, { $push: { finishedWorkouts: finishedWorkout } }, { new: true })
+
+            const addFinishedWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: finishedWorkout } }, { new: true })
             res.json(addFinishedWorkout);
         } catch (err) {
 
@@ -21,8 +20,8 @@ const finishedWorkouts = {
     },
 
     async showFinishedWorkouts({ params, body }, res) {
-        const username = params.username;
-        const userWorkouts = await User.find({ username })
+        const user_id = params.user_id;
+        const userWorkouts = await User.find({ user_id })
             .populate({
                 path: 'finishedWorkouts',
                 select: '-__v'

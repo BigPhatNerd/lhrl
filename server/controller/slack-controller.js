@@ -22,8 +22,8 @@ const slackController = {
 
     },
     getWorkouts(req, res) {
-        const username = req.params.username
-        User.find({ username })
+        const user_id = req.params.user_id
+        User.find({ user_id })
             .populate({
                 path: 'workouts',
                 select: '-__v'
@@ -42,7 +42,7 @@ const slackController = {
     async saveWorkout({ params, body }, res) {
         Workout.create(body)
             .then(({ _id }) => {
-                return User.findOneAndUpdate({ username: params.username }, { $addToSet: { workouts: _id } }, { new: true })
+                return User.findOneAndUpdate({ user_id: params.user_id }, { $addToSet: { workouts: _id } }, { new: true })
             })
             .then(workoutData => {
                 if(!workoutData) {
@@ -68,17 +68,26 @@ const slackController = {
 
     },
     async publishHomepage(req, res) {
-        res.send(req.body);
+        try {
+            res.send(req.body);
+            console.log('req.session: ', req.session);
+            const { user } = req.body.event;
 
-        const { user } = req.body.event;
+            const userInfo = await web.users.info({ user: user });
+            const passUser = userInfo.user;
 
-        const userInfo = await web.users.info({ user: user });
-        const passUser = userInfo.user;
-        //Add axios call to get user's finished workouts and add the call to the homepage() function
-        const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.name}`);
-        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            //Add axios call to get user's finished workouts and add the call to the homepage() function
+            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
+            //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
+            //CF WOD url https://api.sugarwod.com/v2/workoutshq
+            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
 
-        web.views.publish(homepage(passUser, allWorkouts, wod));
+            web.views.publish(homepage(passUser, allWorkouts, wod));
+        } catch (err) {
+
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
     },
 
 

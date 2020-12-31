@@ -7,7 +7,7 @@ const {
     deleteGoals
 } = require('../../controller/weeklyGoals');
 
-router.route('/:username')
+router.route('/:user_id')
     .get(showGoals)
     .post(createGoals);
 

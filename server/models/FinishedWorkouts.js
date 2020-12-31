@@ -10,16 +10,19 @@ const finishedWorkoutSchema = new Schema({
         type: String
     },
     pushups: {
-        type: Number
+        type: Number,
+        default: 0
     },
     situps: {
-        type: Number
+        type: Number,
+        default: 0
     },
     squats: {
         type: Number
     },
     miles: {
-        type: Number
+        type: Number,
+        default: 0
     },
     date: {
         type: Date,
@@ -47,10 +50,28 @@ const finishedWorkoutSchema = new Schema({
         type: String
     },
     rounds: {
-        type: Number
+        type: Number,
+        default: 0
     },
     reps: {
-        type: Number
+        type: Number,
+        default: 0
+    },
+    weight: {
+        type: Number,
+        default: 0
+    },
+    seconds: {
+        type: Number,
+        default: 0
+    },
+    minutes: {
+        type: Number,
+        default: 0
+    },
+    notes: {
+        type: String,
+        default: "No notes recorded"
     },
 
     subscribed: {

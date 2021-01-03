@@ -3,7 +3,7 @@ const axios = require('axios');
 module.exports = {
     cfWOD: (wod) => {
         try {
-            console.log("\n\n\nwod.data.data[0] !== undefined", wod.data.data[0] === undefined)
+
             if(wod.data.data[0] !== undefined) {
 
                 var { title, description, score_type } = wod.data.data[0].attributes;
@@ -58,5 +58,16 @@ module.exports = {
             console.error(err.message);
 
         }
+    },
+    cfHeader: () => {
+        const header = {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "CrossFit HQ Workout of the Day",
+                "emoji": true
+            }
+        };
+        return header
     }
 }

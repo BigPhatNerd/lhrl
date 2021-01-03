@@ -7,6 +7,12 @@ const sessionSchema = new Schema({
     session: {
         type: String
     },
+    team_id: {
+        type: String
+    },
+    api_app_id: {
+        type: String
+    },
     userId: {
         type: String
     }

@@ -76,7 +76,8 @@ const selectedProgramController = {
             const id = params.id;
             const data = {
                 completed: true,
-                time: body.time,
+                minutes: body.minutes,
+                seconds: body.seconds,
                 userId: user_id
             }
 

@@ -38,7 +38,7 @@ var UserSchema = new Schema({
         unique: true,
 
     },
-    channel_id: {
+    team_id: {
         type: String
     },
     user_id: {

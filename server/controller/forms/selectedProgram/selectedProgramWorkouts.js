@@ -6,6 +6,7 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
     const shortData = workouts.data[0].selectedProgram;
 
 
+
     const array = []
     const blockData = (info) => {
         for(var i = 0; i < shortData.length; i++) {
@@ -14,7 +15,7 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
             const date = dayjs(slicedDate).format('dddd MMMM D YYYY');
             const completed = () => {
                 if(info[i].completed) {
-                    return "You completed this workout on " + date + " \nin " + info[i].time + " seconds!"
+                    return "You completed this workout on " + date + " \nin " + info[i].minutes + " minutes " + info[i].seconds + " seconds!"
                 }
                 return "Workout for: " + date
             };

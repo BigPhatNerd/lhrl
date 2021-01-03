@@ -22,8 +22,13 @@ const selectedProgramSchema = new Schema({
     description: {
         type: String
     },
-    time: {
-        type: Number
+    seconds: {
+        type: Number,
+        default: 0
+    },
+    minutes: {
+        type: Number,
+        default: 0
     },
     subscribed: {
         type: Boolean,

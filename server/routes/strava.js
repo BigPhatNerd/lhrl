@@ -137,21 +137,23 @@ router.route('/loginfromslack')
     .post(async (req, res) => {
         try {
             //First I need to get the user requesting the login from slack and store it.
+            console.log("\n\nIs this the error?\n\n");
+            const { team_id, user_id, user_name, api_app_id } = req.body;
+            console.log("\n\n\n\nreq.body: ", req.body);
 
-            const { channel_id, user_id, user_name, api_app_id } = req.body;
+            console.log
             req.session.userId = user_id;
-            console.log('req.session: ', req.session);
-            console.log("user_id: ", user_id);
+
 
 
             const deleteSessions = await Session.deleteMany({});
-            const createSession = await Session.create({ userId: user_id });
-            const createUser = await User.findOneAndUpdate({ channel_id: channel_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
+            const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
+            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
 
 
             open('http://lhrlslacktest.ngrok.io/strava/login');
             res.send("Taking you to the Strava login page");
-            console.log("do I make it here?");
+
             return createUser
         } catch (err) {
             console.error(err.message);
@@ -164,11 +166,23 @@ router.route('/loginfromslack')
 router.get('/login', passport.authenticate('strava', {
     'scope': 'activity:read_all'
 }));
-router.get('/redirect', passport.authenticate('strava', {
-    successRedirect: 'https://mytestbot-workspace.slack.com',
+
+router.get('/redirect', passport.authenticate('strava'), async (req, res) => {
+    console.log("DID I MAKE THIS");
+    const session = await Session.find({});
+    console.log('\n\n\n\nsession: ', session);
+    const { team_id, api_app_id } = session[0];
+    // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
+    res.redirect(`slack://app?team=${team_id}`)
     //I need to flash a failure message if login fails.
-    failureRedirect: 'http://localhost:3000/failed'
-}));
+
+});
+
+// router.get('/redirect', async (req, res) => {
+//     const getSession = await Session.find({});
+//     const { team_id, api_app_id } = getSession[0];
+//     res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`);
+// });
 
 
 

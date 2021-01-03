@@ -2,9 +2,9 @@ const axios = require('axios');
 var dayjs = require("dayjs");
 const updatedProgramWorkouts = async (viewId, username) => {
     const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
-
+    console.log("\n\nworkouts.data[0]: (in updated) ", workouts.data[0]);
     const shortData = workouts.data[0].selectedProgram;
-
+    console.log('\n\nI made it here!!!!!!\n\n');
     const array = [];
 
     const blockData = (info) => {
@@ -14,7 +14,7 @@ const updatedProgramWorkouts = async (viewId, username) => {
 
             const completed = () => {
                 if(info[i].completed) {
-                    return "You completed this workout on " + date + " \nin " + info[i].time + " seconds!"
+                    return "You completed this workout on " + date + " \nin " + info[i].minutes + " minutes " + info[i].seconds + " seconds!"
                 }
                 return "Workout for: " + date
             }

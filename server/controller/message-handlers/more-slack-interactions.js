@@ -62,6 +62,9 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const mileSummary = goalCount(repsComplete, "miles");
 
         // const confirm = await axios.post(slack.lhrl_Webhook, { "text": `${username} just added reps of: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+
+        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        await web.views.publish(homepage(passUser, allWorkouts, wod))
         const confirm = await axios.post(slack.lhrl_Webhook, {
             "text": `${username} just did some work! 💪`,
             "blocks": [{
@@ -77,8 +80,6 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
                 }
             }]
         }, config);
-        const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts, wod))
     } catch (err) {
 
         console.error(err.message);

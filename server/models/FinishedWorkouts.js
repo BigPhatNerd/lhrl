@@ -18,7 +18,8 @@ const finishedWorkoutSchema = new Schema({
         default: 0
     },
     squats: {
-        type: Number
+        type: Number,
+        default: 0
     },
     miles: {
         type: Number,

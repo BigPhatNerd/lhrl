@@ -2,7 +2,9 @@ var dayjs = require("dayjs");
 
 
 const submitTime = (trigger_id, workoutSelected) => {
-    const { _id, name, week, day, startDate, type, description } = workoutSelected;
+    console.log("YOOOOOO");
+    const { _id, name, week, day, startDate, type, description, time } = workoutSelected;
+
 
     const date = dayjs(startDate).format('dddd MMMM D YYYY');
 
@@ -70,14 +72,30 @@ const submitTime = (trigger_id, workoutSelected) => {
                 {
                     "type": "input",
                     "optional": false,
-                    "block_id": "time",
+                    "block_id": "minutes",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "time"
+                        "initial_value": String(minutes),
+                        "action_id": "minutes"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Enter Time",
+                        "text": "Enter Minutes",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "input",
+                    "optional": false,
+                    "block_id": "seconds",
+                    "element": {
+                        "type": "plain_text_input",
+                        "initial_value": String(seconds),
+                        "action_id": "seconds"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Enter Seconds",
                         "emoji": true
                     }
                 },

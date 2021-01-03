@@ -1,11 +1,7 @@
 const axios = require('axios');
 var dayjs = require("dayjs");
 const updatedWorkouts = async (viewId, username) => {
-    console.log("\n\n\n\nmade it here\n\n\n");
-    console.log("username: ", username);
     const workouts = await axios.get(`https://lhrlslacktest.ngrok.io/slack/get-workouts/${username}`)
-    console.log("\n\n\nDid I make it here?????\n\n");
-    console.log("workouts: ", workouts);
     const shortData = workouts.data[0].workouts;
     const array = []
     const blockData = (info) => {

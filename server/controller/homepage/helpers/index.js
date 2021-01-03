@@ -15,6 +15,47 @@ dayjs.extend(utc)
 
 
 module.exports = {
+    authorizePrograms: (allWorkouts) => {
+        const isAuthorized = () => {
+            const isAuthed = allWorkouts.data[0].authorizeStrava ? "Deauthorize Strava" : "Authorize Strava";
+            return isAuthed
+        }
+        const stravaButton = {
+            "type": "actions",
+            "elements": [{
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": isAuthorized(),
+                    "emoji": true
+                },
+                "value": isAuthorized(),
+                "action_id": isAuthorized()
+            }]
+        };
+        return stravaButton
+    },
+
+    divider: () => {
+        const divider = {
+            "type": "divider"
+        };
+        return divider
+    },
+    welcome: () => {
+
+        const welcomeMessage = {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "LHRL® App",
+                "emoji": true
+            }
+
+
+        }
+        return welcomeMessage
+    },
     currentlySubscribed: (allWorkouts) => {
 
 

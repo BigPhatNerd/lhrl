@@ -11,6 +11,7 @@ module.exports = {
                     return prev + cur.situps;
                     break;
                 case "squats":
+                    console.log("sur.squats: ", cur.squats);
                     return prev + cur.squats;
                     break;
                 case "miles":

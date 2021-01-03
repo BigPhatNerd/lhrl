@@ -4,6 +4,7 @@ const {
     todaysWorkout,
     weeklyGoals,
     enterGoalReps,
+    authorizePrograms
 
 
 } = require('./helpers');
@@ -39,6 +40,10 @@ const homepage = (user, allWorkouts, wod) => {
                     "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
                     "alt_text": "logo"
                 },
+                ////
+                //////////////
+                authorizePrograms(allWorkouts),
+                //////
                 {
                     "type": "header",
                     "text": {
@@ -53,7 +58,7 @@ const homepage = (user, allWorkouts, wod) => {
                 {
                     "type": "divider"
                 },
-                //////////////
+
                 ////// Insert Create Workouts with different types
                 {
                     "type": "section",
@@ -142,32 +147,7 @@ const homepage = (user, allWorkouts, wod) => {
 
 
                 ///////
-                // {
-                //     "type": "actions",
-                //     "elements": [{
-                //             "type": "button",
-                //             "text": {
-                //                 "type": "plain_text",
-                //                 "text": "6-Weeks to 5K",
-                //                 "emoji": true
-                //             },
-                //             "value": "5K",
-                //             "action_id": "5K"
-                //         },
-                //         {
-                //             "type": "button",
-                //             "text": {
-                //                 "type": "plain_text",
-                //                 "text": "6-Weeks to 10K",
-                //                 "emoji": true
-                //             },
-                //             "value": "10K",
-                //             "action_id": "10K"
-                //         },
 
-                //     ],
-
-                // },
 
                 ////////
                 {

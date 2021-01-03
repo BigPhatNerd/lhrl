@@ -1,13 +1,13 @@
 const sendGraphView = (percentage) => {
     var chartColor;
     if(percentage <= 25) {
-        chartColor = "red";
+        chartColor = "black";
     } else if(percentage > 25 && percentage <= 50) {
-        chartColor = "green";
+        chartColor = "red";
     } else if(percentage > 50 && percentage <= 75) {
-        chartColor = "blue";
+        chartColor = "green";
     } else if(percentage > 75) {
-        chartColor = "yellow";
+        chartColor = "blue";
     }
     const radialGauge = { type: 'radialGauge', data: { datasets: [{ data: [percentage], backgroundColor: chartColor }] } };
     const encodeRadialGauge = encodeURIComponent(JSON.stringify(radialGauge));

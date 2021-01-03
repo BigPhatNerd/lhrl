@@ -1,6 +1,6 @@
 const editWorkout = (trigger_id, workoutSelected) => {
-    const { _id, type, name, weight, reps, rounds, description, notes } = workoutSelected;
-    console.log("workoutSelected: ", workoutSelected);
+    const { _id, type, name, weight, minutes, seconds, reps, rounds, description, notes } = workoutSelected;
+
     if(workoutSelected.type === "Rounds + Reps") {
         const roundRepsModal = {
             "trigger_id": trigger_id,

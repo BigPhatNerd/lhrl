@@ -90,7 +90,7 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
         var username = payload.user.username;
         var user_id = payload.user.id;
         if(text === "Edit Workout") {
-            console.log("payload: ", payload.container.view_id);
+
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");
             const workoutSelected = await Workout.find({ _id: buttonPressed });
@@ -144,6 +144,30 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
 
             const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
             web.views.open(submitScore(trigger_id, wod))
+        } else if(value === 'Authorize Strava') {
+            const user = payload.user.id;
+            const userInfo = await web.users.info({ user: user });
+
+            const { id, team_id, name, real_name } = userInfo.user;
+            const data = {
+                team_id: team_id,
+                user_id: id,
+                user_name: name,
+                api_app_id: "A014GVBCQGG"
+            }
+            axios.post('http://lhrlslacktest.ngrok.io/strava/loginfromslack', data);
+            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
+            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            web.views.publish(homepage(passUser, allWorkouts, wod))
+        } else if(value === 'Deauthorize Strava') {
+            const user = payload.user.id;
+            const userInfo = await web.users.info({ user: user });
+
+            const passUser = userInfo.user;
+            axios.put(`http://lhrlslacktest.ngrok.io/strava/deauth/${passUser.id}`);
+            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
+            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            web.views.publish(homepage(passUser, allWorkouts, wod))
         }
     } catch (err) {
         console.error(err.message);
@@ -214,10 +238,10 @@ slackInteractions.viewSubmission('edit_workout', async (payload, respond) => {
         var { minutes, seconds, rounds, reps, weight, notes, name, description } = payload.view.state.values;
 
         if(score_type === "Rounds + Reps") {
-            rounds = rounds.rounds.value;
-            reps = reps.reps.value;
-            notes = notes.notes.value;
-            description = description.description.value;
+            rounds = rounds.rounds.value || 0;
+            reps = reps.reps.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
             name = name.name.value;
             data = {
                 type: score_type,
@@ -228,12 +252,11 @@ slackInteractions.viewSubmission('edit_workout', async (payload, respond) => {
                 notes: notes
             }
         } else if(score_type === "Time") {
-            minutes = minutes.minutes.value;
-            seconds = seconds.seconds.value;
-            console.log("minutes: ", minutes);
-            console.log("second: ", seconds)
-            notes = notes.notes.value;
-            description = description.description.value;
+            minutes = minutes.minutes.value || 0;
+            seconds = seconds.seconds.value || 0;
+
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
             name = name.name.value;
 
             data = {
@@ -247,9 +270,9 @@ slackInteractions.viewSubmission('edit_workout', async (payload, respond) => {
 
         } else if(score_type === "Load") {
             console.log("I made it here")
-            weight = weight.weight.value;
-            notes = notes.notes.value;
-            description = description.description.value;
+            weight = weight.weight.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
             name = name.name.value;
             data = {
                 type: score_type,
@@ -266,9 +289,7 @@ slackInteractions.viewSubmission('edit_workout', async (payload, respond) => {
 
         web.views.update(updated)
     } catch (err) {
-
         console.error(err.message);
-
     }
 });
 slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
@@ -280,7 +301,6 @@ slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
 slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
     try {
         const metadata = JSON.parse(payload.view.private_metadata);
-        console.log("metadata: ", metadata);
         const { score_type } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
@@ -290,10 +310,12 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         var { minutes, seconds, rounds, reps, weight, notes, name, description } = payload.view.state.values;
 
         if(score_type === "Rounds + Reps") {
-            rounds = rounds.rounds.value;
-            reps = reps.reps.value;
-            notes = notes.notes.value;
-            description = description.description.value;
+
+            rounds = rounds.rounds.value || 0;
+
+            reps = reps.reps.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
             name = name.name.value;
             data = {
                 type: score_type,
@@ -304,12 +326,10 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
                 notes: notes
             }
         } else if(score_type === "Time") {
-            minutes = minutes.minutes.value;
-            seconds = seconds.seconds.value;
-            console.log("minutes: ", minutes);
-            console.log("second: ", seconds)
-            notes = notes.notes.value;
-            description = description.description.value;
+            minutes = minutes.minutes.value || 0;
+            seconds = seconds.seconds.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
             name = name.name.value;
 
             data = {
@@ -323,9 +343,9 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 
         } else if(score_type === "Load") {
             console.log("I made it here")
-            weight = weight.weight.value;
-            notes = notes.notes.value;
-            description = description.description.value;
+            weight = weight.weight.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
             name = name.name.value;
             data = {
                 type: score_type,
@@ -348,14 +368,18 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
     try {
         const workoutId = payload.view.private_metadata;
 
-        const data = { time: payload.view.state.values.time.time.value }
+        const data = {
+            minutes: payload.view.state.values.minutes.minutes.value,
+            seconds: payload.view.state.values.seconds.seconds.value
+        }
         const username = payload.user.username;
         const user_id = payload.user.id;
 
         const sendWorkout = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/enter-score/${user_id}/${workoutId}`, data);
 
         //Taken from 'edit_workout' viewSubmission above
-        const updated = await updatedProgramWorkouts(viewId, username);
+
+        const updated = await updatedProgramWorkouts(viewId, user_id);
         web.views.update(updated)
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });

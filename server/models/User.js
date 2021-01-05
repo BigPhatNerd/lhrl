@@ -62,6 +62,10 @@ var UserSchema = new Schema({
         type: String,
 
     },
+    goalReps: [{
+        type: Schema.Types.ObjectId,
+        ref: "GoalReps"
+    }],
     workouts: [{
         type: Schema.Types.ObjectId,
         ref: "Workout"

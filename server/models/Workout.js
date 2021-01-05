@@ -4,7 +4,7 @@ const workoutSchema = new Schema({
     userId: {
         type: String
     },
-    day: {
+    date: {
         type: Date,
         default: () => new Date()
     },
@@ -40,13 +40,18 @@ const workoutSchema = new Schema({
     distance: {
         type: Number
     },
+    miles: {
+        type: Number,
+        default: 0
+    },
+    meters: {
+        type: Number,
+        default: 0
+    },
     startDate: {
         type: Date
     },
     week: {
-        type: Number
-    },
-    day: {
         type: Number
     },
     description: {

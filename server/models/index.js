@@ -5,4 +5,5 @@ const Program = require('./SelectedProgram');
 const FinishedWorkout = require('./FinishedWorkouts');
 const WeeklyGoal = require('./WeeklyGoals');
 const Session = require('./Session');
-module.exports = { User, Workout, Strava, Program, FinishedWorkout, WeeklyGoal, Session };
+const GoalReps = require('./GoalReps');
+module.exports = { User, Workout, Strava, Program, FinishedWorkout, WeeklyGoal, Session, GoalReps };

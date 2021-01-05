@@ -17,6 +17,7 @@ const programRoutes = require('./routes/programs');
 const weeklyGoals = require('./routes/weeklyGoals');
 const homeviewRoutes = require('./routes/homeviewRoutes');
 const finishedWorkouts = require('./routes/finishedWorkouts');
+const goalReps = require('./routes/goalReps');
 const getEverything = require('./routes/getEverything');
 process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
@@ -74,7 +75,8 @@ app.use('/programs', programRoutes);
 app.use('/weeklyGoals', weeklyGoals);
 app.use('/finishedWorkouts', finishedWorkouts);
 app.use('/getEverything', getEverything);
-app.use('/homeview', homeviewRoutes)
+app.use('/homeview', homeviewRoutes);
+app.use('/goalReps', goalReps);
 
 app.get('/', (req, res) => res.json({ msg: "Welcome to the Lift Heavy Run Long® API" }));
 app.listen(PORT, () => {

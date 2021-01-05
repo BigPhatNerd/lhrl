@@ -1,4 +1,4 @@
-const { User, Program } = require('../../models');
+const { User, Program, FinishedWorkout } = require('../../models');
 const homepage = require('../homepage/homeview.js');
 const fiveK = require('../../programs/fiveK');
 const tenK = require('../../programs/tenK');
@@ -74,17 +74,33 @@ const selectedProgramController = {
             console.log("\n\n\n\nbody: ", body);
             const user_id = params.user_id;
             const id = params.id;
+
+            var minutes = parseInt(body.minutes) || 0;
+            var seconds = parseInt(body.seconds) || 0;
+            var date = new Date();
             const data = {
                 completed: true,
-                minutes: body.minutes,
-                seconds: body.seconds,
-                userId: user_id
+                minutes: minutes,
+                seconds: seconds,
+                userId: user_id,
+                dateCompleted: date
             }
 
 
             const completeWorkout = await Program.findOneAndUpdate({ _id: id }, data, { new: true });
-
-            const addWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: completeWorkout } }, { new: true });
+            console.log("\n\ncompleteWorkout: ", completeWorkout);
+            const dataForWorkout = {
+                seconds: completeWorkout.seconds,
+                minutes: completeWorkout.minutes,
+                name: completeWorkout.name,
+                week: completeWorkout.week,
+                day: completeWorkout.day,
+                type: completeWorkout.type,
+                description: completeWorkout.description,
+                dateCompleted: date
+            }
+            const addFinishedWorkout = await FinishedWorkout.create(dataForWorkout);
+            const addWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: addFinishedWorkout } }, { new: true });
 
             res.send(addWorkout);
 

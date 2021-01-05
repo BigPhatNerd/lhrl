@@ -89,7 +89,7 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_created_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -99,7 +99,86 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_created_workouts",
+                            action_id: "delete" + info[i]._id,
+
+                        }
+                    ]
+                }, {
+                    type: "divider"
+                })
+            } else if(info[i].type === "Distance") {
+                array.push({
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Date Created: " + date,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Type: " + info[i].type,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Name: " + info[i].name,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Description: " + info[i].description,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Miles: " + info[i].miles,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Notes: " + info[i].notes,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "actions",
+                    elements: [{
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Workout",
+                                emoji: true
+                            },
+                            value: "edit_created_workouts",
+                            action_id: info[i]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Delete Workout",
+                                emoji: true
+                            },
+                            value: "delete_created_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -176,7 +255,7 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_created_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -186,7 +265,7 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_created_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -255,7 +334,7 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_created_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -265,7 +344,7 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_created_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -317,8 +396,8 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "updated" + info[i]._id,
-                            action_id: "updated" + info[i]._id
+                            value: "edit_created_workouts" + info[i]._id,
+                            action_id: "edit_created_workouts" + info[i]._id
                         },
                         {
                             type: "button",
@@ -327,7 +406,7 @@ const updatedWorkouts = async (viewId, username) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_created_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }

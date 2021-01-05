@@ -21,7 +21,15 @@ const finishedWorkoutSchema = new Schema({
         type: Number,
         default: 0
     },
+    distance: {
+        type: Number,
+        default: 0
+    },
     miles: {
+        type: Number,
+        default: 0
+    },
+    meters: {
         type: Number,
         default: 0
     },
@@ -30,6 +38,9 @@ const finishedWorkoutSchema = new Schema({
         default: Date.now
     },
     startDate: {
+        type: Date
+    },
+    dateCompleted: {
         type: Date
     },
     week: {
@@ -76,6 +87,10 @@ const finishedWorkoutSchema = new Schema({
     },
 
     subscribed: {
+        type: Boolean,
+        default: false
+    },
+    completed: {
         type: Boolean,
         default: false
     }

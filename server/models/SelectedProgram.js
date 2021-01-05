@@ -30,6 +30,18 @@ const selectedProgramSchema = new Schema({
         type: Number,
         default: 0
     },
+    distance: {
+        type: Number,
+        default: 0
+    },
+    miles: {
+        type: Number,
+        default: 0
+    },
+    meters: {
+        type: Number,
+        default: 0
+    },
     subscribed: {
         type: Boolean,
         default: false
@@ -37,7 +49,10 @@ const selectedProgramSchema = new Schema({
     completed: {
         type: Boolean,
         default: false
-    }
+    },
+    dateCompleted: {
+        type: Date
+    },
 
 });
 

@@ -7,7 +7,7 @@ const timeModal = require('../forms/createWorkout/timeModal');
 const viewWorkouts = require('../forms/viewWorkouts.js');
 const editWorkout = require('../forms/editWorkout.js');
 const submitTime = require('../forms/selectedProgram/submitTime.js');
-
+const viewFinishedWorkouts = require('../forms/completedWorkouts/viewCompletedWorkouts');
 const homepage = require('../homepage/homeview.js');
 const { User, Workout, Program, WeeklyGoal } = require('../../models/');
 const editWorkoutResponse = require('../responses/successful-edit');
@@ -69,7 +69,13 @@ slackInteractions.action({ type: "static_select" }, async (payload, respond) => 
             const workoutIndex = await viewWorkouts(trigger_id, workouts);
             web.views.open(workoutIndex);
         } else if(value === "completed_workouts") {
-            console.log("I need to get workouts!");
+            ////
+            ////
+            const finishedWorkouts = await axios.get(`https://lhrlslacktest.ngrok.io/finishedWorkouts/${user_id}`)
+            const finishedWorkoutIndex = await viewFinishedWorkouts(trigger_id, finishedWorkouts);
+            web.views.open(finishedWorkoutIndex);
+            ///
+            ///
         }
     } catch (err) {
         console.error(err.message);
@@ -84,19 +90,30 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
         value = payload.actions[0].value;
         var text = payload.actions[0].text.text;
         var deleteBlockIdPressed = payload.actions[0].block_id;
-
+        console.log("value: ", value);
 
         var { trigger_id } = payload;
         var username = payload.user.username;
         var user_id = payload.user.id;
-        if(text === "Edit Workout") {
+        if(value === "edit_created_workouts") {
 
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");
             const workoutSelected = await Workout.find({ _id: buttonPressed });
             web.views.push(editWorkout(trigger_id, workoutSelected[0]));
-        } else if(text === "Delete Workout") {
+        } else if(value === "delete_created_workouts") {
+            //////
+            console.log("value: ", value);
+            console.log("\n\n\n\n\nWASSSSSSSuppppp\n\n\n");
+            console.log("payload: ", payload);
+            ///////
+            // const updated = await updatedWorkouts(viewId, passUser.id);
+
+            // web.views.update(updated)
+
+            /////
             buttonPressed = buttonPressed.replace("delete", "");
+            console.log("buttonPressed: ", buttonPressed);
             const deleteWorkout = await axios.delete(`https://lhrlslacktest.ngrok.io/slack/delete-workout/${buttonPressed}`);
             const workouts = await axios.get(`https://lhrlslacktest.ngrok.io/slack/get-workouts/${user_id}`)
             const workoutIndex = await viewWorkouts(trigger_id, workouts);
@@ -147,7 +164,7 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
         } else if(value === 'Authorize Strava') {
             const user = payload.user.id;
             const userInfo = await web.users.info({ user: user });
-
+            const passUser = userInfo.user;
             const { id, team_id, name, real_name } = userInfo.user;
             const data = {
                 team_id: team_id,
@@ -156,9 +173,9 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
                 api_app_id: "A014GVBCQGG"
             }
             axios.post('http://lhrlslacktest.ngrok.io/strava/loginfromslack', data);
-            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
-            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-            web.views.publish(homepage(passUser, allWorkouts, wod))
+            // const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
+            // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            // web.views.publish(homepage(passUser, allWorkouts, wod))
         } else if(value === 'Deauthorize Strava') {
             const user = payload.user.id;
             const userInfo = await web.users.info({ user: user });
@@ -367,13 +384,14 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 slackInteractions.viewSubmission('selected_program_workouts', async (payload, respond) => {
     try {
         const workoutId = payload.view.private_metadata;
-
+        console.log("\n\n\n\nworkoutId: ", workoutId);
         const data = {
             minutes: payload.view.state.values.minutes.minutes.value,
             seconds: payload.view.state.values.seconds.seconds.value
         }
         const username = payload.user.username;
         const user_id = payload.user.id;
+        console.log("\n\n\nuser_id: ", user_id)
 
         const sendWorkout = await axios.post(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/enter-score/${user_id}/${workoutId}`, data);
 

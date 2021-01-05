@@ -8,7 +8,10 @@ const everything = {
                 { path: 'workouts' },
                 { path: 'selectedProgram' },
                 { path: 'finishedWorkouts' },
-                { path: 'weeklyGoals' }
+                {
+                    path: 'weeklyGoals',
+                    options: { sort: { 'date': -1 } }
+                }
             ])
             .select('-__v');
         res.json(everything);

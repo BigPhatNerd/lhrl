@@ -15,7 +15,11 @@ const selectedProgramWorkouts = async (trigger_id, workouts) => {
             const date = dayjs(slicedDate).format('dddd MMMM D YYYY');
             const completed = () => {
                 if(info[i].completed) {
-                    return "You completed this workout on " + date + " \nin " + info[i].minutes + " minutes " + info[i].seconds + " seconds!"
+                    if(info[i].type === "Time") {
+                        return "You completed this workout on " + dayjs(info[i].dateCompleted).format('dddd MMMM D YYYY') + " \nin " + info[i].minutes + " minutes " + info[i].seconds + " seconds!"
+                    } else if(info[i].type === "Distance") {
+                        return "You completed this workout on " + dayjs(info[i].dateCompleted).format('dddd MMMM D YYYY') + ". \n You ran " + info[i].miles + " miles!"
+                    }
                 }
                 return "Workout for: " + date
             };

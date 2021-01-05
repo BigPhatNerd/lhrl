@@ -138,6 +138,7 @@ router.route('/loginfromslack')
         try {
             //First I need to get the user requesting the login from slack and store it.
             console.log("\n\nIs this the error?\n\n");
+
             const { team_id, user_id, user_name, api_app_id } = req.body;
             console.log("\n\n\n\nreq.body: ", req.body);
 
@@ -172,8 +173,15 @@ router.get('/redirect', passport.authenticate('strava'), async (req, res) => {
     const session = await Session.find({});
     console.log('\n\n\n\nsession: ', session);
     const { team_id, api_app_id } = session[0];
+
     // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
-    res.redirect(`slack://app?team=${team_id}`)
+    res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=about`)
+    // res.send("Slack successfully authorized")
+    // res.redirect(`slack://app?team=${team_id}`) 
+    // res.redirect('back');
+    // res.redirect(`https://slack.com/app_redirect?channel=${team_id}`)
+
+    return
     //I need to flash a failure message if login fails.
 
 });

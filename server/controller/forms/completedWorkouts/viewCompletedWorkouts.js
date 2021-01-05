@@ -1,25 +1,25 @@
 var dayjs = require("dayjs");
 
-const viewWorkouts = async (trigger_id, workouts) => {
+const viewFinishedWorkouts = async (trigger_id, workouts) => {
 
     var shortData;
     if(workouts.data.length === 0) {
         shortData = [];
     } else {
-        shortData = workouts.data[0].workouts;
+        shortData = workouts.data[0].finishedWorkouts;
     }
     // const shortData = workouts.data[0].workouts;
     const array = []
     const blockData = (info) => {
 
-        const date = dayjs(info.day).format('dddd MMMM D YYYY')
+        // const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(shortData.length === 0) {
             array.push({
 
                 "type": "section",
                 "text": {
                     "type": "plain_text",
-                    "text": "You have not created any workouts yet.",
+                    "text": "You have not completed any workouts yet.",
                     "emoji": true
                 }
 
@@ -27,14 +27,15 @@ const viewWorkouts = async (trigger_id, workouts) => {
         }
         for(var i = 0; i < shortData.length; i++) {
 
-            const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
+            const date = dayjs(info[i].date).format('dddd MMMM D YYYY');
+
             ///Beginning to test different workout types below:
             if(info[i].type === "Rounds + Reps") {
                 array.push({
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Date Created: " + date,
+                        text: "Date Completed: " + date,
                         emoji: true
                     },
 
@@ -98,7 +99,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit_created_workouts",
+                            value: "edit",
                             action_id: info[i]._id
                         },
                         {
@@ -108,86 +109,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete_created_workouts",
-                            action_id: "delete" + info[i]._id,
-
-                        }
-                    ]
-                }, {
-                    type: "divider"
-                })
-            } else if(info[i].type === "Distance") {
-                array.push({
-                    type: "section",
-                    text: {
-                        type: "plain_text",
-                        text: "Date Created: " + date,
-                        emoji: true
-                    },
-
-
-                }, {
-                    type: "section",
-                    text: {
-                        type: "plain_text",
-                        text: "Type: " + info[i].type,
-                        emoji: true
-                    },
-
-
-                }, {
-                    type: "section",
-                    text: {
-                        type: "plain_text",
-                        text: "Name: " + info[i].name,
-                        emoji: true
-                    },
-
-
-                }, {
-                    type: "section",
-                    text: {
-                        type: "plain_text",
-                        text: "Description: " + info[i].description,
-                        emoji: true
-                    },
-
-                }, {
-                    type: "section",
-                    text: {
-                        type: "plain_text",
-                        text: "Miles: " + info[i].miles,
-                        emoji: true
-                    },
-
-                }, {
-                    type: "section",
-                    text: {
-                        type: "plain_text",
-                        text: "Notes: " + info[i].notes,
-                        emoji: true
-                    },
-
-                }, {
-                    type: "actions",
-                    elements: [{
-                            type: "button",
-                            text: {
-                                type: "plain_text",
-                                text: "Edit Workout",
-                                emoji: true
-                            },
-                            value: "edit_created_workouts",
-                            action_id: info[i]._id
-                        },
-                        {
-                            type: "button",
-                            text: {
-                                type: "plain_text",
-                                text: "Delete Workout",
-                                emoji: true
-                            },
-                            value: "delete_created_workouts",
+                            value: "delete",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -200,7 +122,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Date Created: " + date,
+                        text: "Date Completed: " + date,
                         emoji: true
                     },
 
@@ -264,7 +186,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit_created_workouts",
+                            value: "edit",
                             action_id: info[i]._id
                         },
                         {
@@ -274,7 +196,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete_created_workouts",
+                            value: "delete",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -287,7 +209,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Date Created: " + date,
+                        text: "Date Completed: " + date,
                         emoji: true
                     },
 
@@ -343,7 +265,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit_created_workouts",
+                            value: "edit",
                             action_id: info[i]._id
                         },
                         {
@@ -353,7 +275,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete_created_workouts",
+                            value: "delete",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -364,12 +286,12 @@ const viewWorkouts = async (trigger_id, workouts) => {
             }
 
             ///^^^ Testing workout type
-            else {
+            else if(info[i].type === "Distance") {
                 array.push({
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Date Created: " + date,
+                        text: "Date Completed: " + date,
                         emoji: true
                     },
 
@@ -396,7 +318,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Sets: " + info[i].sets,
+                        text: "Description: " + info[i].description,
                         emoji: true
                     },
 
@@ -404,7 +326,15 @@ const viewWorkouts = async (trigger_id, workouts) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Reps: " + info[i].reps,
+                        text: "Miles: " + info[i].miles,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Notes: " + info[i].notes,
                         emoji: true
                     },
 
@@ -417,7 +347,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit_created_workouts",
+                            value: "edit",
                             action_id: info[i]._id
                         },
                         {
@@ -427,7 +357,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete_created_workouts",
+                            value: "delete",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -435,7 +365,6 @@ const viewWorkouts = async (trigger_id, workouts) => {
                 }, {
                     type: "divider"
                 })
-
             }
         }
         return array;
@@ -452,7 +381,7 @@ const viewWorkouts = async (trigger_id, workouts) => {
             "callback_id": "view_workouts",
             "title": {
                 "type": "plain_text",
-                "text": "Workouts Created: ",
+                "text": "Workouts Completed: ",
                 "emoji": true
             },
             "submit": {
@@ -476,4 +405,4 @@ const viewWorkouts = async (trigger_id, workouts) => {
     return mapWorkouts
 }
 
-module.exports = viewWorkouts;
+module.exports = viewFinishedWorkouts;

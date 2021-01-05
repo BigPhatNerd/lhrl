@@ -8,7 +8,7 @@ let fiveK = (start, user) => {
             "startDate": dateHelper(start, 0),
             "week": 1,
             "day": 1,
-            "type": "intervals",
+            "type": "Time",
             "description": "run around and do a bunch of sturff",
             "subscribed": true
 
@@ -18,7 +18,7 @@ let fiveK = (start, user) => {
             "startDate": dateHelper(start, 2),
             "week": 1,
             "day": 2,
-            "type": "tempo run",
+            "type": "Distance",
             "description": "do tempo running",
             "subscribed": true
         },
@@ -27,7 +27,7 @@ let fiveK = (start, user) => {
             "startDate": dateHelper(start, 4),
             "week": 1,
             "day": 3,
-            "type": "Long Run",
+            "type": "Distance",
             "description": "Run long",
             "subscribed": true
         }

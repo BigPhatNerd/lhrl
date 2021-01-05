@@ -3,7 +3,7 @@ var dayjs = require("dayjs");
 
 const submitTime = (trigger_id, workoutSelected) => {
     console.log("YOOOOOO");
-    const { _id, name, week, day, startDate, type, description, time } = workoutSelected;
+    const { _id, name, week, day, startDate, type, description, time, minutes, seconds } = workoutSelected;
 
 
     const date = dayjs(startDate).format('dddd MMMM D YYYY');

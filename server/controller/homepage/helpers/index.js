@@ -163,17 +163,30 @@ module.exports = {
         if(findWorkout.length === 0) {
             return noWorkoutsToday
         } else if(findWorkout.length === 1 && findWorkout[0].completed) {
-            const { time } = findWorkout[0];
-            const alreadyFinishedWorkout = {
+            const { minutes, seconds, miles, meters } = findWorkout[0];
+            if(findWorkout[0].type === "Distance") {
+                const alreadyFinishedDistanceWorkout = {
 
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "*You have already finished today's workout with a time of:* " + time + " :beach_with_umbrella: "
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*You have already finished today's workout with a time of:* " + time + " :beach_with_umbrella: "
 
-                },
-            };
-            return alreadyFinishedWorkout
+                    },
+                };
+                return alreadyFinishedDistanceWorkout
+            } else if(findWorkout[0].type === "Time") {
+                const alreadyFinishedTimeWorkout = {
+
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*You have already finished today's workout with a time of:* \n" + minutes + " minutes and " + seconds + " seconds :beach_with_umbrella: "
+
+                    },
+                };
+                return alreadyFinishedTimeWorkout
+            }
         }
         const { week, day, type, description, _id } = findWorkout[0];
         const workoutForToday = {
@@ -227,6 +240,7 @@ module.exports = {
         const now = dayjs().format('MMMM D, YYYY h:mm A');
 
         const currentDate = dayjs(allWorkouts.data[0].weeklyGoals[0].date).format('MMMM D, YYYY h:mm A');
+
         if(dayjs(now).week() !== dayjs(currentDate).week()) {
             const resetGoals = {
                 "type": "section",
@@ -305,7 +319,7 @@ module.exports = {
             }
 
         };
-        if(allWorkouts.data.length === 0 || allWorkouts.data[0].weeklyGoals.length === 0) {
+        if(allWorkouts.data.length === 0 || allWorkouts.data[0].weeklyGoals.length === 0 || (dayjs().week() !== dayjs(allWorkouts.data[0].weeklyGoals[0].date).week())) {
             return noGoals
         }
 

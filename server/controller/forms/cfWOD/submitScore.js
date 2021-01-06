@@ -118,7 +118,7 @@ const submitScore = (trigger_id, wod) => {
                 "callback_id": "cf_daily",
                 "private_metadata": JSON.stringify({
                     "title": title,
-                    "something": description,
+                    "description": description,
                     "score_type": score_type,
                 }),
 
@@ -197,6 +197,7 @@ const submitScore = (trigger_id, wod) => {
                     },
                     {
                         "type": "input",
+                        "optional": true,
                         "block_id": "notes",
                         "element": {
                             "type": "plain_text_input",

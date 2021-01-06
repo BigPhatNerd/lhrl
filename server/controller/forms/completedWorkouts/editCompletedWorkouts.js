@@ -1,4 +1,4 @@
-const editWorkout = (trigger_id, workoutSelected) => {
+const editCompletedWorkout = (trigger_id, workoutSelected) => {
     const { _id, type, name, weight, minutes, seconds, reps, rounds, description, notes } = workoutSelected;
 
     if(workoutSelected.type === "Rounds + Reps") {
@@ -7,7 +7,7 @@ const editWorkout = (trigger_id, workoutSelected) => {
             "external_id": _id,
             view: {
                 "type": "modal",
-                "callback_id": "edit_created_workout",
+                "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
                     "score_type": "Rounds + Reps"
@@ -116,7 +116,7 @@ const editWorkout = (trigger_id, workoutSelected) => {
             "external_id": _id,
             view: {
                 "type": "modal",
-                "callback_id": "edit_created_workout",
+                "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
                     "score_type": "Time"
@@ -225,7 +225,7 @@ const editWorkout = (trigger_id, workoutSelected) => {
             "external_id": _id,
             view: {
                 "type": "modal",
-                "callback_id": "edit_created_workout",
+                "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
                     "score_type": "Load"
@@ -320,7 +320,7 @@ const editWorkout = (trigger_id, workoutSelected) => {
 
 
 
-module.exports = editWorkout;
+module.exports = editCompletedWorkout;
 
 
 

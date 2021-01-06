@@ -30,6 +30,29 @@ const finishedWorkouts = {
         res.json(userWorkouts)
 
     },
+    async editFinishedWorkouts({ params, body }, res) {
+        try {
+            const workoutId = params.workoutId;
+            const workout = await FinishedWorkout.findByIdAndUpdate(workoutId, body, { new: true, runValidators: true });
+            res.json(workout)
+        } catch (err) {
+
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    },
+    async deleteFinishedWorkouts({ params, body }, res) {
+        try {
+            const id = params.workoutId;
+
+            const deletedWorkout = await FinishedWorkout.findByIdAndUpdate(id);
+            res.json("Workout deleted");
+        } catch (err) {
+
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    }
 
 }
 

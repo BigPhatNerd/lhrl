@@ -169,10 +169,11 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         var data;
         console.log("score_type: ", score_type);
         var { minutes, seconds, rounds, reps, weight, notes } = payload.view.state.values;
+
         if(score_type === "Rounds + Reps") {
             rounds = rounds.rounds.value;
             reps = reps.reps.value;
-            notes = notes.notes.value;
+            notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
                 name: title,

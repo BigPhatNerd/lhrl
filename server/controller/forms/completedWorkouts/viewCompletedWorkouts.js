@@ -99,7 +99,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_completed_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -109,7 +109,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_completed_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -186,7 +186,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_completed_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -196,7 +196,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_completed_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -265,7 +265,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_completed_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -275,7 +275,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_completed_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }
@@ -347,7 +347,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Edit Workout",
                                 emoji: true
                             },
-                            value: "edit",
+                            value: "edit_completed_workouts",
                             action_id: info[i]._id
                         },
                         {
@@ -357,7 +357,7 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                                 text: "Delete Workout",
                                 emoji: true
                             },
-                            value: "delete",
+                            value: "delete_completed_workouts",
                             action_id: "delete" + info[i]._id,
 
                         }

@@ -1,15 +1,19 @@
-const loadModal = (trigger_id) => {
+const loadModal = (trigger_id, workout) => {
+    const { type, name, description, weight, notes } = workout
     const load = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "create_workout",
+            "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
                 "score_type": "Load",
+                "type": type,
+                "name": name,
+                "description": description
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Create Load Workout",
+                "text": "Complete Load Workout",
                 "emoji": true
             },
             "submit": {
@@ -23,37 +27,30 @@ const loadModal = (trigger_id) => {
                 "emoji": true
             },
             "blocks": [{
-                    "type": "input",
-                    "block_id": "name",
-                    "element": {
-                        "type": "plain_text_input",
-                        "action_id": "name"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Name",
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Type:* " + type,
+                        "emoji": true
+                    }
+                }, {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Name:* " + name,
                         "emoji": true
                     }
                 },
-
                 {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "description",
-                    "element": {
-                        "type": "plain_text_input",
-                        "multiline": true,
-                        "action_id": "description"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Description",
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Description:* " + description,
                         "emoji": true
                     }
                 },
                 {
                     "type": "input",
-                    "optional": true,
                     "block_id": "weight",
                     "element": {
                         "type": "plain_text_input",
@@ -61,7 +58,7 @@ const loadModal = (trigger_id) => {
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Weight",
+                        "text": "Weight in lbs",
                         "emoji": true
                     }
                 },

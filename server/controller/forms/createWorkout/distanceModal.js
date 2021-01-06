@@ -1,6 +1,6 @@
-const timeModal = (trigger_id, workout) => {
+const distanceModal = (trigger_id, workout) => {
     const { type, name, description, minutes, seconds, notes } = workout;
-    const time = {
+    const distance = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
@@ -13,7 +13,7 @@ const timeModal = (trigger_id, workout) => {
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Timed Workout",
+                "text": "Complete Distance Workout",
                 "emoji": true
             },
             "submit": {
@@ -27,55 +27,42 @@ const timeModal = (trigger_id, workout) => {
                 "emoji": true
             },
             "blocks": [{
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Type:* " + type,
-        "emoji": true
-    }
-}, {
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Name:* " + name,
-        "emoji": true
-    }
-}, {
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Description:* " + description,
-        "emoji": true
-    }
-},
-                {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "minutes",
-                    "element": {
-                        "type": "plain_text_input",
-                        "action_id": "minutes"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Minutes",
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Type:* " + type,
+                        "emoji": true
+                    }
+                }, {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Name:* " + name,
+                        "emoji": true
+                    }
+                }, {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Description:* " + description,
                         "emoji": true
                     }
                 },
                 {
                     "type": "input",
                     "optional": true,
-                    "block_id": "seconds",
+                    "block_id": "miles",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "seconds"
+                        "action_id": "miles"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Seconds",
+                        "text": "Miles",
                         "emoji": true
                     }
                 },
+
                 {
                     "type": "input",
                     "optional": true,
@@ -96,7 +83,7 @@ const timeModal = (trigger_id, workout) => {
             ]
         }
     }
-    return time
+    return distance
 }
 
-module.exports = timeModal;
+module.exports = distanceModal;

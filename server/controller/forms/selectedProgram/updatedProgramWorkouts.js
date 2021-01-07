@@ -98,9 +98,14 @@ const updatedProgramWorkouts = async (viewId, username) => {
                 "text": shortData[0].name,
                 "emoji": true
             },
+            "submit": {
+                "type": "plain_text",
+                "text": "Submit",
+                "emoji": true
+            },
             "close": {
                 "type": "plain_text",
-                "text": "Take Me Home",
+                "text": "Close",
                 "emoji": true
             },
             "blocks": (blockData(shortData))

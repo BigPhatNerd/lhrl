@@ -83,9 +83,9 @@ const slackController = {
             const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
             //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
             //CF WOD url https://api.sugarwod.com/v2/workoutshq
-            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
 
-            web.views.publish(homepage(passUser, allWorkouts, wod));
+            web.views.publish(homepage(passUser, allWorkouts));
         } catch (err) {
 
             console.error(err.message);

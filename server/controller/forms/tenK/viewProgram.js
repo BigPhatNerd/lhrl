@@ -97,7 +97,7 @@ const view10KProgram = async (trigger_id, workouts) => {
             },
             "close": {
                 "type": "plain_text",
-                "text": "Take Me Home",
+                "text": "Close",
                 "emoji": true
             },
             "blocks": (blockData(shortData))

@@ -1,7 +1,5 @@
 var { Schema, model, Types } = require('mongoose');
-const dayjs = require('dayjs');
-var weekOfYear = require('dayjs/plugin/weekOfYear')
-dayjs.extend(weekOfYear)
+
 const finishedWorkoutSchema = new Schema({
     userId: {
         type: String

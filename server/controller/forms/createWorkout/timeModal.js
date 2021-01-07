@@ -27,27 +27,24 @@ const timeModal = (trigger_id, workout) => {
                 "emoji": true
             },
             "blocks": [{
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Type:* " + type,
-        "emoji": true
-    }
-}, {
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Name:* " + name,
-        "emoji": true
-    }
-}, {
-    "type": "section",
-    "text": {
-        "type": "mrkdwn",
-        "text": "*Description:* " + description,
-        "emoji": true
-    }
-},
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Type:* " + type
+                    }
+                }, {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Name:* " + name
+                    }
+                }, {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Description:* " + description
+                    }
+                },
                 {
                     "type": "input",
                     "optional": true,

@@ -91,8 +91,6 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Session"
     }],
-
-
     photos: {},
     created: {
         type: Date,

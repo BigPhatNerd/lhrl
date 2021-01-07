@@ -2,8 +2,8 @@ var dayjs = require("dayjs");
 
 
 const submitTime = (trigger_id, workoutSelected) => {
-    console.log("YOOOOOO");
-    const { _id, name, week, day, startDate, type, description, time, minutes, seconds } = workoutSelected;
+
+    const { _id, name, week, day, startDate, type, description, time, minutes, seconds, completed } = workoutSelected;
 
 
     const date = dayjs(startDate).format('dddd MMMM D YYYY');
@@ -14,7 +14,10 @@ const submitTime = (trigger_id, workoutSelected) => {
         view: {
             "type": "modal",
             "callback_id": "selected_program_workouts",
-            "private_metadata": _id,
+            "private_metadata": JSON.stringify({
+                "id": _id,
+
+            }),
 
             "title": {
                 "type": "plain_text",
@@ -29,7 +32,7 @@ const submitTime = (trigger_id, workoutSelected) => {
             },
             "close": {
                 "type": "plain_text",
-                "text": "Take Me Home",
+                "text": "Close",
                 "emoji": true
             },
             "blocks": [{

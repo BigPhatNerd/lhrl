@@ -14,7 +14,7 @@ const editCompletedWorkout = (trigger_id, workoutSelected) => {
                 }),
                 "title": {
                     "type": "plain_text",
-                    "text": "Edit Workout",
+                    "text": "Edit Completed Workout",
                     "emoji": true
                 },
                 "submit": {
@@ -110,7 +110,9 @@ const editCompletedWorkout = (trigger_id, workoutSelected) => {
             }
         }
         return roundRepsModal
-    } else if(workoutSelected.type === "Time") {
+    }
+    ////
+    else if(workoutSelected.type === "Time") {
         const timeModal = {
             "trigger_id": trigger_id,
             "external_id": _id,
@@ -123,7 +125,7 @@ const editCompletedWorkout = (trigger_id, workoutSelected) => {
                 }),
                 "title": {
                     "type": "plain_text",
-                    "text": "Edit Workout",
+                    "text": "Edit Completed Workout",
                     "emoji": true
                 },
                 "submit": {
@@ -219,7 +221,9 @@ const editCompletedWorkout = (trigger_id, workoutSelected) => {
             }
         }
         return timeModal
-    } else if(workoutSelected.type === "Load") {
+    }
+    //
+    else if(workoutSelected.type === "Load") {
         const loadModal = {
             "trigger_id": trigger_id,
             "external_id": _id,
@@ -232,7 +236,7 @@ const editCompletedWorkout = (trigger_id, workoutSelected) => {
                 }),
                 "title": {
                     "type": "plain_text",
-                    "text": "Edit Workout",
+                    "text": "Edit Completed Workout",
                     "emoji": true
                 },
                 "submit": {
@@ -314,6 +318,101 @@ const editCompletedWorkout = (trigger_id, workoutSelected) => {
             }
         }
         return loadModal
+    } else if(workoutSelected.type === "Distance") {
+        const timeModal = {
+            "trigger_id": trigger_id,
+            "external_id": _id,
+            view: {
+                "type": "modal",
+                "callback_id": "edit_completed_workout",
+                "private_metadata": JSON.stringify({
+                    "id": _id,
+                    "score_type": "Time"
+                }),
+                "title": {
+                    "type": "plain_text",
+                    "text": "Edit Completed Workout",
+                    "emoji": true
+                },
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Close",
+                    "emoji": true
+                },
+                "blocks": [{
+                        "type": "input",
+                        "block_id": "name",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": name,
+                            "action_id": "name"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Name",
+                            "emoji": true
+                        }
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "description",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": description,
+                            "multiline": true,
+                            "action_id": "description"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Description",
+                            "emoji": true
+                        }
+                    },
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "miles",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": miles.toString(),
+                            "action_id": "miles"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Miles",
+                            "emoji": true
+                        }
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "notes",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": notes,
+                            "multiline": true,
+                            "action_id": "notes"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Notes",
+                            "emoji": true
+                        }
+                    },
+
+
+                ]
+            }
+        }
+        return timeModal
     }
 
 };

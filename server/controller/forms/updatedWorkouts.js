@@ -110,9 +110,14 @@ const updatedWorkouts = async (viewId, username) => {
                 "text": "Workouts Created: ",
                 "emoji": true
             },
+            "submit": {
+                "type": "plain_text",
+                "text": "Submit",
+                "emoji": true
+            },
             "close": {
                 "type": "plain_text",
-                "text": "Take Me Home",
+                "text": "Close",
                 "emoji": true
             },
             "blocks": (blockData(shortData))

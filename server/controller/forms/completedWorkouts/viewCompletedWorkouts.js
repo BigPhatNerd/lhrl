@@ -96,7 +96,17 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                             type: "button",
                             text: {
                                 type: "plain_text",
-                                text: "Edit Workout",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[i]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
@@ -183,7 +193,16 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                             type: "button",
                             text: {
                                 type: "plain_text",
-                                text: "Edit Workout",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[i]._id
+                        }, {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
@@ -262,7 +281,16 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                             type: "button",
                             text: {
                                 type: "plain_text",
-                                text: "Edit Workout",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[i]._id
+                        }, {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
@@ -344,7 +372,16 @@ const viewFinishedWorkouts = async (trigger_id, workouts) => {
                             type: "button",
                             text: {
                                 type: "plain_text",
-                                text: "Edit Workout",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[i]._id
+                        }, {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
                                 emoji: true
                             },
                             value: "edit_completed_workouts",

@@ -8,8 +8,8 @@ var mongoose = require('mongoose');
 // var User = mongoose.model('User');
 const { User, Session } = require('../models');
 
-var { strava } = require("../lib/keys");
-
+var { strava, url } = require("../lib/keys");
+const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development
 
 
 //Telling passport we want to use a Local Strategy aka login with an email and password
@@ -51,7 +51,7 @@ passport.use(new StravaStrategy({
         tokenURL: 'https://www.strava.com/oauth/token',
         clientID: strava.clientId,
         clientSecret: strava.clientSecret,
-        callbackURL: 'http://lhrlslacktest.ngrok.io/strava/redirect',
+        callbackURL: urlString,
         passReqToCallback: true
 
     },

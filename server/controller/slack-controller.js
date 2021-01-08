@@ -1,13 +1,13 @@
 const { User, Workout } = require('../models');
 const createWorkout = require('./forms/createWorkout.js');
-const { slack, sugarwod } = require('../lib/keys.js');
+const { slack, sugarwod, url } = require('../lib/keys.js');
 const { botToken, verificationToken, } = slack;
 const web = require('./../config/slack-web-api.js');
 const homepage = require('./homepage/homeview.js');
 const axios = require('axios');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey }
 
-
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 
 const slackController = {
     async editWorkout({ body, params }, res) {
@@ -80,7 +80,7 @@ const slackController = {
             const team_id = userInfo.user.team_id
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name } }, { upsert: true, new: true });
             //Add axios call to get user's finished workouts and add the call to the homepage() function
-            const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${passUser.id}`);
+            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
             //CF WOD url https://api.sugarwod.com/v2/workoutshq
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });

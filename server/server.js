@@ -8,7 +8,7 @@ const app = express();
 const session = require('express-session');
 const path = require('path');
 const request = require('request');
-const { mongo, slack } = require('./lib/keys');
+const { mongo, slack, url } = require('./lib/keys');
 const cookieSession = require('cookie-session');
 const cors = require("cors");
 const connectDB = require('./config/db');
@@ -23,13 +23,14 @@ process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
 const moreSlackInteractions = require('./controller/message-handlers/more-slack-interactions.js');
 
-console.log("process.env.NODE_ENV: ", process.env.PORT);
+console.log("url.development: ", url.development);
+
 mongoose.set('debug', true);
 
 app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware]);
 
-
-
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
+console.log("urlString: ", urlString);
 var MongoStore = require("connect-mongo")(session);
 
 const cookieParser = require("cookie-parser");
@@ -59,13 +60,13 @@ app.use(passport.initialize());
 // app.use(passport.session());
 app.use(
     cors({
-        origin: "http://lhrlslacktest.ngrok.io",
+        origin: urlString,
         methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
         credentials: true
     })
 );
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://lhrlslacktest.ngrok.io");
+    res.header("Access-Control-Allow-Origin", urlString);
     res.header("Access-Control-Allow-Credentials", true);
     next();
 });
@@ -78,7 +79,13 @@ app.use('/getEverything', getEverything);
 app.use('/homeview', homeviewRoutes);
 app.use('/goalReps', goalReps);
 
-app.get('/', (req, res) => res.json({ msg: "Welcome to the Lift Heavy Run Long® API" }));
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/build')));
+}
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 

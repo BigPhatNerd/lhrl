@@ -30,6 +30,10 @@ module.exports = {
     },
     Session: {
         cookieKey: process.env.COOKIE_KEY
+    },
+    url: {
+        development: process.env.DEV_URL,
+        production: process.env.PROD_URL
     }
 
 }

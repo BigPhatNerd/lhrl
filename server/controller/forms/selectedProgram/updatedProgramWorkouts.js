@@ -1,7 +1,9 @@
 const axios = require('axios');
 var dayjs = require("dayjs");
+const { url } = require("../../../lib/keys");
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const updatedProgramWorkouts = async (viewId, username) => {
-    const workouts = await axios.get(`http://lhrlslacktest.ngrok.io/programs/selectedProgram/get-workouts/${username}`);
+    const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${username}`);
 
     const shortData = workouts.data[0].selectedProgram;
 

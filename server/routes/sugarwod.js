@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../models');
-const { slack, sugarwod } = require('./../lib/keys.js');
+const { slack, sugarwod, url } = require('./../lib/keys.js');
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const axios = require('axios');
 const config = {
     'Authorization': sugarwod.sugarwodKey
@@ -8,13 +9,14 @@ const config = {
 const slackConfig = { 'Content-Type': 'application / json' };
 const webhookConfig = {
     'Authorization': 'b31411f2-0a41-4bbf-ac6b-b8154ab92e83',
-    'subscriber_url': 'https://lhrlslacktest.ngrok.io/sugarwod/webhook/',
+    'subscriber_url': `${urlString}/sugarwod/webhook/`,
     // 'type': 'event.affiliate.ATHLETE_JOINED',
     // 'enabled': true,
     // 'webhooks_version': 0,
     // 'webhook_id': 'liftheavyrunlong'
 
 }
+
 
 
 const slackHeader = { 'Content-Type': 'application/json' }

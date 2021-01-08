@@ -1,16 +1,16 @@
 const router = require('express').Router();
 const { User, Strava, Session, FinishedWorkout } = require('../models');
 const passport = require('../config/authentication');
-const { slack, strava } = require('../lib/keys');
+const { slack, strava, url } = require('../lib/keys');
 const axios = require('axios');
 const config = { 'Content-Type': 'application/json' }
-const url = slack.webHook;
+const hook = slack.webHook;
 const open = require('open');
 const stravaToken = strava.accessToken;
 const { refreshToken } = require('../controller/strava-controller');
 const stravaAuth = require('../config/authentication');
 const passUser = require('../config/middleware/passUser');
-
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const webAddress = 'https://www.strava.com/api/v3/athlete';
 const {
     stravaHook,
@@ -152,7 +152,7 @@ router.route('/loginfromslack')
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
 
 
-            open('http://lhrlslacktest.ngrok.io/strava/login');
+            open(`${urlString}/strava/login`);
             res.send("Taking you to the Strava login page");
 
             return createUser

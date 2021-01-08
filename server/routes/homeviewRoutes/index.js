@@ -19,8 +19,9 @@ const {
     cfWOD,
     cfHeader
 } = require('../../controller/homepage/helpers/sugarWod');
-const { sugarwod } = require('../../lib/keys');
+const { sugarwod, url } = require('../../lib/keys');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 router.post('/create-workout', (req, res) => {
 
     res.send({
@@ -42,14 +43,14 @@ router.post('/subscribe-to-program', (req, res) => {
 
 router.post('/view-program-workouts', async (req, res) => {
     const user_id = req.body.user_id;
-    const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${user_id}`);
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${user_id}`);
     res.send({
         "blocks": [currentlySubscribed(allWorkouts)]
     })
 });
 router.post('/enter-todays-score', async (req, res) => {
     const user_id = req.body.user_id;
-    const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${user_id}`);
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${user_id}`);
     res.send({
         "blocks": [todaysWorkout(allWorkouts)]
     })
@@ -57,7 +58,7 @@ router.post('/enter-todays-score', async (req, res) => {
 
 router.post('/remove-from-program', async (req, res) => {
     const user_id = req.body.user_id;
-    const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${user_id}`);
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${user_id}`);
     res.send({
         "blocks": [removeFromProgram(allWorkouts)]
     })
@@ -65,7 +66,7 @@ router.post('/remove-from-program', async (req, res) => {
 
 router.post('/goal-summary', async (req, res) => {
     const user_id = req.body.user_id;
-    const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${user_id}`);
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${user_id}`);
     res.send({
         "blocks": [weeklyGoals(allWorkouts)]
     })
@@ -73,7 +74,7 @@ router.post('/goal-summary', async (req, res) => {
 
 router.post('/enter-goal-reps', async (req, res) => {
     const user_id = req.body.user_id;
-    const allWorkouts = await axios.get(`http://lhrlslacktest.ngrok.io/getEverything/${user_id}`);
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${user_id}`);
     res.send({
         "blocks": [enterGoalReps(allWorkouts)]
     })

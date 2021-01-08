@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-const { sugarwod } = require('../../../lib/keys.js');
+const { sugarwod, url } = require('../../../lib/keys.js');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const { CrossFit } = require('../../../models');
-
+const urlString = process.env.NODE_ENV === "production" ? url.produ : url.development
 const array = [];
 const getEverything = (apiCall) => {
     apiCall.data.map(wod => {
@@ -21,7 +21,7 @@ const getEverything = (apiCall) => {
 const cfFunction = async () => {
     try {
         const getCFWod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        const getObcfWod = await axios.get('http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod', { headers: sugarWodConfig });
+        const getObcfWod = await axios.get(`${urlString}/sugarwod/obcf-wod`, { headers: sugarWodConfig });
         getEverything(getCFWod.data);
         getEverything(getObcfWod.data);
         console.log("ARRAY: ", array);

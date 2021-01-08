@@ -65,11 +65,11 @@ app.use(
         credentials: true
     })
 );
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", urlString);
-    res.header("Access-Control-Allow-Credentials", true);
-    next();
-});
+// app.use(function(req, res, next) {
+            //     res.header("Access-Control-Allow-Origin", urlString);
+            //     res.header("Access-Control-Allow-Credentials", true);
+            //     next();
+            // });
 require("./routes/api-routes.js")(app);
 app.use('/', routes);
 app.use('/programs', programRoutes);

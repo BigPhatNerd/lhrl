@@ -23,7 +23,7 @@ process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
 const moreSlackInteractions = require('./controller/message-handlers/more-slack-interactions.js');
 
-
+console.log("process.env.NODE_ENV: ", process.env.PORT);
 mongoose.set('debug', true);
 
 app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware]);

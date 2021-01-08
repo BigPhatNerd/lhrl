@@ -16,19 +16,13 @@ const Home = () => {
 
             //     const localUser = JSON.parse(localStorage.getItem('user'));
             const checkStrava = await axios.get('/strava/find', { params: { email: email } });
-            console.log("checkStrava: ", checkStrava)
-            console.log("checkStrava.data: ", checkStrava.data);
-            console.log("checkStrava.data.isAuthenticated: ", checkStrava.data.isAuthenticated);
-            console.log("checkStrava.data.authorizeStrava: ", checkStrava.data.authorizeStrava);
-
-
 
             setUser({
                 ...user,
                 stravaAuthenticated: checkStrava.data.authorizeStrava,
                 isAuthenticated: checkStrava.data.isAuthenticated
             })
-            console.log("User in getUser(): ", user);
+
             // localStorage.setItem('user', JSON.stringify(user));
             return user
         } catch (err) {

@@ -8,7 +8,7 @@ const axios = require('axios');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey }
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-
+console.log("urlString: ", urlString);
 const slackController = {
     async editWorkout({ body, params }, res) {
         try {

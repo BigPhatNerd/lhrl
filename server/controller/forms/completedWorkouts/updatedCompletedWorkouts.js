@@ -1,6 +1,7 @@
 const axios = require('axios');
 var dayjs = require("dayjs");
 const { url } = require('../../../lib/keys');
+console.log("\n\n\n\n\n\nI am up in here!!")
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const updatedCompletedWorkouts = async (viewId, username) => {
     const workouts = await axios.get(`${urlString}/finishedWorkouts/${username}`)

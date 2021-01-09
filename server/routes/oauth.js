@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { slack } = require('../lib/keys');
 const request = require('request');
-const { url } = require('../../../lib/keys');
+const { url } = require('../lib/keys');
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 
 

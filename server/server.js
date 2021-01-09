@@ -23,7 +23,6 @@ process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
 const moreSlackInteractions = require('./controller/message-handlers/more-slack-interactions.js');
 
-console.log("url.development: ", url.development);
 
 mongoose.set('debug', true);
 
@@ -66,10 +65,10 @@ app.use(
     })
 );
 // app.use(function(req, res, next) {
-            //     res.header("Access-Control-Allow-Origin", urlString);
-            //     res.header("Access-Control-Allow-Credentials", true);
-            //     next();
-            // });
+//     res.header("Access-Control-Allow-Origin", urlString);
+//     res.header("Access-Control-Allow-Credentials", true);
+//     next();
+// });
 require("./routes/api-routes.js")(app);
 app.use('/', routes);
 app.use('/programs', programRoutes);

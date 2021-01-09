@@ -8,6 +8,7 @@ router.route('/')
 // this will hit /ngrok
 
 router.get("/", (req, res) => {
+    console.log("req: ", req);
     res.send("What the fuck is happening here?");
 })
 

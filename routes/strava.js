@@ -20,13 +20,6 @@ const {
 const post = { "text": "booga booga" }
 
 
-const openWindow = async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(`${urlString}/strava/login`);
-
-    await browser.close();
-}
 router.get('/find', async (req, res) => {
     const findUser = await User.findOne({ "email": req.query.email });
     res.json(findUser);
@@ -164,9 +157,16 @@ router.route('/loginfromslack')
             // open(`${urlString}/strava/login`);
             // res.send("Taking you to the Strava login page");
             //going to try puppeteer here:
-            openWindow();
-            console.log("\n\n\ndid openWindow() run?\n\n\n")
 
+
+            console.log("\n\n\ndid openWindow() run?\n\n\n")
+                (async () => {
+                    const browser = await puppeteer.launch();
+                    const page = await browser.newPage();
+                    await page.goto(`${urlString}/strava/login`);
+
+                    await browser.close();
+                })();
 
             return createUser
         } catch (err) {

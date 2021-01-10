@@ -155,8 +155,7 @@ router.route('/loginfromslack')
                 open(`${urlString}/strava/login`);
             }
 
-            open(`${urlString}/strava/login`);
-            res.send("Taking you to the Strava login page");
+
 
             return createUser
         } catch (err) {

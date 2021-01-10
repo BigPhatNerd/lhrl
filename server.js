@@ -78,10 +78,6 @@ app.use('/getEverything', getEverything);
 app.use('/homeview', homeviewRoutes);
 app.use('/goalReps', goalReps);
 
-app.get('/tester', (req, res) => {
-    console.log("\n\n\n\nwhat????\n\n")
-    res.send("Yoooooooo");
-})
 if(process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, './client/build')));
 
@@ -89,21 +85,9 @@ if(process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname, './client/build/index.html'));
     });
 }
-const axios = require("axios");
-const test = async () => {
-    try {
-        const axiosCall = await axios.get(`${urlString}/tester`);
-        console.log("axiosCall: ", axiosCall);
 
 
 
-    } catch (err) {
-        console.error(err.message);
-
-    }
-}
-console.log("Fuck");
-test();
 
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);

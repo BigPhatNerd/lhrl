@@ -142,7 +142,6 @@ router.route('/loginfromslack')
             const { team_id, user_id, user_name, api_app_id } = req.body;
             console.log("\n\n\n\nreq.body: ", req.body);
 
-            console.log
             req.session.userId = user_id;
 
 
@@ -150,7 +149,11 @@ router.route('/loginfromslack')
             const deleteSessions = await Session.deleteMany({});
             const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
-
+            if(process.env.NODE_ENV === 'production') {
+                res.redirect(`${urlString}/strava/login`);
+            } else {
+                open(`${urlString}/strava/login`);
+            }
 
             open(`${urlString}/strava/login`);
             res.send("Taking you to the Strava login page");

@@ -64,11 +64,11 @@ app.use(
         credentials: true
     })
 );
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", urlString);
-//     res.header("Access-Control-Allow-Credentials", true);
-//     next();
-// });
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", urlString);
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
+});
 require("./routes/api-routes.js")(app);
 app.use('/', routes);
 app.use('/programs', programRoutes);
@@ -83,10 +83,10 @@ app.get('/tester', (req, res) => {
     res.send("Yoooooooo");
 })
 if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/build')));
+    app.use(express.static(path.join(__dirname, './client/build')));
 
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/build/index.html'));
+        res.sendFile(path.join(__dirname, './client/build/index.html'));
     });
 }
 const axios = require("axios");

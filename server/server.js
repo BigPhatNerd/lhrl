@@ -78,13 +78,29 @@ app.use('/getEverything', getEverything);
 app.use('/homeview', homeviewRoutes);
 app.use('/goalReps', goalReps);
 
-if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/build')));
-}
+app.get('/tester', (req, res) => {
+    console.log("\n\n\n\nwhat????\n\n")
+    res.send("Yoooooooo");
+})
+// if(process.env.NODE_ENV === 'production') {
+    //     app.use(express.static(path.join(__dirname, '../client/build')));
 
-// app.get('*', (req, res) => {
-            //     res.sendFile(path.join(__dirname, '../client/build/index.html'));
-            // });
+    //     app.get('*', (req, res) => {
+    //         res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    //     });
+    // }
+const axios = require("axios");
+const test = async () => {
+    try {
+        const axiosCall = axios.get("/tester");
+
+    } catch (err) {
+        console.error(err.message);
+
+    }
+}
+test();
+
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 

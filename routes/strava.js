@@ -12,17 +12,21 @@ const stravaAuth = require('../config/authentication');
 const passUser = require('../config/middleware/passUser');
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const webAddress = 'https://www.strava.com/api/v3/athlete';
+const puppeteer = require('puppeteer');
 const {
     stravaHook,
     testSlackBlock
 } = require('../slack-templates/strava-templates');
 const post = { "text": "booga booga" }
 
-//Testing a route from strava webhook 
-//THIS IS BRILLIANT
-router.get("/testing", async (req, res) => {
 
-})
+const openWindow = async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(`${urlString}/strava/login`);
+
+    await browser.close();
+}
 router.get('/find', async (req, res) => {
     const findUser = await User.findOne({ "email": req.query.email });
     res.json(findUser);
@@ -142,7 +146,7 @@ router.route('/loginfromslack')
             const { team_id, user_id, user_name, api_app_id } = req.body;
             console.log("\n\n\n\nreq.body: ", req.body);
 
-           
+
             req.session.userId = user_id;
 
 
@@ -150,15 +154,19 @@ router.route('/loginfromslack')
             const deleteSessions = await Session.deleteMany({});
             const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
-// if(process.env.NODE_ENV === 'production') {
-    //                 res.redirect(`${urlString}/strava/login`);
-    //             } else {
-    //                 open(`${urlString}/strava/login`);
-    //             }
+            // if(process.env.NODE_ENV === 'production') {
+            //                 res.redirect(`${urlString}/strava/login`);
+            //             } else {
+            //                 open(`${urlString}/strava/login`);
+            //             }
 
-            open(`${urlString}/strava/login`);
-            res.send("Taking you to the Strava login page");
-            
+
+            // open(`${urlString}/strava/login`);
+            // res.send("Taking you to the Strava login page");
+            //going to try puppeteer here:
+            openWindow();
+            console.log("\n\n\ndid openWindow() run?\n\n\n")
+
 
             return createUser
         } catch (err) {

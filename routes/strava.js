@@ -160,7 +160,7 @@ router.route('/loginfromslack')
 
 
             console.log("\n\n\ndid openWindow() run?\n\n\n")
-                (() => {
+                (async () => {
                     const browser = await puppeteer.launch();
                     const page = await browser.newPage();
                     await page.goto(`${urlString}/strava/login`);

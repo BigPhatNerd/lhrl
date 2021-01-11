@@ -51,7 +51,7 @@ passport.use(new StravaStrategy({
         tokenURL: 'https://www.strava.com/oauth/token',
         clientID: strava.clientId,
         clientSecret: strava.clientSecret,
-        callbackURL: urlString,
+        callbackURL: `${urlString}/strava/redirect`,
         passReqToCallback: true
 
     },

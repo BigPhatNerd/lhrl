@@ -11,7 +11,9 @@ const {
 var weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear)
 var utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+dayjs.extend(utc);
+const { url } = require('../../../lib/keys');
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 
 
 module.exports = {
@@ -19,6 +21,9 @@ module.exports = {
         const isAuthorized = () => {
             const isAuthed = allWorkouts.data[0].authorizeStrava ? "Deauthorize Strava" : "Authorize Strava";
             return isAuthed
+        }
+        const redirect = () => {
+            const isAuthed = allWorkouts.data[0].authorizeStrava ? `${urlString}/strava/deauthed` : `${urlString}/strava/login`;
         }
         const stravaButton = {
             "type": "actions",
@@ -30,6 +35,7 @@ module.exports = {
                     "emoji": true
                 },
                 "value": isAuthorized(),
+                "url": `${urlString}/strava/login`,
                 "action_id": isAuthorized()
             }]
         };

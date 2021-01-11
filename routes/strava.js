@@ -160,7 +160,7 @@ router.route('/loginfromslack')
 
 
             console.log("\n\n\ndid openWindow() run?\n\n\n")
-
+console.log("urlString in puppeteer: ", urlStringstrava/login)
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.goto(`${urlString}/strava/login`);
@@ -188,7 +188,7 @@ router.get('/redirect', passport.authenticate('strava'), async (req, res) => {
     const { team_id, api_app_id } = session[0];
 
     // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
-    res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=about`)
+    res.redirect(`${urlString}/auth`)
     // res.send("Slack successfully authorized")
     // res.redirect(`slack://app?team=${team_id}`) 
     // res.redirect('back');

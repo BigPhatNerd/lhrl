@@ -12,7 +12,7 @@ const editCompletedWorkout = require('../forms/completedWorkouts/editCompletedWo
 const submitTime = require('../forms/selectedProgram/submitTime.js');
 const viewFinishedWorkouts = require('../forms/completedWorkouts/viewCompletedWorkouts');
 const homepage = require('../homepage/homeview.js');
-const { User, Workout, Program, WeeklyGoal, FinishedWorkout } = require('../../models/');
+const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session } = require('../../models/');
 const editWorkoutResponse = require('../responses/successful-edit');
 const updatedWorkouts = require('../forms/updatedWorkouts.js');
 const updatedCompletedWorkouts = require('../forms/completedWorkouts/updatedCompletedWorkouts');
@@ -200,13 +200,23 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
             const { id, team_id, name, real_name } = userInfo.user;
+            const api_app_id = payload.api_app_id;
             const data = {
                 team_id: team_id,
                 user_id: id,
                 user_name: name,
-                api_app_id: "A014GVBCQGG"
+                api_app_id: api_app_id
             }
-            axios.post(`${urlString}/strava/loginfromslack`, data);
+
+            // axios.post(`${urlString}/strava/loginfromslack`, data);
+            /////////
+
+
+            const deleteSessions = await Session.deleteMany({});
+            const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
+            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: user_id, user_name: name } }, { upsert: true, new: true });
+            console.log("createUser: ", createUser);
+            ////
             // const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
             // web.views.publish(homepage(passUser, allWorkouts, wod))

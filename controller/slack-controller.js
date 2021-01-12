@@ -69,14 +69,15 @@ const slackController = {
     },
     async publishHomepage(req, res) {
         try {
-            console.log("\n\nreq.body: ", req.body);
+            
              res.send(req.body);
 
             const { user } = req.body.event;
+            console.log("user (in slack controller): ", user);
 const api_app_id = req.body.api_app_id;
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
-
+console.log("userInfo (in slack controller): ", userInfo);
 
             const team_id = userInfo.user.team_id
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });

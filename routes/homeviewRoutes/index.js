@@ -4,7 +4,7 @@ const web = require('../../config/slack-web-api.js');
 const slashCreateWorkout = require('../../controller/slashMessageBlocks/createWorkout');
 const slashViewCreatedWorkouts = require('../../controller/slashMessageBlocks/viewCreatedWorkouts');
 const homepage = require('../../controller/homepage/homeview.js');
-
+const { User } = require('../../models');
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
 const {
     divider,

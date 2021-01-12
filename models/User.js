@@ -34,8 +34,7 @@ var UserSchema = new Schema({
     },
     username: {
         type: String,
-        allowNull: false,
-        unique: true,
+        
 
     },
     team_id: {

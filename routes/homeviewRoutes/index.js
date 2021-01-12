@@ -3,7 +3,7 @@ const axios = require('axios');
 const web = require('../../config/slack-web-api.js');
 const slashCreateWorkout = require('../../controller/slashMessageBlocks/createWorkout');
 const slashViewCreatedWorkouts = require('../../controller/slashMessageBlocks/viewCreatedWorkouts');
-const homepage = require('../../controller/homepage/homeview.js');
+const homeModal = require('../../controller/homepage/homeModal.js');
 const { User } = require('../../models');
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
 const {
@@ -91,26 +91,26 @@ router.post('/cf-wod', async (req, res) => {
 
 router.post('/lhrl', async (req, res) => {
     try {
-          res.redirect(307, '/slack/events');     
-// const { user_id, api_app_id } = req.body;
-// console.log("\n\n\nuser in slash: ", user_id);
-// console.log("\n\nreq.body.user in slash: ", req.body.user_id);
-//             const userInfo = await web.users.info({ user: user_id });
-//             const passUser = userInfo.user;
+        console.log("req.body: ", req.body);
+     
+const { user_id, api_app_id, trigger_id } = req.body;
 
+            const userInfo = await web.users.info({ user: user_id });
+            const passUser = userInfo.user;
+            const team_id = userInfo.user.team_id;
 
-//             const team_id = userInfo.user.team_id
-//             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
-//             console.log("createUser in slash: ", createUser)
+            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
             
-//             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-           
-
-//             web.views.publish(homepage(passUser, allWorkouts));
+            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+            // web.views.publish(homepage(passUser, allWorkouts));
+            web.views.open(homeModal(trigger_id, passUser, allWorkouts))
             //
             //
             // OR:
+            
+            //slack://app?team=T012RRU3P3R&id=A014GVBCQGG&tab=home
     // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
+
     
     } catch(err) {
         

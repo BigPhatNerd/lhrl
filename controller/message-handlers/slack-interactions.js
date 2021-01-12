@@ -61,6 +61,22 @@ slackInteractions.action({ type: "static_select" }, async (payload, respond) => 
             const tenKIndex = await view10KProgram(trigger_id, workouts);
             web.views.open(tenKIndex);
         } else if(value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance") {
+///
+
+///////
+//This is where we are playing
+if(payload.view.callback_id === "homepage_modal") {
+    console.log("Yep");
+    web.views.push(createWorkoutModal(trigger_id, value));
+    return
+}
+
+
+
+////
+
+///
+            console.log("payload: ", payload);
             web.views.open(createWorkoutModal(trigger_id, value));
         } else if(value === "view_workout") {
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
@@ -415,6 +431,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const passUser = userInfo.user;
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        console.log("payload in create workout looking for /command: ", payload);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         await web.views.publish(homepage(passUser, allWorkouts))
     } catch (err) {

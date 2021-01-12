@@ -91,12 +91,14 @@ router.post('/cf-wod', async (req, res) => {
 
 router.post('/lhrl', async (req, res) => {
     try {
-        console.log("\n\n\n\n\n req: ", req);
+        
         console.log("\n\n\n\nreq.body: ", req.body);
             
 
          
 const { user, api_app_id } = req.body;
+console.log("\n\n\nuser: ", user);
+console.log("req.body.user: ", req.body.user);
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
 

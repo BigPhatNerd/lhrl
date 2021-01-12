@@ -23,8 +23,9 @@ body {
 }
 
 a {
-    color: var(--primary-color);
-    text-decoration: none;
+    color: grey;
+    text-decoration: underline;
+    font-size: 1.5rem;
 }
 
 ul {

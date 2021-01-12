@@ -5,7 +5,7 @@ import logo from './img/lhrl.png';
 
 import Home from './components/pages/Home';
 import Deauthed from './components/pages/Deauthed';
-import Authed from './components/pages/Deauthed';
+import Authed from './components/pages/Authed';
 import './App.css';
 
 function App() {

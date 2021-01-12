@@ -18,25 +18,36 @@ const urlString = process.env.NODE_ENV === "production" ? url.production : url.d
 
 module.exports = {
     authorizePrograms: (allWorkouts) => {
-        const isAuthorized = () => {
-            const isAuthed = allWorkouts.data[0].authorizeStrava ? "Deauthorize Strava" : "Authorize Strava";
-            return isAuthed
-        }
-        const redirect = () => {
-            const isAuthed = allWorkouts.data[0].authorizeStrava ? `${urlString}/strava/deauthed` : `${urlString}/strava/login`;
-        }
+       //
+if(allWorkouts.data[0].authorizeStrava){
+    const stravaButton = {
+            "type": "actions",
+            "elements": [{
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Deauthorize Strava",
+                    "emoji": true
+                },
+                "value": "Deauthorize Strava",
+                "action_id": "Deauthorize Strava"
+            }]
+        };
+        return stravaButton
+}
+     
         const stravaButton = {
             "type": "actions",
             "elements": [{
                 "type": "button",
                 "text": {
                     "type": "plain_text",
-                    "text": isAuthorized(),
+                    "text": "Authorize Strava",
                     "emoji": true
                 },
-                "value": isAuthorized(),
+                "value": "Authorize Strava",
                 "url": `${urlString}/strava/login`,
-                "action_id": isAuthorized()
+                "action_id": "Authorize Strava"
             }]
         };
         return stravaButton

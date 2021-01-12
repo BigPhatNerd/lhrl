@@ -18,6 +18,7 @@ const weeklyGoals = require('./routes/weeklyGoals');
 const homeviewRoutes = require('./routes/homeviewRoutes');
 const finishedWorkouts = require('./routes/finishedWorkouts');
 const goalReps = require('./routes/goalReps');
+const sessions = require('./routes/session');
 const getEverything = require('./routes/getEverything');
 process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
@@ -77,6 +78,7 @@ app.use('/finishedWorkouts', finishedWorkouts);
 app.use('/getEverything', getEverything);
 app.use('/homeview', homeviewRoutes);
 app.use('/goalReps', goalReps);
+app.use('/session', sessions);
 
 if(process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, './client/build')));

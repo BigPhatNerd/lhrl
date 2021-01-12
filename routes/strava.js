@@ -35,9 +35,13 @@ router.put('/deauth/:stravaId', async (req, res) => {
         authorizeStrava: false
     }
     let user = await User.findOneAndUpdate(stravaId, update, {
-        new: true
+        new: false
     });
+    console.log("\n\n\nuser: ", user)
+    const { team_id, api_app_id } = user
+
     res.json(user)
+    
 })
 
 //Create route for STRAVA webhook to go to Slack

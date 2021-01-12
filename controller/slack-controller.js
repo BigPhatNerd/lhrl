@@ -72,13 +72,13 @@ const slackController = {
             // res.send(req.body);
 
             const { user } = req.body.event;
-
+const api_app_id = req.body.api_app_id;
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
 
 
             const team_id = userInfo.user.team_id
-            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name } }, { upsert: true, new: true });
+            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
             //Add axios call to get user's finished workouts and add the call to the homepage() function
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod

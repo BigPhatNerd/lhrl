@@ -51,7 +51,8 @@ passport.use(new StravaStrategy({
         tokenURL: 'https://www.strava.com/oauth/token',
         clientID: strava.clientId,
         clientSecret: strava.clientSecret,
-        callbackURL: `${urlString}/strava/redirect`,
+        callbackURL: `https://immense-shelf-69979.herokuapp.com/strava/redirect`,
+         // callbackURL: `${urlString}/strava/redirect`,
         passReqToCallback: true
 
     },

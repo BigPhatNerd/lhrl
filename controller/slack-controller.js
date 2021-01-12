@@ -77,7 +77,7 @@ const slackController = {
 const api_app_id = req.body.api_app_id;
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
-console.log("userInfo (in slack controller): ", userInfo);
+
 
             const team_id = userInfo.user.team_id
             const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });

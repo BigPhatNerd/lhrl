@@ -91,10 +91,13 @@ router.post('/cf-wod', async (req, res) => {
 
 router.post('/lhrl', async (req, res) => {
     try {
-        console.log("req.body: ", req.body);
-     
-const { user_id, api_app_id, trigger_id } = req.body;
 
+     console.log("req.body: ", req.body);
+     
+const { user_id, api_app_id, trigger_id, response_url } = req.body;
+
+res.send("Opening LHRL Modal"
+);
             const userInfo = await web.users.info({ user: user_id });
             const passUser = userInfo.user;
             const team_id = userInfo.user.team_id;
@@ -104,6 +107,7 @@ const { user_id, api_app_id, trigger_id } = req.body;
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             // web.views.publish(homepage(passUser, allWorkouts));
             web.views.open(homeModal(trigger_id, passUser, allWorkouts))
+return
             //
             //
             // OR:

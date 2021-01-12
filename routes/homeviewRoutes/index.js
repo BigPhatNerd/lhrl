@@ -93,10 +93,10 @@ router.post('/lhrl', async (req, res) => {
     try {
         console.log("\n\n\n\n\n req: ", req);
         console.log("\n\n\n\nreq.body: ", req.body);
-             res.send(req.body);
+            
 
-            const { user } = req.body.event;
-const api_app_id = req.body.api_app_id;
+         
+const { user, api_app_id } = req.body;
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
 

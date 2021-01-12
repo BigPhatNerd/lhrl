@@ -3,6 +3,8 @@ const axios = require('axios');
 const web = require('../../config/slack-web-api.js');
 const slashCreateWorkout = require('../../controller/slashMessageBlocks/createWorkout');
 const slashViewCreatedWorkouts = require('../../controller/slashMessageBlocks/viewCreatedWorkouts');
+const homepage = require('../../controller/homepage/homeview.js');
+
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
 const {
     divider,
@@ -88,9 +90,33 @@ router.post('/cf-wod', async (req, res) => {
 });
 
 router.post('/lhrl', async (req, res) => {
-    const team_id = req.body.team_id;
-    const api_app_id = req.body.api_app_id;
-    open(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
+    try {
+        console.log("\n\n\n\n\n req: ", req);
+        console.log("\n\n\n\nreq.body: ", req.body);
+             res.send(req.body);
+
+            const { user } = req.body.event;
+const api_app_id = req.body.api_app_id;
+            const userInfo = await web.users.info({ user: user });
+            const passUser = userInfo.user;
+
+
+            const team_id = userInfo.user.team_id
+            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
+            //Add axios call to get user's finished workouts and add the call to the homepage() function
+            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+            //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
+            //CF WOD url https://api.sugarwod.com/v2/workoutshq
+            // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+
+            web.views.publish(homepage(passUser, allWorkouts));
+    // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
+    web.views.publish(passUser, allWorkouts)
+    } catch(err) {
+        
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 
 });
 

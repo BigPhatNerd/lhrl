@@ -96,10 +96,10 @@ router.post('/lhrl', async (req, res) => {
             
 
          
-const { user, api_app_id } = req.body;
-console.log("\n\n\nuser: ", user);
-console.log("req.body.user: ", req.body.user);
-            const userInfo = await web.users.info({ user: user });
+const { user_id, api_app_id } = req.body;
+console.log("\n\n\nuser: ", user_id);
+console.log("req.body.user: ", req.body.user_id);
+            const userInfo = await web.users.info({ user: user_id });
             const passUser = userInfo.user;
 
 

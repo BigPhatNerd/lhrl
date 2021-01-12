@@ -92,19 +92,20 @@ router.post('/cf-wod', async (req, res) => {
 router.post('/lhrl', async (req, res) => {
     try {
         
-        console.log("\n\n\n\nreq.body: ", req.body);
+        
             
 
          
 const { user_id, api_app_id } = req.body;
-console.log("\n\n\nuser: ", user_id);
-console.log("req.body.user: ", req.body.user_id);
+console.log("\n\n\nuser in slash: ", user_id);
+console.log("\n\nreq.body.user in slash: ", req.body.user_id);
             const userInfo = await web.users.info({ user: user_id });
             const passUser = userInfo.user;
 
 
             const team_id = userInfo.user.team_id
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
+            console.log("createUser in slash: ", createUser)
             //Add axios call to get user's finished workouts and add the call to the homepage() function
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
@@ -113,7 +114,7 @@ console.log("req.body.user: ", req.body.user_id);
 
             web.views.publish(homepage(passUser, allWorkouts));
     // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
-    web.views.publish(passUser, allWorkouts)
+    
     } catch(err) {
         
         console.error(err.message);

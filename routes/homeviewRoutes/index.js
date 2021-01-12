@@ -90,7 +90,7 @@ router.post('/cf-wod', async (req, res) => {
 router.post('/lhrl', async (req, res) => {
     const team_id = req.body.team_id;
     const api_app_id = req.body.api_app_id;
-    res.redirect(303, `slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
+    res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
 
 });
 

@@ -69,7 +69,8 @@ const slackController = {
     },
     async publishHomepage(req, res) {
         try {
-            // res.send(req.body);
+            console.log("\n\nreq.body: ", req.body);
+             res.send(req.body);
 
             const { user } = req.body.event;
 const api_app_id = req.body.api_app_id;

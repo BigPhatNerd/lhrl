@@ -91,28 +91,25 @@ router.post('/cf-wod', async (req, res) => {
 
 router.post('/lhrl', async (req, res) => {
     try {
-        
-        
+          res.redirect(307, '/slack/events');     
+// const { user_id, api_app_id } = req.body;
+// console.log("\n\n\nuser in slash: ", user_id);
+// console.log("\n\nreq.body.user in slash: ", req.body.user_id);
+//             const userInfo = await web.users.info({ user: user_id });
+//             const passUser = userInfo.user;
+
+
+//             const team_id = userInfo.user.team_id
+//             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
+//             console.log("createUser in slash: ", createUser)
             
+//             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+           
 
-         
-const { user_id, api_app_id } = req.body;
-console.log("\n\n\nuser in slash: ", user_id);
-console.log("\n\nreq.body.user in slash: ", req.body.user_id);
-            const userInfo = await web.users.info({ user: user_id });
-            const passUser = userInfo.user;
-
-
-            const team_id = userInfo.user.team_id
-            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
-            console.log("createUser in slash: ", createUser)
-            //Add axios call to get user's finished workouts and add the call to the homepage() function
-            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
-            //CF WOD url https://api.sugarwod.com/v2/workoutshq
-            // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-
-            web.views.publish(homepage(passUser, allWorkouts));
+//             web.views.publish(homepage(passUser, allWorkouts));
+            //
+            //
+            // OR:
     // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
     
     } catch(err) {

@@ -1,5 +1,5 @@
-const updateGoals = (trigger_id, goalSelected) => {
-
+const updateGoals = (payload, goalSelected) => {
+const { trigger_id } = payload;
     const { _id, userId, pushups, situps, squats, miles, date } = goalSelected;
     //Check to see if the movement exists
 

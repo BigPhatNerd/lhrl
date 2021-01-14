@@ -91,13 +91,11 @@ router.post('/cf-wod', async (req, res) => {
 
 router.post('/lhrl', async (req, res) => {
     try {
-
-     console.log("req.body: ", req.body);
-     
+console.log("req.body: ", req.body);
+   
 const { user_id, api_app_id, trigger_id, response_url } = req.body;
 
-res.send("Opening LHRL Modal"
-);
+res.send(200, "Opening LHRL Modal");
             const userInfo = await web.users.info({ user: user_id });
             const passUser = userInfo.user;
             const team_id = userInfo.user.team_id;
@@ -105,15 +103,9 @@ res.send("Opening LHRL Modal"
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
             
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            // web.views.publish(homepage(passUser, allWorkouts));
             web.views.open(homeModal(trigger_id, passUser, allWorkouts))
-return
-            //
-            //
-            // OR:
-            
-            //slack://app?team=T012RRU3P3R&id=A014GVBCQGG&tab=home
-    // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
+
+         
 
     
     } catch(err) {

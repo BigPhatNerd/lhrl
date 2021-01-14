@@ -1,4 +1,5 @@
-const createWorkout = (trigger_id) => {
+const createWorkout = (payload) => {
+    const { trigger_id } = payload;
     const workoutModal = {
         "trigger_id": trigger_id,
         view: {

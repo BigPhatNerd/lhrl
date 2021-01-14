@@ -11,20 +11,18 @@ const {
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homeModal = (trigger_id, user, allWorkouts, wod) => {
+const homeModal = (homeModal_view_id, user, allWorkouts) => {
+// const metadata = JSON.parse(payload.view.private_metadata)
 
-
+// console.log("payload in update home(find viewId): ",payload)
     //user and userProgram is set in controller/slack-controller publishHomepage
-
 
 
     const view = {
 
         "user_id": user.id,
-         "external_id": "whatever",
-        
-        "trigger_id": trigger_id,
-        "response_action": "clear",
+        "view_id":  homeModal_view_id,
+        "response_action": "update",
         view: {
             "type": "modal",
             "callback_id": "homepage_modal",
@@ -46,19 +44,7 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                 "text": "Cancel",
                 "emoji": true
             },
-            "blocks": [{
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Lift Heavy Run Long®",
-                        "emoji": true
-                    }
-                },
-                {
-                    "type": "image",
-                    "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
-                    "alt_text": "logo"
-                },
+            "blocks": [
                 ////
                 //////////////
                 authorizePrograms(allWorkouts),
@@ -271,8 +257,8 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                         "text": "CrossFit HQ Workout of the Day",
                         "emoji": true
                     }
-                },
-                // cfWOD(wod),
+                }
+             
 
 
 

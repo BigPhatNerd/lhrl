@@ -25,6 +25,8 @@ const updateGoals = require('../forms/weeklyGoals/updateGoals');
 const addRepsToGoals = require('../forms/addRepsToGoals');
 const submitScore = require('../forms/cfWOD/submitScore');
 const { slack, sugarwod, url } = require('../../lib/keys');
+const homeModal = require('../homepage/homeModal');
+const updateHomeModal = require('../homepage/updateHomeModal');
 const axios = require('axios');
 const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
@@ -34,52 +36,47 @@ var value;
 
 slackInteractions.viewSubmission('create_form', async (payload, respond) => {
     try {
-        console.log("We are hitting here!");
-        const { trigger_id } = payload;
-        web.views.open(createWorkout(trigger_id))
-
+        web.views.open(createWorkout(payload))
         return
     } catch (err) {
         console.error(err.message);
     }
-
 });
 
 slackInteractions.action({ type: "static_select" }, async (payload, respond) => {
     try {
-        var { trigger_id } = payload;
         var user_id = payload.user.id;
-        value = payload.actions[0].selected_option.value;
+        value = payload.actions[0].selected_option.value;   
         if(value === "5K") {
-            // const workouts = await axios.get('${urlString}/programs/fiveK/view-program');
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
-            const fiveKIndex = await view5KProgram(trigger_id, workouts);
+            
 if(payload.view.callback_id === "homepage_modal") {
+    const fiveKIndex = await view5KProgram(payload, workouts, "slash");
     web.views.push(fiveKIndex);
     return
 }
+const fiveKIndex = await view5KProgram(payload, workouts, "home");
             web.views.open(fiveKIndex);
         } else if(value === "10K") {
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
-            const tenKIndex = await view10KProgram(trigger_id, workouts);
+            
             if(payload.view.callback_id === "homepage_modal") {
+                const tenKIndex = await view10KProgram(payload, workouts, "slash");
     web.views.push(tenKIndex);
     return
 }
+const tenKIndex = await view10KProgram(payload, workouts, "home");
             web.views.open(tenKIndex);
         } else if(value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance") {
-///
 
-///////
-//This is where we are playing
 if(payload.view.callback_id === "homepage_modal") {
-    web.views.push(createWorkoutModal(trigger_id, value));
+    web.views.push(createWorkoutModal(payload, value));
     return
 }
-            web.views.open(createWorkoutModal(trigger_id, value));
+            web.views.open(createWorkoutModal(payload, value));
         } else if(value === "view_workout") {
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
-            const workoutIndex = await viewWorkouts(trigger_id, workouts);
+            const workoutIndex = await viewWorkouts(payload, workouts);
             if(payload.view.callback_id === "homepage_modal") {
     web.views.push(workoutIndex);
     return
@@ -89,7 +86,7 @@ if(payload.view.callback_id === "homepage_modal") {
             web.views.open(workoutIndex);
         } else if(value === "completed_workouts") {
             const finishedWorkouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
-            const finishedWorkoutIndex = await viewFinishedWorkouts(trigger_id, finishedWorkouts);
+            const finishedWorkoutIndex = await viewFinishedWorkouts(payload, finishedWorkouts);
             if(payload.view.callback_id === "homepage_modal") {
     web.views.push(finishedWorkoutIndex);
     return
@@ -109,9 +106,6 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
         value = payload.actions[0].value;
         var text = payload.actions[0].text.text;
         var deleteBlockIdPressed = payload.actions[0].block_id;
-
-
-        var { trigger_id } = payload;
         var username = payload.user.username;
         var user_id = payload.user.id;
         if(value === "complete_created_workouts") {
@@ -120,28 +114,33 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             const workoutSelected = await Workout.find({ _id: buttonPressed });
             if(workoutSelected[0].type === "Rounds + Reps") {
 
-                web.views.push(roundsPlusRepsModal(trigger_id, workoutSelected[0]));
+                web.views.push(roundsPlusRepsModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Time") {
-                web.views.push(timeModal(trigger_id, workoutSelected[0]));
+                web.views.push(timeModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Load") {
-                web.views.push(loadModal(trigger_id, workoutSelected[0]));
+                web.views.push(loadModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Distance") {
-                web.views.push(distanceModal(trigger_id, workoutSelected[0]));
+                web.views.push(distanceModal(payload, workoutSelected[0]));
             }
 
 
         } else if(value === "edit_created_workouts") {
 
+            //step 2
+            console.log("is this where it ends? payload: ", payload.view.id);
+            console.log("payload: ", payload)
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");
             const workoutSelected = await Workout.find({ _id: buttonPressed });
-            web.views.push(editWorkout(trigger_id, workoutSelected[0]));
+const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
+            //ADD AWAIT RIGHT HERE
+            web.views.push(awaitWorkouts);
         } else if(value === "delete_created_workouts") {
 
             buttonPressed = buttonPressed.replace("delete", "");
             const deleteWorkout = await axios.delete(`${urlString}/slack/delete-workout/${buttonPressed}`);
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
-            const workoutIndex = await viewWorkouts(trigger_id, workouts);
+            const workoutIndex = await viewWorkouts(payload, workouts);
             web.views.push(workoutIndex);
         } else if(value === "complete_completed_workouts") {
             //This is where I am working
@@ -150,13 +149,13 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
             if(workoutSelected[0].type === "Rounds + Reps") {
 
-                web.views.push(roundsPlusRepsModal(trigger_id, workoutSelected[0]));
+                web.views.push(roundsPlusRepsModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Time") {
-                web.views.push(timeModal(trigger_id, workoutSelected[0]));
+                web.views.push(timeModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Load") {
-                web.views.push(loadModal(trigger_id, workoutSelected[0]));
+                web.views.push(loadModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Distance") {
-                web.views.push(distanceModal(trigger_id, workoutSelected[0]));
+                web.views.push(distanceModal(payload, workoutSelected[0]));
             }
 
 
@@ -165,7 +164,7 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
-            web.views.push(editCompletedWorkout(trigger_id, workoutSelected[0]));
+            web.views.push(editCompletedWorkout(payload, workoutSelected[0]));
         } else if(value === "delete_completed_workouts") {
             //THIS IS WHERE I AM
 
@@ -174,11 +173,11 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             // const deleteWorkout = await axios.delete(`${urlString}/finishedWorkouts/delete/${buttonPressed}`);
             const deleteWorkout = await FinishedWorkout.deleteOne({ _id: buttonPressed });
             const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
-            const workoutIndex = await viewFinishedWorkouts(trigger_id, workouts);
+            const workoutIndex = await viewFinishedWorkouts(payload, workouts);
             web.views.push(workoutIndex);
         } else if(value === "program_workouts") {
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`)
-            const listWorkouts = await selectedProgramWorkouts(trigger_id, workouts);
+            const listWorkouts = await selectedProgramWorkouts(payload, workouts);
             web.views.open(listWorkouts)
         } else if(value === "remove_workouts") {
             const user = payload.user.id;
@@ -196,29 +195,29 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
             //Open modal to enter score for program workout
             buttonPressed = buttonPressed.replace("selected_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
-            const submitTimeView = await submitTime(trigger_id, workoutSelected[0]);
+            const submitTimeView = await submitTime(payload, workoutSelected[0]);
             web.views.push(submitTimeView);
 
         } else if(value === 'daily_program_score') {
 
             buttonPressed = buttonPressed.replace("daily_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
-            const submitTimeView = await submitTime(trigger_id, workoutSelected[0]);
+            const submitTimeView = await submitTime(payload, workoutSelected[0]);
             web.views.open(submitTimeView);
         } else if(value === "weekly_goal") {
-            web.views.open(setGoals(trigger_id));
+            web.views.open(setGoals(payload));
         } else if(value === "update_weekly_goal") {
             viewId = payload.container.view_id;
 
             buttonPressed = buttonPressed.replace("update_weekly_goal", "");
             const goalsSelected = await WeeklyGoal.find({ _id: buttonPressed });
-            web.views.open(updateGoals(trigger_id, goalsSelected[0]))
+            web.views.open(updateGoals(payload, goalsSelected[0]))
         } else if(value === 'add_reps_to_goal') {
-            web.views.open(addRepsToGoals(trigger_id));
+            web.views.open(addRepsToGoals(payload));
         } else if(value === 'cf_wod_score') {
 
             const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-            web.views.open(submitScore(trigger_id, wod))
+            web.views.open(submitScore(payload, wod))
         } else if(value === 'Authorize Strava') {
             const user = payload.user.id;
             const userInfo = await web.users.info({ user: user });
@@ -262,22 +261,29 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
 slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
     try {
 
-        const { trigger_id } = payload;
-        const value = payload.view.private_metadata;
+
+const metadata = JSON.parse(payload.view.private_metadata);
+
+const { distance, home_or_slash, homeModal_view_id } = metadata;
+
+       
         const date = payload.view.state.values.date.date.selected_date;
         const user_id = payload.user.id;
         const username = payload.user.username;
 
-        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${value}`, { startDate: date });
+        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${distance}`, { startDate: date });
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        console.log("\n\npayload in subscribe to plan: ", payload);
-        web.views.publish(homepage(passUser, allWorkouts))
+ 
+if(home_or_slash === "slash"){
+            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts))
+} else {
+     web.views.publish(homepage(passUser, allWorkouts))
+}
         const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 5k program 🏃‍♂️` }, config)
-        // const newhomePageView = await axios.post(`${urlString}/slack/events`);
+        
     } catch (err) {
         console.error(err.message);
     }
@@ -285,11 +291,12 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
 
 slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) => {
     try {
-        const user_id = payload.user.id;
-        const value = payload.view.private_metadata;
-        console.log("value: ", value);
+        const metadata = JSON.parse(payload.view.private_metadata);
+const { distance, home_or_slash, homeModal_view_id } = metadata;
 
-        const { trigger_id } = payload;
+        const user_id = payload.user.id;
+
+        
         const date = payload.view.state.values.date.date.selected_date;
         const username = payload.user.username;
         const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${value}`, { startDate: date });
@@ -297,9 +304,11 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        web.views.publish(homepage(passUser, allWorkouts))
-
+        if(home_or_slash === "slash"){          
+            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts))        
+} else {
+    web.views.publish(homepage(passUser, allWorkouts))
+}
         const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 10k program 🏃‍♂️` }, config)
     } catch (err) {
         console.error(err.message);
@@ -308,13 +317,18 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
 
 slackInteractions.viewSubmission('edit_created_workout', async (payload, respond) => {
     try {
+//step 3
+//Try to pass view_id from step 1 into updated workouts
 
         const metadata = JSON.parse(payload.view.private_metadata);
-        const { id, score_type } = metadata;
+        const { id, score_type, homeModal_view_id } = metadata;
+        
+        console.log("\n\nviewId: ", viewId);
+        console.log("metadata line 344: ", metadata);
         // const workoutId = payload.view.private_metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+ 
         var data;
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
@@ -328,7 +342,7 @@ slackInteractions.viewSubmission('edit_created_workout', async (payload, respond
             description: description,
         }
         const sendWorkout = await axios.put(`${urlString}/slack/edit-workout/${id}`, data);
-        const updated = await updatedWorkouts(viewId, passUser.id);
+        const updated = await updatedWorkouts(viewId, passUser.id, homeModal_view_id);
         web.views.update(updated)
     } catch (err) {
         console.error(err.message);
@@ -343,7 +357,7 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
         // const workoutId = payload.view.private_metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+        
         var data;
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
@@ -406,9 +420,8 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
     }
 });
 slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
-    return Promise.resolve({
-        "response_action": "clear"
-    })
+//   Nothing is happening here. Is that cool?
+console.log("payload line 443 `view_workouts`: ", payload);
 });
 
 slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
@@ -417,7 +430,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const { score_type } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+        
         var data;
 
         var { name, description } = payload.view.state.values;
@@ -435,6 +448,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏋️‍♀️ ${username} just created a new workout 🏋` }, config)
 
         //I just added this. Maybe not necessary
+        //I REALLY DONT THINK THIS IS NECESSARY
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
@@ -455,7 +469,7 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         const { score_type, name, description } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+        
         var data;
         var { minutes, seconds, rounds, reps, weight, miles, notes } = payload.view.state.values;
 

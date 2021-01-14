@@ -1,5 +1,5 @@
-const submitScore = (trigger_id, wod) => {
-
+const submitScore = (payload, wod) => {
+const {trigger_id } = payload;
     const { title, description, score_type } = wod.data.data[0].attributes;
     if(score_type === "Rounds + Reps") {
         const roundsPlusReps = {

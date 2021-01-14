@@ -1,7 +1,7 @@
 var dayjs = require("dayjs");
 
-const view10KProgram = async (trigger_id, workouts) => {
-
+const view10KProgram = async (payload, workouts, slashOrHome) => {
+const { trigger_id } = payload;
     const shortData = workouts.data;
     const array = [{
             "type": "header",
@@ -83,7 +83,11 @@ const view10KProgram = async (trigger_id, workouts) => {
         view: {
             "type": "modal",
             "callback_id": "subscribe_to_10k",
-            "private_metadata": "10K",
+             "private_metadata": JSON.stringify({
+                "distance": "10K",
+                "home_or_slash": slashOrHome,
+                "homeModal_view_id": payload.view.id
+            }),
             "title": {
                 "type": "plain_text",
                 "text": "10K Workouts: ",

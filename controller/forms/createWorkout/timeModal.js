@@ -1,4 +1,5 @@
-const timeModal = (trigger_id, workout) => {
+const timeModal = (payload, workout) => {
+    const { trigger_id } = payload;
     const { type, name, description, minutes, seconds, notes } = workout;
     const time = {
         "trigger_id": trigger_id,

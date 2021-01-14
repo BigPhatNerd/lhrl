@@ -1,8 +1,8 @@
 var dayjs = require("dayjs");
 
 
-const selectedProgramWorkouts = async (trigger_id, workouts) => {
-
+const selectedProgramWorkouts = async (payload, workouts) => {
+const { trigger_id } = payload;
     const shortData = workouts.data[0].selectedProgram;
 
 

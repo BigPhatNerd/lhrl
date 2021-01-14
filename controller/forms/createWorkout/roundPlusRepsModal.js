@@ -1,4 +1,5 @@
-const roundsPlusRepsModal = (trigger_id, workout) => {
+const roundsPlusRepsModal = (payload, workout) => {
+    const { trigger_id } = payload;
     const { type, name, description, rounds, reps, notes } = workout;
     const roundsPlusReps = {
         "trigger_id": trigger_id,

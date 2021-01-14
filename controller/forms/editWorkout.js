@@ -1,6 +1,9 @@
-const editWorkout = (trigger_id, workoutSelected) => {
+const editWorkout = (payload, workoutSelected) => {
+    const { trigger_id } = payload;
     const { _id, type, name, description } = workoutSelected;
-
+    const metadata = JSON.parse(payload.view.private_metadata)
+    
+console.log("payload in edit*: ", payload)
     const roundRepsModal = {
         "trigger_id": trigger_id,
         "external_id": _id,
@@ -9,7 +12,9 @@ const editWorkout = (trigger_id, workoutSelected) => {
             "callback_id": "edit_created_workout",
             "private_metadata": JSON.stringify({
                 "id": _id,
-                "score_type": "Rounds + Reps"
+                "score_type": "Rounds + Reps",
+                 "homeModal_view_id": metadata.homeModal_view_id
+
             }),
             "title": {
                 "type": "plain_text",

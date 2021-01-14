@@ -1,8 +1,8 @@
 var dayjs = require("dayjs");
 
 
-const submitTime = (trigger_id, workoutSelected) => {
-
+const submitTime = (payload, workoutSelected) => {
+const { trigger_id } = payload;
     const { _id, name, week, day, startDate, type, description, time, minutes, seconds, completed } = workoutSelected;
 
 

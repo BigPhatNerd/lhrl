@@ -1,5 +1,6 @@
-const loadModal = (trigger_id, workout) => {
-    const { type, name, description, weight, notes } = workout
+const loadModal = (payload, workout) => {
+    const { trigger_id } = payload;
+    const { type, name, description, weight, notes } = workout;
     const load = {
         "trigger_id": trigger_id,
         view: {

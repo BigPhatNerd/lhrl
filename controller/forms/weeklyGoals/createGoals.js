@@ -1,4 +1,5 @@
-const createGoals = (trigger_id) => {
+const createGoals = (payload) => {
+    const { trigger_id } = payload;
     const goalModal = {
         "trigger_id": trigger_id,
         "view": {

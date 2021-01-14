@@ -24,6 +24,11 @@ const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf
 var viewId;
 var value;
 
+moreSlackInteractions.viewSubmission('homepage_modal', async (payload, respond) => {
+console.log("YesSS");
+console.log("payload in homepage: ", payload);
+})
+
 moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respond) => {
     try {
         const username = payload.user.username;
@@ -92,7 +97,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+        
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
         situps = situps.situps.value;
@@ -127,7 +132,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const weeklyGoalId = payload.view.private_metadata
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+        
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
         situps = situps.situps.value;
@@ -165,7 +170,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const { title, description, score_type } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
-        const { trigger_id } = payload;
+       
         var data;
 
         var { minutes, seconds, rounds, reps, weight, notes } = payload.view.state.values;

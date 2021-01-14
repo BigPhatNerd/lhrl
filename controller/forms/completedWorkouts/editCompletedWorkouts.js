@@ -1,4 +1,5 @@
-const editCompletedWorkout = (trigger_id, workoutSelected) => {
+const editCompletedWorkout = (payload, workoutSelected) => {
+    const { trigger_id } = payload;
     const { _id, type, name, weight, minutes, seconds, reps, rounds, description, notes } = workoutSelected;
 
     if(workoutSelected.type === "Rounds + Reps") {

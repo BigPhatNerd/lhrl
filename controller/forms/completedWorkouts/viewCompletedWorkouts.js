@@ -1,6 +1,7 @@
 var dayjs = require("dayjs");
 
-const viewFinishedWorkouts = async (trigger_id, workouts) => {
+const viewFinishedWorkouts = async (payload, workouts) => {
+    const { trigger_id } = payload;
 
     var shortData;
     if(workouts.data.length === 0) {

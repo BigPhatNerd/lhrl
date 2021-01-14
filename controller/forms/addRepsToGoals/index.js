@@ -1,4 +1,5 @@
-const addRepsToGoals = (trigger_id) => {
+const addRepsToGoals = (payload) => {
+    const { trigger_id } = payload;
     const repsModal = {
         "trigger_id": trigger_id,
         "view": {

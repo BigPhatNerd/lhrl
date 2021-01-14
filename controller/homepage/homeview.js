@@ -22,7 +22,8 @@ const homepage = (user, allWorkouts, wod) => {
 
         "user_id": user.id,
         "external_id": "whatever",
-        "private_metadata": "something",
+         "private_metadata": "something",
+       
         view: {
             "type": "home",
             "callback_id": "homepage_menu",

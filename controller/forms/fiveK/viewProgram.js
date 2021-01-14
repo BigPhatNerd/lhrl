@@ -1,6 +1,7 @@
 var dayjs = require("dayjs");
 
-const view5KProgram = async (trigger_id, workouts) => {
+const view5KProgram = async (payload, workouts, slashOrHome) => {
+    const { trigger_id } = payload;
 
     const shortData = workouts.data;
     const array = [{
@@ -80,10 +81,16 @@ const view5KProgram = async (trigger_id, workouts) => {
 
     const mapWorkouts = {
         "trigger_id": trigger_id,
+       
         view: {
             "type": "modal",
             "callback_id": "subscribe_to_5k",
-            "private_metadata": "5K",
+            "private_metadata": JSON.stringify({
+                "distance": "5K",
+                "home_or_slash": slashOrHome,
+                "homeModal_view_id": payload.view.id
+            }),
+            
             "title": {
                 "type": "plain_text",
                 "text": "5K Workouts: ",

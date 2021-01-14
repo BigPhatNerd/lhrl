@@ -1,4 +1,5 @@
-const createWorkoutModal = (trigger_id, value) => {
+const createWorkoutModal = (payload, value, homeOrSlash) => {
+    const { trigger_id } = payload;
     const type = (value) => {
         if(value === "rounds_plus_reps") {
             return "Rounds + Reps"
@@ -28,6 +29,7 @@ const createWorkoutModal = (trigger_id, value) => {
             "callback_id": "create_workout",
             "private_metadata": JSON.stringify({
                 "score_type": type(value),
+               
             }),
             "title": {
                 "type": "plain_text",

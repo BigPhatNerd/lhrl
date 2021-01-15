@@ -7,6 +7,7 @@ const { User, Workout, Program, FinishedWorkout } = require('../../models/');
 const { createGoalsMessage } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
+const updateHomeModal = require('../homepage/updateHomeModal');
 const {
     goalCount,
     goalSummary,
@@ -23,6 +24,27 @@ const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development
 var viewId;
 var value;
+
+moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) =>{
+    console.log("line 28 moreSlackInteractions");
+    console.log("payload: ", payload);
+    const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
+    console.log("home_or_slash: ", home_or_slash);
+    console.log("homeModal_view_id: ", homeModal_view_id);
+
+    const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);      
+    if(home_or_slash === "slash"){
+web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+return       
+    }
+
+web.views.publish(homepage(passUser, allWorkouts))
+
+})
 
 moreSlackInteractions.viewSubmission('homepage_modal', async (payload, respond) => {
 console.log("YesSS");

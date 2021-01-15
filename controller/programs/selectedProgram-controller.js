@@ -71,7 +71,6 @@ const selectedProgramController = {
     },
     async completePlanWorkout({ params, body }, res) {
         try {
-            console.log("\n\n\n\nbody: ", body);
             const user_id = params.user_id;
             const id = params.id;
 
@@ -88,7 +87,6 @@ const selectedProgramController = {
 
 
             const completeWorkout = await Program.findOneAndUpdate({ _id: id }, data, { new: true });
-            console.log("\n\ncompleteWorkout: ", completeWorkout);
             const dataForWorkout = {
                 seconds: completeWorkout.seconds,
                 minutes: completeWorkout.minutes,

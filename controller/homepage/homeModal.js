@@ -11,7 +11,7 @@ const {
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homeModal = (trigger_id, user, allWorkouts, wod) => {
+const homeModal = (trigger_id, user, allWorkouts) => {
 
 
     //user and userProgram is set in controller/slack-controller publishHomepage
@@ -46,19 +46,7 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                 "text": "Cancel",
                 "emoji": true
             },
-            "blocks": [{
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Lift Heavy Run Long®",
-                        "emoji": true
-                    }
-                },
-                {
-                    "type": "image",
-                    "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
-                    "alt_text": "logo"
-                },
+            "blocks": [
                 ////
                 //////////////
                 authorizePrograms(allWorkouts),
@@ -272,7 +260,7 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                         "emoji": true
                     }
                 },
-                // cfWOD(wod),
+            
 
 
 

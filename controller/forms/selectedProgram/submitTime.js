@@ -1,7 +1,7 @@
 var dayjs = require("dayjs");
 
 
-const submitTime = (payload, workoutSelected) => {
+const submitTime = (payload, workoutSelected, homeModal_view_id, slashOrHome, enter_score_slash) => {
 const { trigger_id } = payload;
     const { _id, name, week, day, startDate, type, description, time, minutes, seconds, completed } = workoutSelected;
 
@@ -16,6 +16,9 @@ const { trigger_id } = payload;
             "callback_id": "selected_program_workouts",
             "private_metadata": JSON.stringify({
                 "id": _id,
+                "home_or_slash": slashOrHome,
+                "homeModal_view_id": homeModal_view_id,
+                "enter_score_slash" : enter_score_slash,
 
             }),
 

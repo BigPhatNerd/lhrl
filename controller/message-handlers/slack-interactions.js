@@ -125,30 +125,22 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
 
 
         } else if(value === "edit_created_workouts") {
-
-            //step 2
-            console.log("is this where it ends? payload: ", payload.view.id);
-            console.log("payload: ", payload)
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");
             const workoutSelected = await Workout.find({ _id: buttonPressed });
 const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
-            //ADD AWAIT RIGHT HERE
             web.views.push(awaitWorkouts);
         } else if(value === "delete_created_workouts") {
-
             buttonPressed = buttonPressed.replace("delete", "");
             const deleteWorkout = await axios.delete(`${urlString}/slack/delete-workout/${buttonPressed}`);
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
             const workoutIndex = await viewWorkouts(payload, workouts);
             web.views.push(workoutIndex);
         } else if(value === "complete_completed_workouts") {
-            //This is where I am working
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
             if(workoutSelected[0].type === "Rounds + Reps") {
-
                 web.views.push(roundsPlusRepsModal(payload, workoutSelected[0]));
             } else if(workoutSelected[0].type === "Time") {
                 web.views.push(timeModal(payload, workoutSelected[0]));
@@ -157,27 +149,36 @@ const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
             } else if(workoutSelected[0].type === "Distance") {
                 web.views.push(distanceModal(payload, workoutSelected[0]));
             }
-
-
         } else if(value === "edit_completed_workouts") {
-
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
             web.views.push(editCompletedWorkout(payload, workoutSelected[0]));
         } else if(value === "delete_completed_workouts") {
-            //THIS IS WHERE I AM
-
             buttonPressed = buttonPressed.replace("delete", "");
-            console.log("buttonPressed: ", buttonPressed);
-            // const deleteWorkout = await axios.delete(`${urlString}/finishedWorkouts/delete/${buttonPressed}`);
             const deleteWorkout = await FinishedWorkout.deleteOne({ _id: buttonPressed });
             const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
             const workoutIndex = await viewFinishedWorkouts(payload, workouts);
             web.views.push(workoutIndex);
         } else if(value === "program_workouts") {
-            const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`)
-            const listWorkouts = await selectedProgramWorkouts(payload, workouts);
+
+            //HERE FOR NOW
+
+console.log("payload: ", payload);
+console.log("\n\n\nline 168\n\n\n");
+
+
+
+
+            //
+const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`)
+if(payload.view.callback_id === "homepage_modal") {
+
+   const listWorkouts = await selectedProgramWorkouts(payload, workouts, "slash");
+            web.views.push(listWorkouts)
+    return
+}   
+            const listWorkouts = await selectedProgramWorkouts(payload, workouts, "home");
             web.views.open(listWorkouts)
         } else if(value === "remove_workouts") {
             const user = payload.user.id;
@@ -191,19 +192,55 @@ const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
             web.views.publish(homepage(passUser, allWorkouts))
         } else if(value === "selected_program_score") {
             viewId = payload.container.view_id;
-
+            //
+console.log("\n\n\nline 194\n\n\n");
+console.log("payload line 195: ", payload);
+const { home_or_slash, homeModal_view_id } = JSON.parse(payload.view.private_metadata);
             //Open modal to enter score for program workout
             buttonPressed = buttonPressed.replace("selected_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
-            const submitTimeView = await submitTime(payload, workoutSelected[0]);
-            web.views.push(submitTimeView);
+            //RIGHT HERE
+            if(home_or_slash === "slash"){
+                console.log("I am in here");
+                 const submitTimeView = await submitTime(payload, workoutSelected[0], homeModal_view_id, "slash");
+                 web.views.push(submitTimeView);
+            } else {
+console.log("homeModal_view_id: ", homeModal_view_id);
+                const submitTimeView = await submitTime(payload, workoutSelected[0], "homepage", "home");
+                web.views.push(submitTimeView);
+            }
+           
+            
 
+
+
+
+
+
+
+//
         } else if(value === 'daily_program_score') {
+console.log("HIT ME")
+//THIS is where I am supposed to be
+console.log('payload line 225: ', payload);
+console.log("226");
 
-            buttonPressed = buttonPressed.replace("daily_program_score", "");
+buttonPressed = buttonPressed.replace("daily_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
-            const submitTimeView = await submitTime(payload, workoutSelected[0]);
+if(payload.view.private_metadata !== "" ){
+ const metadata = JSON.parse(payload.view.private_metadata );
+    const { home_or_slash } = metadata;
+    const homeModal_view_id = payload.view.id 
+ const submitTimeView = await submitTime(payload, workoutSelected[0], homeModal_view_id, "slash", "yes");
+ web.views.push(submitTimeView);
+return
+}
+           
+const submitTimeView = await submitTime(payload, workoutSelected[0], "", "home", "no");
             web.views.open(submitTimeView);
+
+
+            //
         } else if(value === "weekly_goal") {
             web.views.open(setGoals(payload));
         } else if(value === "update_weekly_goal") {
@@ -317,8 +354,7 @@ const { distance, home_or_slash, homeModal_view_id } = metadata;
 
 slackInteractions.viewSubmission('edit_created_workout', async (payload, respond) => {
     try {
-//step 3
-//Try to pass view_id from step 1 into updated workouts
+
 
         const metadata = JSON.parse(payload.view.private_metadata);
         const { id, score_type, homeModal_view_id } = metadata;
@@ -546,8 +582,11 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
 slackInteractions.viewSubmission('selected_program_workouts', async (payload, respond) => {
     try {
         console.log("What the hell");
+        console.log("payload line 585: ", payload);
+        console.log("payload.view.private_metadata: ", payload.view.private_metadata)
         const metadata = JSON.parse(payload.view.private_metadata);
-        const { id } = metadata;
+
+        const { id, home_or_slash, homeModal_view_id, enter_score_slash } = metadata;
         //id is workoutId
 
         const data = {
@@ -561,20 +600,47 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
         const sendWorkout = await axios.post(`${urlString}/programs/selectedProgram/enter-score/${user_id}/${id}`, data);
 
         //Taken from 'edit_workout' viewSubmission above
-
-        // const updated = await updatedProgramWorkouts(viewId, user_id);
-        // web.views.update(updated)
-        const user = payload.user.id;
+//
+//I think I updateProgramWorkoutsHere
+if(enter_score_slash === "yes"){
+    console.log("Is this the problem?");
+     const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
+    console.log("home_or_slash: ", home_or_slash);
+    console.log("homeModal_view_id: ", homeModal_view_id);
+const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
-        console.log("Am I here?");
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts));
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);      
+web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+return  
+}
+if(home_or_slash === "slash"){
+        const updated = await updatedProgramWorkouts(viewId, user_id, homeModal_view_id, "slash");
+        web.views.update(updated)
+        return
+    } 
+    const updated = await updatedProgramWorkouts(viewId, user_id, homeModal_view_id, "home");
+        web.views.update(updated)
 
-        return Promise.resolve({
-            "response_action": "clear"
-        })
+        //
+//         const user = payload.user.id;
+//         const userInfo = await web.users.info({ user: user });
+//         const passUser = userInfo.user;
+//         console.log("Am I here?");
+//         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+//         //
+// if(home_or_slash === "slash"){
+//     console.log("line 604")
+//             web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts))
+//             return
+// } 
+//         //
+//         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+//         await web.views.publish(homepage(passUser, allWorkouts));
+//         return Promise.resolve({
+//             "response_action": "clear"
+//         })
 
     } catch (err) {
         console.error(err.message);

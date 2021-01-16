@@ -3,8 +3,9 @@ const router = require('express').Router();
 const { slack } = require('../lib/keys');
 const request = require('request');
 const { url } = require('../lib/keys');
-const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development;
+const clientId = process.env.NODE_ENV === "production" ? slack.clientID : slack.dev_clientId;
+const clientSecret = process.env.NODE_ENV === "production" ? slack.clientSecret : slack.dev_clientSecret;
 
 router.route("/")
     .get((req, res) => {
@@ -16,7 +17,7 @@ router.route("/")
         } else {
             request({
                 url: 'https://slack.com/api/oauth.v2.access',
-                qs: { code: req.query.code, client_id: slack.clientID, client_secret: slack.clientSecret, redirect_uri: `${urlString}/oauth/` },
+                qs: { code: req.query.code, client_id: clientId, client_secret: clientSecret, redirect_uri: `${urlString}/oauth/` },
                 method: 'GET',
             }, function(error, response, body) {
                 console.log("\n\nbody: ", body);

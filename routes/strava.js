@@ -18,7 +18,7 @@ const {
     testSlackBlock
 } = require('../slack-templates/strava-templates');
 const post = { "text": "booga booga" }
-
+const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook : slack.dev_lhrl_Webhook;
 
 router.get('/find', async (req, res) => {
     const findUser = await User.findOne({ "email": req.query.email });

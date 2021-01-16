@@ -30,7 +30,8 @@ const updateHomeModal = require('../homepage/updateHomeModal');
 const axios = require('axios');
 const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
-const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development
+const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
+const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook : slack.dev_lhrl_Webhook;
 var viewId;
 var value;
 
@@ -319,7 +320,7 @@ if(home_or_slash === "slash"){
 } else {
      web.views.publish(homepage(passUser, allWorkouts))
 }
-        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 5k program 🏃‍♂️` }, config)
+        const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${username} just signed up for the 5k program 🏃‍♂️` }, config)
         
     } catch (err) {
         console.error(err.message);
@@ -346,7 +347,7 @@ const { distance, home_or_slash, homeModal_view_id } = metadata;
 } else {
     web.views.publish(homepage(passUser, allWorkouts))
 }
-        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏃‍♀️ ${username} just signed up for the 10k program 🏃‍♂️` }, config)
+        const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${username} just signed up for the 10k program 🏃‍♂️` }, config)
     } catch (err) {
         console.error(err.message);
     }
@@ -481,7 +482,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 
         }
         const sendWorkout = await axios.post(`${urlString}/slack/create-workout/${user_id}`, data);
-        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏋️‍♀️ ${username} just created a new workout 🏋` }, config)
+        const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just created a new workout 🏋` }, config)
 
         //I just added this. Maybe not necessary
         //I REALLY DONT THINK THIS IS NECESSARY
@@ -558,7 +559,7 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
             }
         }
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
-        const confirm = await axios.post(slack.lhrl_Webhook, { "text": `🏋️‍♀️ ${username} just finished a new workout 🏋` }, config)
+        const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just finished a new workout 🏋` }, config)
 
         //I just added this. Maybe not necessary
         const user = payload.user.id;

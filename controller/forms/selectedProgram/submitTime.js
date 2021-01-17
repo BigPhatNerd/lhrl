@@ -91,21 +91,7 @@ if(type === "Time"){
                         "emoji": true
                     }
                 },
-                {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "notes",
-                    "element": {
-                        "type": "plain_text_input",
-                        "multiline": true,
-                        "action_id": "notes"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Enter Minutes",
-                        "emoji": true
-                    }
-                },
+               
                 {
                     "type": "input",
                     "optional": false,
@@ -118,6 +104,21 @@ if(type === "Time"){
                     "label": {
                         "type": "plain_text",
                         "text": "Enter Seconds",
+                        "emoji": true
+                    }
+                },
+                 {
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "notes",
+                    "element": {
+                        "type": "plain_text_input",
+                        "multiline": true,
+                        "action_id": "notes"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Notes",
                         "emoji": true
                     }
                 },

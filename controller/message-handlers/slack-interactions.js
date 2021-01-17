@@ -200,15 +200,9 @@ const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
             web.views.push(workoutIndex);
         } else if(value === "program_workouts") {
 
-            //HERE FOR NOW
-
 console.log("payload: ", payload);
 console.log("\n\n\nline 168\n\n\n");
 
-
-
-
-            //
 const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`)
 if(payload.view.callback_id === "homepage_modal") {
 
@@ -221,11 +215,16 @@ if(payload.view.callback_id === "homepage_modal") {
         } else if(value === "remove_workouts") {
             const user = payload.user.id;
             const removePlan = await axios.delete(`${urlString}/programs/selectedProgram/delete-program/${user_id}`);
-
             const userInfo = await web.users.info({ user: user });
-
             const passUser = userInfo.user;
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+            
+if(payload.view.callback_id === "homepage_modal") {
+    console.log("We did good line 222");
+    console.log(payload);
+    web.views.update(updateHomeModal(payload.view.id, passUser, allWorkouts));
+    return
+}
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
             web.views.publish(homepage(passUser, allWorkouts))
         } else if(value === "selected_program_score") {
@@ -280,6 +279,13 @@ const submitTimeView = await submitTime(payload, workoutSelected[0], "", "home",
 
             //
         } else if(value === "weekly_goal") {
+            if(payload.view.callback_id === "homepage_modal") {
+    console.log("We did good line 222");
+    console.log(payload);
+    const goals = await setGoals(payload);
+    web.views.push(goals)
+    return
+}
             web.views.open(setGoals(payload));
         } else if(value === "update_weekly_goal") {
             viewId = payload.container.view_id;

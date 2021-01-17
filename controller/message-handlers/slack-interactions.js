@@ -32,6 +32,8 @@ const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
 const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook : slack.dev_lhrl_Webhook;
+console.log("\n\nslack.dev_lhrl_Webhook\n\n", slack.dev_lhrl_Webhook);
+console.log("\n\nslack.lhrl_Webhook\n\n", slack.lhrl_Webhook);
 var viewId;
 var value;
 

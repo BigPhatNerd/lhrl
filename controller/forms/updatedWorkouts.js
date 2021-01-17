@@ -2,8 +2,8 @@ const axios = require('axios');
 var dayjs = require("dayjs");
 const { url } = require("../../lib/keys");
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development
-const updatedWorkouts = async (viewId, username, homeModal_view_id) => {
-    const workouts = await axios.get(`${urlString}/slack/get-workouts/${username}`)
+const updatedWorkouts = async (viewId, user_id, homeModal_view_id) => {
+    const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
     const shortData = workouts.data[0].workouts;
     const array = []
     const blockData = (info) => {

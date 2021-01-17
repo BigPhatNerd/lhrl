@@ -1,6 +1,6 @@
 var dayjs = require("dayjs");
 
-const viewFinishedWorkouts = async (payload, workouts) => {
+const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
 
     var shortData;
@@ -417,6 +417,11 @@ const viewFinishedWorkouts = async (payload, workouts) => {
         view: {
             "type": "modal",
             "callback_id": "view_workouts",
+            "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": payload.view.id,
+
+              }),
             "title": {
                 "type": "plain_text",
                 "text": "Workouts Completed: ",

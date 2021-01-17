@@ -32,8 +32,7 @@ const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
 const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook : slack.dev_lhrl_Webhook;
-console.log("\n\nslack.dev_lhrl_Webhook\n\n", slack.dev_lhrl_Webhook);
-console.log("\n\nslack.lhrl_Webhook\n\n", slack.lhrl_Webhook);
+
 var viewId;
 var value;
 
@@ -79,21 +78,24 @@ if(payload.view.callback_id === "homepage_modal") {
             web.views.open(createWorkoutModal(payload, value));
         } else if(value === "view_workout") {
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
-            const workoutIndex = await viewWorkouts(payload, workouts);
+            
             if(payload.view.callback_id === "homepage_modal") {
+                const workoutIndex = await viewWorkouts(payload, workouts, "slash");
     web.views.push(workoutIndex);
     return
 }
 
-            
+            const workoutIndex = await viewWorkouts(payload, workouts, "home");
             web.views.open(workoutIndex);
         } else if(value === "completed_workouts") {
             const finishedWorkouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
-            const finishedWorkoutIndex = await viewFinishedWorkouts(payload, finishedWorkouts);
+            
             if(payload.view.callback_id === "homepage_modal") {
+                const finishedWorkoutIndex = await viewFinishedWorkouts(payload, finishedWorkouts, "slash");
     web.views.push(finishedWorkoutIndex);
     return
 }
+const finishedWorkoutIndex = await viewFinishedWorkouts(payload, finishedWorkouts, "home");
             web.views.open(finishedWorkoutIndex);
         }
     } catch (err) {
@@ -136,9 +138,20 @@ const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
         } else if(value === "delete_created_workouts") {
             buttonPressed = buttonPressed.replace("delete", "");
             const deleteWorkout = await axios.delete(`${urlString}/slack/delete-workout/${buttonPressed}`);
-            const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
-            const workoutIndex = await viewWorkouts(payload, workouts);
-            web.views.push(workoutIndex);
+            
+            
+            ///HERE 
+            console.log("payload line 141: ", payload)
+            const metadata = JSON.parse(payload.view.private_metadata);
+    const {  homeModal_view_id } = metadata;
+            // const workoutIndex = await viewWorkouts(payload, workouts);
+            // web.views.push(workoutIndex);
+            console.log("\n\nviewId: ", viewId);
+            console.log("payload.view.id: ", payload.view.id);
+            console.log("username: ", username);
+            console.log('homeModal_view_id', homeModal_view_id);
+            const updatedIndex = await(updatedWorkouts(payload.view.id, user_id, homeModal_view_id))
+            web.views.update(updatedIndex);
         } else if(value === "complete_completed_workouts") {
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
@@ -461,6 +474,7 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
 slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
 //   Nothing is happening here. Is that cool?
 console.log("payload line 443 `view_workouts`: ", payload);
+
 });
 
 slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
@@ -496,6 +510,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         console.log("payload in create workout looking for /command: ", payload);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         await web.views.publish(homepage(passUser, allWorkouts))
+
     } catch (err) {
         console.error(err.message);
     }

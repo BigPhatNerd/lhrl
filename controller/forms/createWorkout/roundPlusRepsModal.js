@@ -1,4 +1,4 @@
-const roundsPlusRepsModal = (payload, workout) => {
+const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) => {
     const { trigger_id } = payload;
     const { type, name, description, rounds, reps, notes } = workout;
     const roundsPlusReps = {
@@ -10,7 +10,9 @@ const roundsPlusRepsModal = (payload, workout) => {
                 "score_type": "Rounds + Reps",
                 "type": type,
                 "name": name,
-                "description": description
+                "description": description,
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": homeModal_view_id,
             }),
             "title": {
                 "type": "plain_text",

@@ -78,8 +78,10 @@ if(payload.view.callback_id === "homepage_modal") {
             web.views.open(createWorkoutModal(payload, value));
         } else if(value === "view_workout") {
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
-            
+            console.log("81");
+            console.log("payload: ", payload)
             if(payload.view.callback_id === "homepage_modal") {
+
                 const workoutIndex = await viewWorkouts(payload, workouts, "slash");
     web.views.push(workoutIndex);
     return
@@ -116,16 +118,36 @@ slackInteractions.action({ type: 'button' }, async (payload, respond) => {
         if(value === "complete_created_workouts") {
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
-            const workoutSelected = await Workout.find({ _id: buttonPressed });
-            if(workoutSelected[0].type === "Rounds + Reps") {
+             const workoutSelected = await Workout.find({ _id: buttonPressed });
+            //
 
-                web.views.push(roundsPlusRepsModal(payload, workoutSelected[0]));
+
+            console.log("121");
+            console.log("payload: ", payload)
+const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
+
+            //
+            if(workoutSelected[0].type === "Rounds + Reps") {
+                if(home_or_slash === "slash"){
+                    web.views.push(roundsPlusRepsModal(payload, workoutSelected[0], "slash", homeModal_view_id));
+                }
+                web.views.push(roundsPlusRepsModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Time") {
-                web.views.push(timeModal(payload, workoutSelected[0]));
+                if(home_or_slash === "slash"){
+                    web.views.push(timeModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(timeModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Load") {
-                web.views.push(loadModal(payload, workoutSelected[0]));
+                if(home_or_slash === "slash"){
+                    web.views.push(loadModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(loadModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Distance") {
-                web.views.push(distanceModal(payload, workoutSelected[0]));
+                if(home_or_slash === "slash"){
+                    web.views.push(distanceModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(distanceModal(payload, workoutSelected[0], "home", "noModal"));
             }
 
 
@@ -519,8 +541,9 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 
 slackInteractions.viewSubmission('complete_workout', async (payload, respond) => {
     try {
+        console.log("line 544")
         const metadata = JSON.parse(payload.view.private_metadata);
-        const { score_type, name, description } = metadata;
+        const { score_type, name, description, home_or_slash, homeModal_view_id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
         
@@ -584,12 +607,17 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         const passUser = userInfo.user;
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        console.log("home_or_slash line 610: ", home_or_slash);
+       if(home_or_slash === "slash"){
+        console.log("\n\n\n\nI am in here! on line 610");
+        const updateWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts)
+web.views.update(updatedWorkouts); 
+return       
+    }
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         await web.views.publish(homepage(passUser, allWorkouts))
 
-        return Promise.resolve({
-            "response_action": "clear"
-        })
+      
 
     } catch (err) {
         console.error(err.message);
@@ -600,20 +628,29 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
 slackInteractions.viewSubmission('selected_program_workouts', async (payload, respond) => {
     try {
         console.log("What the hell");
-        console.log("payload line 585: ", payload);
+        console.log("payload line 632: ", payload);
         console.log("payload.view.private_metadata: ", payload.view.private_metadata)
         const metadata = JSON.parse(payload.view.private_metadata);
 
-        const { id, home_or_slash, homeModal_view_id, enter_score_slash } = metadata;
+        const { id, home_or_slash, homeModal_view_id, enter_score_slash, score_type } = metadata;
         //id is workoutId
-
-        const data = {
-            minutes: payload.view.state.values.minutes.minutes.value,
-            seconds: payload.view.state.values.seconds.seconds.value
+        var data;
+if (score_type === "Time"){
+         data = {
+            minutes: payload.view.state.values.minutes.minutes.value || 0,
+            seconds: payload.view.state.values.seconds.seconds.value || 0,
+           
         }
+    } else if(score_type === "Distance"){
+        console.log("payload.view.state.values.miles.miles.value: ", payload.view.state.values.miles.miles.value)
+        data = {
+
+         miles: payload.view.state.values.miles.miles.value || 0
+     }
+    }
         const username = payload.user.username;
         const user_id = payload.user.id;
-        console.log("\n\n\nuser_id: ", user_id)
+       
 
         const sendWorkout = await axios.post(`${urlString}/programs/selectedProgram/enter-score/${user_id}/${id}`, data);
 
@@ -621,11 +658,7 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
 //
 //I think I updateProgramWorkoutsHere
 if(enter_score_slash === "yes"){
-    console.log("Is this the problem?");
-     const metadata = JSON.parse(payload.view.private_metadata);
-    const { home_or_slash, homeModal_view_id } = metadata;
-    console.log("home_or_slash: ", home_or_slash);
-    console.log("homeModal_view_id: ", homeModal_view_id);
+    
 const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
@@ -641,24 +674,7 @@ if(home_or_slash === "slash"){
     const updated = await updatedProgramWorkouts(viewId, user_id, homeModal_view_id, "home");
         web.views.update(updated)
 
-        //
-//         const user = payload.user.id;
-//         const userInfo = await web.users.info({ user: user });
-//         const passUser = userInfo.user;
-//         console.log("Am I here?");
-//         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-//         //
-// if(home_or_slash === "slash"){
-//     console.log("line 604")
-//             web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts))
-//             return
-// } 
-//         //
-//         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-//         await web.views.publish(homepage(passUser, allWorkouts));
-//         return Promise.resolve({
-//             "response_action": "clear"
-//         })
+
 
     } catch (err) {
         console.error(err.message);

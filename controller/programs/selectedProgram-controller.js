@@ -76,13 +76,16 @@ const selectedProgramController = {
 
             var minutes = parseInt(body.minutes) || 0;
             var seconds = parseInt(body.seconds) || 0;
+            var miles = parseInt(body.miles) || 0;
             var date = new Date();
             const data = {
                 completed: true,
                 minutes: minutes,
                 seconds: seconds,
                 userId: user_id,
-                dateCompleted: date
+                dateCompleted: date,
+                miles: miles
+
             }
 
 

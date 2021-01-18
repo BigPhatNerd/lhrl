@@ -1,4 +1,4 @@
-const updateGoals = (payload, goalSelected) => {
+const updateGoals = (payload, goalSelected, slashOrHome) => {
 const { trigger_id } = payload;
     const { _id, userId, pushups, situps, squats, miles, date } = goalSelected;
     //Check to see if the movement exists
@@ -16,7 +16,12 @@ const { trigger_id } = payload;
         "view": {
             "type": "modal",
             "callback_id": "update_goals",
-            "private_metadata": _id,
+           "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": payload.view.id,
+                  "id": _id
+
+              }),
             "title": {
                 "type": "plain_text",
                 "text": "Update Goals",

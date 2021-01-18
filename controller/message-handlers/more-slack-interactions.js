@@ -92,8 +92,10 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         // const confirm = await axios.post(slack.lhrl_Webhook, { "text": `${username} just added reps of: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
 
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts))
-        const confirm = await axios.post(lhrlWebhook, {
+         const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
+
+    const confirm = await axios.post(lhrlWebhook, {
             "text": `${username} just did some work! 💪`,
             "blocks": [{
                 "type": "section",
@@ -108,6 +110,13 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
                 }
             }]
         }, config);
+if(home_or_slash === "slash"){
+web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+return      
+}
+        await web.views.publish(homepage(passUser, allWorkouts))
+        
+
     } catch (err) {
 
         console.error(err.message);
@@ -141,6 +150,12 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
+if(home_or_slash === "slash"){
+web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+return      
+}
         await web.views.publish(homepage(passUser, allWorkouts))
 
     } catch (err) {
@@ -151,8 +166,9 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 });
 moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) => {
     try {
-
-        const weeklyGoalId = payload.view.private_metadata
+const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id, id } = metadata;
+        
         const username = payload.user.username;
         const user_id = payload.user.id;
         
@@ -168,7 +184,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
             squats: parseInt(squats),
             miles: parseInt(miles)
         }
-        const sendGoals = await axios.put(`${urlString}/weeklyGoals/${weeklyGoalId}`, data);
+        const sendGoals = await axios.put(`${urlString}/weeklyGoals/${id}`, data);
         const confirm = await axios.post(lhrlWebhook, { "text": `${username} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
@@ -176,6 +192,11 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+
+if(home_or_slash === "slash"){
+web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+return      
+}
         await web.views.publish(homepage(passUser, allWorkouts))
     } catch (err) {
 

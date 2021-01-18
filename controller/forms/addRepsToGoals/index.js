@@ -1,10 +1,15 @@
-const addRepsToGoals = (payload) => {
+const addRepsToGoals = (payload, slashOrHome) => {
     const { trigger_id } = payload;
     const repsModal = {
         "trigger_id": trigger_id,
         "view": {
             "type": "modal",
             "callback_id": "add_reps_to_goals",
+            "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": payload.view.id,
+
+              }),
             "title": {
                 "type": "plain_text",
                 "text": "Add Reps To Goals",

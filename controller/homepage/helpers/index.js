@@ -187,7 +187,7 @@ if(allWorkouts.data[0].authorizeStrava){
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*You have already finished today's workout with a time of:* " + time + " :beach_with_umbrella: "
+                        "text": "*You have already finished today's workout and completed:* " + miles + " miles. :beach_with_umbrella: "
 
                     },
                 };

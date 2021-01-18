@@ -280,22 +280,49 @@ const submitTimeView = await submitTime(payload, workoutSelected[0], "", "home",
 
             //
         } else if(value === "weekly_goal") {
+console.log("payload line 203: ", payload);
             if(payload.view.callback_id === "homepage_modal") {
     console.log("We did good line 222");
+    ///
+
+
+
+
+
+
+
+
+
+    //
     console.log(payload);
-    const goals = await setGoals(payload);
+    const goals = await setGoals(payload, "slash");
     web.views.push(goals)
     return
 }
-            web.views.open(setGoals(payload));
+            web.views.open(setGoals(payload, "home"));
         } else if(value === "update_weekly_goal") {
             viewId = payload.container.view_id;
 
             buttonPressed = buttonPressed.replace("update_weekly_goal", "");
             const goalsSelected = await WeeklyGoal.find({ _id: buttonPressed });
-            web.views.open(updateGoals(payload, goalsSelected[0]))
+            if(payload.view.callback_id === "homepage_modal") {
+                const update = await updateGoals(payload, goalsSelected[0], "slash");
+                web.views.push(update);
+return
+            }
+            const update = await updateGoals(payload, goalsSelected[0], "home")
+            web.views.open(update);
         } else if(value === 'add_reps_to_goal') {
-            web.views.open(addRepsToGoals(payload));
+            if(payload.view.callback_id === "homepage_modal") {
+                const addReps = addRepsToGoals(payload, "slash");
+    console.log("We did good line 222");
+    console.log(payload);
+    web.views.push(addReps);
+    return
+}
+            // Here line 310
+            const addReps = addRepsToGoals(payload, "home");
+            web.views.open(addReps);
         } else if(value === 'cf_wod_score') {
 
             const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });

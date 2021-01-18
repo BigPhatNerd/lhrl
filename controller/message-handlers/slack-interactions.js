@@ -196,8 +196,9 @@ const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
             buttonPressed = buttonPressed.replace("delete", "");
             const deleteWorkout = await FinishedWorkout.deleteOne({ _id: buttonPressed });
             const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
-            const workoutIndex = await viewFinishedWorkouts(payload, workouts);
-            web.views.push(workoutIndex);
+            const workoutIndex = await updatedCompletedWorkouts(payload.view.id, user_id);
+            console.log("WHAT IS UP ON LINE 200")
+            web.views.update(workoutIndex);
         } else if(value === "program_workouts") {
 
 console.log("payload: ", payload);

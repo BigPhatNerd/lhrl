@@ -15,6 +15,7 @@ let fiveK = (start, user) => {
         },
         {
             "userId": user,
+            "name": "6-Weeks to 5K",
             "startDate": dateHelper(start, 2),
             "week": 1,
             "day": 2,
@@ -24,6 +25,7 @@ let fiveK = (start, user) => {
         },
         {
             "userId": user,
+            "name": "6-Weeks to 5K",
             "startDate": dateHelper(start, 4),
             "week": 1,
             "day": 3,

@@ -73,10 +73,13 @@ const tenKIndex = await view10KProgram(payload, workouts, "home");
         } else if(value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance") {
 
 if(payload.view.callback_id === "homepage_modal") {
-    web.views.push(createWorkoutModal(payload, value));
+    console.log("payload: looking for homeview ", payload);
+    const create = await createWorkoutModal(payload, value, "slash")
+    web.views.push(create);
     return
 }
-            web.views.open(createWorkoutModal(payload, value));
+const create = await createWorkoutModal(payload, value, "home")
+            web.views.open(create);
         } else if(value === "view_workout") {
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
             console.log("81");
@@ -255,16 +258,7 @@ console.log("homeModal_view_id: ", homeModal_view_id);
                 const submitTimeView = await submitTime(payload, workoutSelected[0], "homepage", "home");
                 web.views.push(submitTimeView);
             }
-           
-            
 
-
-
-
-
-
-
-//
         } else if(value === 'daily_program_score') {
 console.log("HIT ME")
 //THIS is where I am supposed to be
@@ -560,7 +554,8 @@ console.log("payload line 443 `view_workouts`: ", payload);
 slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
     try {
         const metadata = JSON.parse(payload.view.private_metadata);
-        const { score_type } = metadata;
+        console.log("metadate in create workout: ", metadata);
+        const { score_type, homeModal_view_id, home_or_slash } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
         
@@ -578,6 +573,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 
         }
         const sendWorkout = await axios.post(`${urlString}/slack/create-workout/${user_id}`, data);
+console.log("\n\n\nurlString in create workout: ", urlString)
         const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just created a new workout 🏋` }, config)
 
         //I just added this. Maybe not necessary
@@ -589,6 +585,15 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         console.log("payload in create workout looking for /command: ", payload);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+if(home_or_slash === "slash"){
+        console.log("\n\n\n\nI am in here! on line 610");
+        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+        const updateWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+web.views.update(updatedWorkouts); 
+return       
+    }
+
+
         const wod = await CrossFit.find().limit(1).sort({$natural:-1});
         const updateHome = await homepage(passUser, allWorkouts, wod[0])
         await web.views.publish(updateHome);
@@ -692,21 +697,31 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
         console.log("payload line 632: ", payload);
         console.log("payload.view.private_metadata: ", payload.view.private_metadata)
         const metadata = JSON.parse(payload.view.private_metadata);
-
+var { minutes, seconds, miles, notes } = payload.view.state.values;
         const { id, home_or_slash, homeModal_view_id, enter_score_slash, score_type } = metadata;
         //id is workoutId
         var data;
 if (score_type === "Time"){
+    minutes = minutes.minutes.value || 0;
+            seconds = seconds.seconds.value || 0;
+
+            notes = notes.notes.value || "No notes provided.";
+          
          data = {
-            minutes: payload.view.state.values.minutes.minutes.value || 0,
-            seconds: payload.view.state.values.seconds.seconds.value || 0,
+            minutes: parseInt(minutes),
+            seconds: parseInt(seconds),
+            notes: notes
+
            
         }
     } else if(score_type === "Distance"){
-        console.log("payload.view.state.values.miles.miles.value: ", payload.view.state.values.miles.miles.value)
+        
+        miles = miles.miles.value || 0;
+            notes = notes.notes.value || "No notes provided.";
         data = {
 
-         miles: payload.view.state.values.miles.miles.value || 0
+         miles: parseInt(miles),
+         notes: notes
      }
     }
         const username = payload.user.username;
@@ -714,7 +729,7 @@ if (score_type === "Time"){
        
 
         const sendWorkout = await axios.post(`${urlString}/programs/selectedProgram/enter-score/${user_id}/${id}`, data);
-
+console.log("\n\n\nurlString: ", urlString)
         //Taken from 'edit_workout' viewSubmission above
 //
 //I think I updateProgramWorkoutsHere
@@ -724,10 +739,10 @@ const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`); 
-        //WHAT IS UP HERE  
-//         const wod = await CrossFit.find().limit(1).sort({$natural:-1});    
-// web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])) 
-// return  
+        
+        const wod = await CrossFit.find().limit(1).sort({$natural:-1});    
+web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])) 
+return  
 }
 if(home_or_slash === "slash"){
         const updated = await updatedProgramWorkouts(viewId, user_id, homeModal_view_id, "slash");

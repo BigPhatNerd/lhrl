@@ -10,7 +10,8 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
         shortData = workouts.data[0].workouts;
     }
     // const shortData = workouts.data[0].workouts;
-    const array = []
+    const array = [];
+    
     const blockData = (info) => {
 
         const date = dayjs(info.day).format('dddd MMMM D YYYY')

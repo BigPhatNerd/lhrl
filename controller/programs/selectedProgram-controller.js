@@ -77,6 +77,9 @@ const selectedProgramController = {
             var minutes = parseInt(body.minutes) || 0;
             var seconds = parseInt(body.seconds) || 0;
             var miles = parseInt(body.miles) || 0;
+            console.log("\n\n\nNotes: ", notes)
+            var notes = body.notes || "No notes provided";
+            console.log("\n\nbottom notes: ", notes)
             var date = new Date();
             const data = {
                 completed: true,
@@ -84,12 +87,15 @@ const selectedProgramController = {
                 seconds: seconds,
                 userId: user_id,
                 dateCompleted: date,
-                miles: miles
+                miles: miles,
+                notes: notes
 
             }
-
+console.log("selectedprogram controller data: ", data)
 
             const completeWorkout = await Program.findOneAndUpdate({ _id: id }, data, { new: true });
+            console.log("completeWorkout: ", completeWorkout);
+            console.log("notes: ", completeWorkout.notes);
             const dataForWorkout = {
                 seconds: completeWorkout.seconds,
                 minutes: completeWorkout.minutes,
@@ -98,8 +104,10 @@ const selectedProgramController = {
                 day: completeWorkout.day,
                 type: completeWorkout.type,
                 description: completeWorkout.description,
-                dateCompleted: date
+                dateCompleted: date,
+                notes: completeWorkout.notes
             }
+            console.log("dataForWorkout look for notes: ", data);
             const addFinishedWorkout = await FinishedWorkout.create(dataForWorkout);
             const addWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: addFinishedWorkout } }, { new: true });
 

@@ -225,15 +225,17 @@ if(payload.view.callback_id === "homepage_modal") {
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            
+            const wod = await CrossFit.find().limit(1).sort({$natural:-1});
 if(payload.view.callback_id === "homepage_modal") {
     console.log("We did good line 222");
+    
     console.log(payload);
-    web.views.update(updateHomeModal(payload.view.id, passUser, allWorkouts));
+    const update = await updateHomeModal(payload.view.id, passUser, allWorkouts, wod[0])
+    web.views.update(update);
     return
 }
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-            web.views.publish(homepage(passUser, allWorkouts))
+            web.views.publish(homepage(passUser, allWorkouts, wod[0]))
         } else if(value === "selected_program_score") {
             viewId = payload.container.view_id;
             //
@@ -400,12 +402,14 @@ const { distance, home_or_slash, homeModal_view_id } = metadata;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
- 
+  const wod = await CrossFit.find().limit(1).sort({$natural:-1});
 if(home_or_slash === "slash"){
-    const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]))
+   
+    const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
+            web.views.update(update)
 } else {
-     web.views.publish(homepage(passUser, allWorkouts))
+    const updateHome = homepage(passUser, allWorkouts, wod[0])
+     web.views.publish(updateHome);
 }
         const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${username} just signed up for the 5k program 🏃‍♂️` }, config)
         
@@ -429,11 +433,14 @@ const { distance, home_or_slash, homeModal_view_id } = metadata;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+         const wod = await CrossFit.find().limit(1).sort({$natural:-1}); 
         if(home_or_slash === "slash"){ 
-        const wod = await CrossFit.find().limit(1).sort({$natural:-1});         
-            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]))        
+       const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+
+            web.views.update(update);        
 } else {
-    web.views.publish(homepage(passUser, allWorkouts))
+    const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+    web.views.publish(updateHome);
 }
         const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${username} just signed up for the 10k program 🏃‍♂️` }, config)
     } catch (err) {
@@ -582,7 +589,9 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         console.log("payload in create workout looking for /command: ", payload);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts))
+        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+        const updateHome = await homepage(passUser, allWorkouts, wod[0])
+        await web.views.publish(updateHome);
 
     } catch (err) {
         console.error(err.message);

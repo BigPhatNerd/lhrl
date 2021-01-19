@@ -3,7 +3,7 @@ const moreSlackInteractions = require('./../../config/slack-interactions.js');
 var CronJob = require('cron').CronJob;
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
-const { User, Workout, Program, FinishedWorkout } = require('../../models/');
+const { User, Workout, Program, FinishedWorkout, CrossFit } = require('../../models/');
 const { createGoalsMessage } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
@@ -156,6 +156,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;
 if(home_or_slash === "slash"){
+    console.log("homeModal_view_id: ", homeModal_view_id);
      const wod = await CrossFit.find().limit(1).sort({$natural:-1});
      const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
 web.views.update(update) 

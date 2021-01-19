@@ -15,7 +15,8 @@ console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
                     "title": title,
                     "description": description,
                     "score_type": type,
-                    "id": _id
+                    "id": _id,
+                    
                 }),
 
                 "title": {

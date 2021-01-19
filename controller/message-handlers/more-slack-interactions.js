@@ -220,8 +220,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
 
         const metadata = JSON.parse(payload.view.private_metadata);
-console.log("line 223 more-slack cf_daily metadata: ", metadata);
-return
+
         const { title, description, score_type,home_or_slash, id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
@@ -282,8 +281,9 @@ return
 
         const passUser = userInfo.user;
 const view_id = payload.view.root_view_id;
-        console.log("\n\n\npayload in submit score looking for root view: ", payload);
+       
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
+        console.log("\n\n\nsendWorkout: ", sendWorkout)
         const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just finished a CrossFit workout 🏋` }, config);
          const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 console.log("271");

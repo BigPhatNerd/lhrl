@@ -3,40 +3,13 @@ const axios = require('axios');
 module.exports = {
     cfWOD: (wod) => {
         try {
-
-            if(wod.data.data[0] !== undefined) {
-
-                var { title, description, score_type } = wod.data.data[0].attributes;
-
-            } else {
-                return {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": `*CrossFit HQ Workout of the Day* \n*There is no CF WOD today. Enjoy!* 🏝\n`
-
-                    },
-
-                };
-            }
-
-            if(title.trim().toLowerCase().includes("rest day")) {
-                const restDay = {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": `\n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${score_type}\n`
-
-                    },
-
-                };
-                return restDay;
-            }
+           
+                var { title, description, type, _id } = wod;
             const workoutOfTheDay = {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": `\n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${score_type}\n`
+                    "text": `\n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${type}\n`
 
                 },
 
@@ -64,7 +37,7 @@ module.exports = {
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": "CrossFit HQ Workout of the Day",
+                "text": "CF Workout of the Day",
                 "emoji": true
             }
         };

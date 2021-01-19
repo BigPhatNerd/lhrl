@@ -65,6 +65,10 @@ var UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "GoalReps"
     }],
+     cfWods: [{
+        type: Schema.Types.ObjectId,
+        ref: "CrossFit"
+    }],
     workouts: [{
         type: Schema.Types.ObjectId,
         ref: "Workout"

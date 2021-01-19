@@ -4,14 +4,18 @@ const {
     todaysWorkout,
     weeklyGoals,
     enterGoalReps,
-    authorizePrograms
+    authorizePrograms,
+    viewOrComplete,
+    createWorkout,
+    header,
+    choosePlan
 
 
 } = require('./helpers');
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homeModal = (trigger_id, user, allWorkouts) => {
+const homeModal = (trigger_id, user, allWorkouts, wod) => {
 
 
     //user and userProgram is set in controller/slack-controller publishHomepage
@@ -47,181 +51,21 @@ const homeModal = (trigger_id, user, allWorkouts) => {
                 "emoji": true
             },
             "blocks": [
-                ////
-                //////////////
+  
                 authorizePrograms(allWorkouts),
-                //////
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Workouts Section",
-                        "emoji": true
-                    }
-                },
-
-
-
+               header("Workouts Section"),
                 {
                     "type": "divider"
                 },
 
-                ////// Insert Create Workouts with different types
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Create a Workout:"
-                    },
-                    "accessory": {
-                        "type": "static_select",
-                        "placeholder": {
-                            "type": "plain_text",
-                            "text": "Select workout type",
-                            "emoji": true
-                        },
-                        "options": [{
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Rounds + Reps",
-                                    "emoji": true
-                                },
-                                "value": "rounds_plus_reps",
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Time",
-                                    "emoji": true
-                                },
-                                "value": "time"
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Load",
-                                    "emoji": true
-                                },
-                                "value": "load"
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Distance",
-                                    "emoji": true
-                                },
-                                "value": "distance"
-                            },
-
-
-                        ],
-                        "action_id": "create"
-                    }
-                },
-                //^^ Create workouts with types
-
-                /////
-                ////////////
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "View or Complete a Workout:"
-                    },
-                    "accessory": {
-                        "type": "static_select",
-                        "placeholder": {
-                            "type": "plain_text",
-                            "text": "Select an item",
-                            "emoji": true
-                        },
-                        "options": [{
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "View Created Workouts",
-                                    "emoji": true
-                                },
-                                "value": "view_workout"
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "View Completed Workouts",
-                                    "emoji": true
-                                },
-                                "value": "completed_workouts"
-                            },
-
-                        ],
-                        "action_id": "create_edit_view"
-                    }
-                },
-
-                ///////////
-                //////
-
-
-                ///////
-
-
-                ////////
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Subscribe to Program",
-                        "emoji": true
-                    }
-                },
-
-                //
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Choose a plan:"
-                    },
-                    "accessory": {
-                        "type": "static_select",
-                        "placeholder": {
-                            "type": "plain_text",
-                            "text": "Select an item",
-                            "emoji": true
-                        },
-                        "options": [{
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "6-Weeks to 5K",
-                                    "emoji": true
-                                },
-                                "value": "5K",
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "6-Weeks to 10K",
-                                    "emoji": true
-                                },
-                                "value": "10K"
-                            },
-
-                        ],
-                        "action_id": "choose_plan"
-                    }
-                },
-
-                ///////////
+                createWorkout(),
+               viewOrComplete(),
+                header("Subscribe to Program"),
+             choosePlan(),
                 {
                     "type": "divider"
                 },
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": user.real_name,
-                        "emoji": true
-                    }
-                },
+               header(user.real_name),
                 currentlySubscribed(allWorkouts),
                 {
                     "type": "divider"
@@ -234,32 +78,17 @@ const homeModal = (trigger_id, user, allWorkouts) => {
                 {
                     "type": "divider"
                 },
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Here is your goal summary for this week",
-                        "emoji": true
-                    }
-                },
+                header("Here is your goal summary for this week"),
                 weeklyGoals(allWorkouts),
-
                 {
                     "type": "divider"
                 },
-
                 enterGoalReps(allWorkouts),
                 {
                     "type": "divider"
                 },
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "CrossFit HQ Workout of the Day",
-                        "emoji": true
-                    }
-                },
+                header("Workout of the Day"),
+                cfWOD(wod),
             
 
 

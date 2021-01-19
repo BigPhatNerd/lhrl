@@ -1,4 +1,4 @@
-const { User, Workout } = require('../models');
+const { User, Workout, CrossFit } = require('../models');
 const createWorkout = require('./forms/createWorkout.js');
 const { slack, sugarwod, url } = require('../lib/keys.js');
 const { botToken, verificationToken, } = slack;
@@ -86,8 +86,9 @@ const api_app_id = req.body.api_app_id;
             //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
             //CF WOD url https://api.sugarwod.com/v2/workoutshq
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-
-            web.views.publish(homepage(passUser, allWorkouts));
+const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+console.log("\n\nwod in slack controller: ", wod)
+            web.views.publish(homepage(passUser, allWorkouts, wod[0]));
         } catch (err) {
 
             console.error(err.message);

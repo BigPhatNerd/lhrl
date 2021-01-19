@@ -4,7 +4,7 @@ const web = require('../../config/slack-web-api.js');
 const slashCreateWorkout = require('../../controller/slashMessageBlocks/createWorkout');
 const slashViewCreatedWorkouts = require('../../controller/slashMessageBlocks/viewCreatedWorkouts');
 const homeModal = require('../../controller/homepage/homeModal.js');
-const { User } = require('../../models');
+const { User, CrossFit } = require('../../models');
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
 const {
     divider,
@@ -103,7 +103,8 @@ res.send(200, "Opening LHRL Modal");
             const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: passUser.id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
             
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            web.views.open(homeModal(trigger_id, passUser, allWorkouts))
+            const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+            web.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
 
          
 

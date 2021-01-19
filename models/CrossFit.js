@@ -12,6 +12,10 @@ const crossFitSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    title: {
+type: String,
+unique: true
+    },
 
     type: {
         type: String

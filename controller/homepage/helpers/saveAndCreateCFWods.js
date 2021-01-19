@@ -9,10 +9,13 @@ const array = [];
 const getEverything = (apiCall) => {
     apiCall.data.map(wod => {
         const { title, description, score_type } = wod.attributes;
+        const name = wod.attributes.track.attributes_for.name;
         const data = {
-            name: title,
+            name: name,
             description: description,
-            type: score_type
+            type: score_type,
+            title: title
+
         }
         array.push(data);
     })
@@ -26,7 +29,7 @@ const cfFunction = async () => {
         getEverything(getObcfWod.data);
         console.log("ARRAY: ", array);
         //Have run once a day and save all of these to database. 
-        const addCFWods = await CrossFit.collection.insertMany(array);
+        const addCFWods = await CrossFit.collection.insertMany(array, { ordered: false });
         console.log('addCFWod: ', addCFWods);
     } catch (err) {
 
@@ -37,3 +40,4 @@ const cfFunction = async () => {
 }
 
 // cfFunction();
+

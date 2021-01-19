@@ -1,7 +1,9 @@
-const submitScore = (payload, wod) => {
+const submitScore = (payload, wod, slashOrHome) => {
 const {trigger_id } = payload;
-    const { title, description, score_type } = wod.data.data[0].attributes;
-    if(score_type === "Rounds + Reps") {
+console.log("\n\nIn submit score trigger_id: ", trigger_id);
+console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
+    const { title, description, type, _id, name } = wod;
+    if(type === "Rounds + Reps") {
         const roundsPlusReps = {
             "trigger_id": trigger_id,
             // 'external_id': _id,
@@ -9,9 +11,11 @@ const {trigger_id } = payload;
                 "type": "modal",
                 "callback_id": "cf_daily",
                 "private_metadata": JSON.stringify({
+                    "home_or_slash": slashOrHome,
                     "title": title,
                     "description": description,
-                    "score_type": score_type,
+                    "score_type": type,
+                    "id": _id
                 }),
 
                 "title": {
@@ -52,7 +56,7 @@ const {trigger_id } = payload;
                         type: "section",
                         text: {
                             type: "mrkdwn",
-                            text: `*Score Type:* ${score_type}`
+                            text: `*Score Type:* ${type}`
 
                         },
 
@@ -109,7 +113,8 @@ const {trigger_id } = payload;
         }
         return roundsPlusReps
 
-    } else if(score_type === "Time") {
+    } else if(type === "Time") {
+        console.log("payload in the time bitch: ", trigger_id);
         const time = {
             "trigger_id": trigger_id,
             // 'external_id': _id,
@@ -119,7 +124,7 @@ const {trigger_id } = payload;
                 "private_metadata": JSON.stringify({
                     "title": title,
                     "description": description,
-                    "score_type": score_type,
+                    "score_type": type,
                 }),
 
 
@@ -161,7 +166,7 @@ const {trigger_id } = payload;
                         type: "section",
                         text: {
                             type: "mrkdwn",
-                            text: `*Score Type:* ${score_type}`
+                            text: `*Score Type:* ${type}`
 
                         },
 
@@ -218,7 +223,7 @@ const {trigger_id } = payload;
 
         }
         return time
-    } else if(score_type === "Load") {
+    } else if(type === "Load") {
         const load = {
             "trigger_id": trigger_id,
             // 'external_id': _id,
@@ -228,7 +233,7 @@ const {trigger_id } = payload;
                 "private_metadata": JSON.stringify({
                     "title": title,
                     "description": description,
-                    "score_type": score_type,
+                    "score_type": type,
                 }),
 
 
@@ -270,7 +275,99 @@ const {trigger_id } = payload;
                         type: "section",
                         text: {
                             type: "mrkdwn",
-                            text: `*Score Type:* ${score_type}`
+                            text: `*Score Type:* ${type}`
+
+                        },
+
+
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": false,
+                        "block_id": "weight",
+                        "element": {
+                            "type": "plain_text_input",
+                            "action_id": "weight"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Enter Max Weight",
+                            "emoji": true
+                        }
+                    },
+                    {
+                        "type": "input",
+                        "block_id": "notes",
+                        "element": {
+                            "type": "plain_text_input",
+                            "multiline": true,
+                            "action_id": "notes"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Notes",
+                            "emoji": true
+                        }
+                    },
+                ]
+            }
+
+        }
+        return load
+    }else if(type === "Other / Text") {
+        const load = {
+            "trigger_id": trigger_id,
+            // 'external_id': _id,
+            view: {
+                "type": "modal",
+                "callback_id": "cf_daily",
+                "private_metadata": JSON.stringify({
+                    "title": title,
+                    "description": description,
+                    "score_type": type,
+                }),
+
+
+                "title": {
+                    "type": "plain_text",
+                    "text": "CF WOD",
+                    "emoji": true
+                },
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true,
+
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Close",
+                    "emoji": true
+                },
+                "blocks": [{
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*Title:* ${title}`
+
+                        },
+
+
+                    }, {
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*Description:* ${description}`
+
+                        },
+
+
+                    }, {
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*Score Type:* ${type}`
 
                         },
 

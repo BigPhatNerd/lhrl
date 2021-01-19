@@ -3,6 +3,7 @@ const web = require('../../config/slack-web-api.js');
 const createWorkout = require('../forms/createWorkout.js');
 const createWorkoutModal = require('../forms/createWorkout/createWorkoutModal');
 const loadModal = require('../forms/createWorkout/loadModal');
+const otherModal = require('../forms/createWorkout/otherModal');
 const roundsPlusRepsModal = require('../forms/createWorkout/roundPlusRepsModal');
 const timeModal = require('../forms/createWorkout/timeModal');
 const distanceModal = require("../forms/createWorkout/timeModal");
@@ -12,7 +13,7 @@ const editCompletedWorkout = require('../forms/completedWorkouts/editCompletedWo
 const submitTime = require('../forms/selectedProgram/submitTime.js');
 const viewFinishedWorkouts = require('../forms/completedWorkouts/viewCompletedWorkouts');
 const homepage = require('../homepage/homeview.js');
-const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session } = require('../../models/');
+const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit } = require('../../models/');
 const editWorkoutResponse = require('../responses/successful-edit');
 const updatedWorkouts = require('../forms/updatedWorkouts.js');
 const updatedCompletedWorkouts = require('../forms/completedWorkouts/updatedCompletedWorkouts');
@@ -143,6 +144,11 @@ const metadata = JSON.parse(payload.view.private_metadata);
                     web.views.push(loadModal(payload, workoutSelected[0], "slash", homeModal_view_id))
                 }
                 web.views.push(loadModal(payload, workoutSelected[0], "home", "noModal"));
+            }  else if(workoutSelected[0].type === "Other") {
+                if(home_or_slash === "slash"){
+                    web.views.push(otherModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(otherModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Distance") {
                 if(home_or_slash === "slash"){
                     web.views.push(distanceModal(payload, workoutSelected[0], "slash", homeModal_view_id))
@@ -324,9 +330,18 @@ return
             const addReps = addRepsToGoals(payload, "home");
             web.views.open(addReps);
         } else if(value === 'cf_wod_score') {
-
-            const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-            web.views.open(submitScore(payload, wod))
+//327
+console.log("328");
+const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+console.log("wod: ", wod[0]);
+if(payload.view.callback_id === "homepage_modal"){
+    
+    const score = await submitScore(payload, wod[0], "slash");
+    web.views.push(score);
+    return
+}
+            const score = await submitScore(payload, wod[0], "home");
+            web.views.open(score);
         } else if(value === 'Authorize Strava') {
             const user = payload.user.id;
             const userInfo = await web.users.info({ user: user });
@@ -387,7 +402,8 @@ const { distance, home_or_slash, homeModal_view_id } = metadata;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
  
 if(home_or_slash === "slash"){
-            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts))
+    const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]))
 } else {
      web.views.publish(homepage(passUser, allWorkouts))
 }
@@ -413,8 +429,9 @@ const { distance, home_or_slash, homeModal_view_id } = metadata;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        if(home_or_slash === "slash"){          
-            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts))        
+        if(home_or_slash === "slash"){ 
+        const wod = await CrossFit.find().limit(1).sort({$natural:-1});         
+            web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]))        
 } else {
     web.views.publish(homepage(passUser, allWorkouts))
 }
@@ -644,7 +661,8 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         console.log("home_or_slash line 610: ", home_or_slash);
        if(home_or_slash === "slash"){
         console.log("\n\n\n\nI am in here! on line 610");
-        const updateWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts)
+        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+        const updateWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
 web.views.update(updatedWorkouts); 
 return       
     }
@@ -696,9 +714,11 @@ if(enter_score_slash === "yes"){
 const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);      
-web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
-return  
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`); 
+        //WHAT IS UP HERE  
+//         const wod = await CrossFit.find().limit(1).sort({$natural:-1});    
+// web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])) 
+// return  
 }
 if(home_or_slash === "slash"){
         const updated = await updatedProgramWorkouts(viewId, user_id, homeModal_view_id, "slash");

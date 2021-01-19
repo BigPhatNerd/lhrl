@@ -111,10 +111,13 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
             }]
         }, config);
 if(home_or_slash === "slash"){
-web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+     const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
+web.views.update(update) 
 return      
 }
-        await web.views.publish(homepage(passUser, allWorkouts))
+const updateHomepage = await homepage(passUser, allWorkouts);
+        await web.views.publish(updateHomepage);
         
 
     } catch (err) {
@@ -153,10 +156,13 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;
 if(home_or_slash === "slash"){
-web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+     const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+web.views.update(update) 
 return      
 }
-        await web.views.publish(homepage(passUser, allWorkouts))
+const updateHome = await homepage(passUser, allWorkouts);
+        await web.views.publish(updateHome);
 
     } catch (err) {
 
@@ -194,10 +200,13 @@ const metadata = JSON.parse(payload.view.private_metadata);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
 
 if(home_or_slash === "slash"){
-web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
+const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+web.views.update( update) 
 return      
 }
-        await web.views.publish(homepage(passUser, allWorkouts))
+const updateHome = await homepage(passUser, allWorkouts);
+        await web.views.publish(updateHome)
     } catch (err) {
 
         console.error(err.message);
@@ -211,7 +220,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         const metadata = JSON.parse(payload.view.private_metadata);
 
-        const { title, description, score_type } = metadata;
+        const { title, description, score_type,home_or_slash, id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
        
@@ -255,12 +264,37 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
                 weight: parseInt(weight),
                 notes: notes
             }
+        }else if(score_type === "Other / Text") {
+
+            weight = weight.weight.value;
+            notes = notes.notes.value;
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                notes: notes
+            }
         }
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+
+        const passUser = userInfo.user;
+const view_id = payload.view.root_view_id;
+        console.log("\n\n\npayload in submit score looking for root view: ", payload);
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
         const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just finished a CrossFit workout 🏋` }, config);
-        return Promise.resolve({
-            "response_action": "clear"
-        })
+         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+console.log("271");
+
+
+       if(home_or_slash === "slash"){
+        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+        const update = await updateHomeModal(view_id, passUser, allWorkouts, wod[0])
+web.views.update(update) 
+return      
+}
+const homePage = await homepage(passUser, allWorkouts);
+        await web.views.publish(homePage);
     } catch (err) {
         console.error(err.message);
 

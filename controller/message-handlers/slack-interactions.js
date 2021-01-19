@@ -337,7 +337,7 @@ console.log("328");
 const wod = await CrossFit.find().limit(1).sort({$natural:-1});
 console.log("wod: ", wod[0]);
 if(payload.view.callback_id === "homepage_modal"){
-    
+    console.log("\n\n\n\nThis is where we want to be");
     const score = await submitScore(payload, wod[0], "slash");
     web.views.push(score);
     return

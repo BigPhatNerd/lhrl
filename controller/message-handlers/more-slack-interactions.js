@@ -220,7 +220,8 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
 
         const metadata = JSON.parse(payload.view.private_metadata);
-
+console.log("line 223 more-slack cf_daily metadata: ", metadata);
+return
         const { title, description, score_type,home_or_slash, id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
@@ -287,14 +288,15 @@ const view_id = payload.view.root_view_id;
          const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 console.log("271");
 
-
+ const wod = await CrossFit.find().limit(1).sort({$natural:-1});
        if(home_or_slash === "slash"){
-        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+       
+        console.log("wod in")
         const update = await updateHomeModal(view_id, passUser, allWorkouts, wod[0])
 web.views.update(update) 
 return      
 }
-const homePage = await homepage(passUser, allWorkouts);
+const homePage = await homepage(passUser, allWorkouts, wod[0]);
         await web.views.publish(homePage);
     } catch (err) {
         console.error(err.message);

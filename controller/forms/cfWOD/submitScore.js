@@ -2,6 +2,7 @@ const submitScore = (payload, wod, slashOrHome) => {
 const {trigger_id } = payload;
 console.log("\n\nIn submit score trigger_id: ", trigger_id);
 console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
+console.log("\n\n\nlook for title in wod: ", wod)
     const { title, description, type, _id, name } = wod;
     if(type === "Rounds + Reps") {
         const roundsPlusReps = {
@@ -16,7 +17,7 @@ console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
                     "description": description,
                     "score_type": type,
                     "id": _id,
-                    
+
                 }),
 
                 "title": {
@@ -126,6 +127,8 @@ console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
                     "title": title,
                     "description": description,
                     "score_type": type,
+                     "home_or_slash": slashOrHome,
+                    "id": _id,
                 }),
 
 
@@ -235,6 +238,8 @@ console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
                     "title": title,
                     "description": description,
                     "score_type": type,
+                     "home_or_slash": slashOrHome,
+                    "id": _id,
                 }),
 
 
@@ -327,6 +332,8 @@ console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
                     "title": title,
                     "description": description,
                     "score_type": type,
+                     "home_or_slash": slashOrHome,
+                    "id": _id,
                 }),
 
 
@@ -375,20 +382,7 @@ console.log("\n\n\nwod in submit score. It ain't score_type no mo: ", wod)
 
                     },
 
-                    {
-                        "type": "input",
-                        "optional": false,
-                        "block_id": "weight",
-                        "element": {
-                            "type": "plain_text_input",
-                            "action_id": "weight"
-                        },
-                        "label": {
-                            "type": "plain_text",
-                            "text": "Enter Max Weight",
-                            "emoji": true
-                        }
-                    },
+                    
                     {
                         "type": "input",
                         "block_id": "notes",

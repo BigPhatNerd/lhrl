@@ -11,7 +11,7 @@ const {
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homeModal = (homeModal_view_id, user, allWorkouts, wod) => {
+const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
 // const metadata = JSON.parse(payload.view.private_metadata)
 
 // console.log("payload in update home(find viewId): ",payload)
@@ -274,4 +274,8 @@ const homeModal = (homeModal_view_id, user, allWorkouts, wod) => {
     }
     return view
 }
-module.exports = homeModal
+module.exports = updateHomeModal;
+
+
+
+//

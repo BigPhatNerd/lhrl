@@ -27,7 +27,7 @@ router.get('/find', async (req, res) => {
 
 //deauthorize strava by removing access and refresh tokens
 router.put('/deauth/:stravaId', async (req, res) => {
-    console.log("req.params.stravaId: ", req.params.stravaId);
+    
     const stravaId = req.params.stravaId;
     const update = {
         stravaAccessToken: '',
@@ -37,7 +37,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
     let user = await User.findOneAndUpdate(stravaId, update, {
         new: false
     });
-    console.log("\n\n\nuser: ", user)
+
     const { team_id, api_app_id } = user
 
     res.json(user)
@@ -47,7 +47,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
 //Create route for STRAVA webhook to go to Slack
 router.post('/webhook', async (req, res) => {
     try {
-        console.log("Strave webhook event received!", req.query, req.body);
+       
         const {
             aspect_type,
             object_id,
@@ -77,7 +77,7 @@ router.post('/webhook', async (req, res) => {
             map
         } = stravaData.data[0];
         //Save the information to mongoose by searching for stravaId
-        console.log("stravaData(inside strava webhook): ", stravaData.data[0]);
+        
         const body = {
             type: type,
             owner_id: athlete.id,
@@ -98,8 +98,6 @@ router.post('/webhook', async (req, res) => {
                     res.status(404).json({ message: 'No user found with that id!' });
                     return
                 }
-                //Need to send the info back to Slack below
-                //Send Slack Webhook
 
                 const { name, stravaAvatar } = activityData;
 
@@ -161,9 +159,8 @@ router.get('/login', passport.authenticate('strava', {
 }));
 
 router.get('/redirect', passport.authenticate('strava'), async (req, res) => {
-    console.log("DID I MAKE THIS");
+  
     const session = await Session.find({});
-    console.log('\n\n\n\nsession: ', session);
     const { team_id, api_app_id } = session[0];
     res.redirect(`${urlString}/auth`)
     return

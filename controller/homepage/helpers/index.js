@@ -94,7 +94,7 @@ if(allWorkouts.data[0].authorizeStrava){
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "*Currently subscribed to:*" + program
+                "text": "*Currently subscribed to:* " + program
 
             },
             "accessory": {

@@ -138,40 +138,15 @@ router.route('/loginfromslack')
     .post(async (req, res) => {
         try {
             //First I need to get the user requesting the login from slack and store it.
-            console.log("\n\nIs this the error?\n\n");
-
             const { team_id, user_id, user_name, api_app_id } = req.body;
-            console.log("\n\n\n\nreq.body: ", req.body);
-
-
             req.session.userId = user_id;
-
-
-
             const deleteSessions = await Session.deleteMany({});
             const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
-            const createUser = await User.findOneAndUpdate({ team_id: team_id }, { $set: { user_id: user_id, user_name: user_name } }, { upsert: true, new: true });
-            // if(process.env.NODE_ENV === 'production') {
-            //                 res.redirect(`${urlString}/strava/login`);
-            //             } else {
-            //                 open(`${urlString}/strava/login`);
-            //             }
-
-
-            // open(`${urlString}/strava/login`);
-            // res.send("Taking you to the Strava login page");
-            //going to try puppeteer here:
-
-
-            console.log("\n\n\ndid openWindow() run?\n\n\n")
-console.log("urlString in puppeteer: ", urlStringstrava/login)
+            const createUser = await User.findOneAndUpdate({ user_id: user_id  }, { $set: { team_id: team_id, user_name: user_name } }, { upsert: true, new: true });
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.goto(`${urlString}/strava/login`);
-
             await browser.close();
-
-
             return createUser
         } catch (err) {
             console.error(err.message);
@@ -190,24 +165,13 @@ router.get('/redirect', passport.authenticate('strava'), async (req, res) => {
     const session = await Session.find({});
     console.log('\n\n\n\nsession: ', session);
     const { team_id, api_app_id } = session[0];
-
-    // res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`)
     res.redirect(`${urlString}/auth`)
-    // res.send("Slack successfully authorized")
-    // res.redirect(`slack://app?team=${team_id}`) 
-    // res.redirect('back');
-    // res.redirect(`https://slack.com/app_redirect?channel=${team_id}`)
-
     return
-    //I need to flash a failure message if login fails.
+
 
 });
 
-// router.get('/redirect', async (req, res) => {
-//     const getSession = await Session.find({});
-//     const { team_id, api_app_id } = getSession[0];
-//     res.redirect(`slack://app?team=${team_id}&id=${api_app_id}&tab=home`);
-// });
+
 
 
 

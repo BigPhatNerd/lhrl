@@ -53,7 +53,6 @@ var UserSchema = new Schema({
     email: {
         type: String,
 
-        unique: true,
 
     },
     // The password cannot be null

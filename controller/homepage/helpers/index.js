@@ -82,7 +82,7 @@ if(allWorkouts.data[0].authorizeStrava){
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": ":thumbsdown: You are currently not subscribed to any programs. :thumbsdown:"
+                    "text": "You are currently not subscribed to any programs."
 
                 }
             };
@@ -94,7 +94,7 @@ if(allWorkouts.data[0].authorizeStrava){
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "*Currently subscribed to:* :woman-running: " + program + " :runner:"
+                "text": "*Currently subscribed to:*" + program
 
             },
             "accessory": {
@@ -376,7 +376,7 @@ const view = {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "😢 *You currently have no goals set* 😢"
+                "text": "*You currently have no goals set*"
 
             },
             "accessory": {
@@ -472,7 +472,7 @@ const view = {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": " *Enter weekly goals above*\n :bangbang: Weekly goals begin on _*Sunday*_ and reset at the end of the day on _*Saturday*_. :bangbang:"
+                "text": " *Enter weekly goals above*\nWeekly goals begin on _*Sunday*_ and reset at the end of the day on _*Saturday*_. "
             }
 
         };

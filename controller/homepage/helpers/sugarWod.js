@@ -9,7 +9,7 @@ module.exports = {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": `\n*Title:* ${title}\n*Description:* ${description}\n*Score Type:* ${type}\n`
+                    "text": `\n*Title:* ${title}\n\n*Description:* ${description}\n\n*Score Type:* ${type}\n`
 
                 },
 

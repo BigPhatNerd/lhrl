@@ -44,40 +44,17 @@ const homepage = (user, allWorkouts, wod) => {
                     "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
                     "alt_text": "logo"
                 },
-                ////
-                //////////////
+               
                 authorizePrograms(allWorkouts),
-                //////
+           
                 header("Workouts Section"),
-
-
-
                 {
                     "type": "divider"
                 },
-
-                ////// Insert Create Workouts with different types
                 createWorkout(),
-                //^^ Create workouts with types
-
-                /////
-                ////////////
                 viewOrComplete(),
-
-                ///////////
-                //////
-
-
-                ///////
-
-
-                ////////
                 header("Subscribe to Program"),
-
-                //
                choosePlan(),
-
-                ///////////
                 {
                     "type": "divider"
                 },

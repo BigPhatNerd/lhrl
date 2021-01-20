@@ -370,7 +370,13 @@ if(payload.view.callback_id === "homepage_modal"){
             const passUser = userInfo.user;
             axios.put(`${urlString}/strava/deauth/${passUser.id}`);
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            if(payload.view.callback_id === "homepage_modal"){
+    
+    const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+const update = updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]);
+            web.views.update(update)
+    return
+}
             web.views.publish(homepage(passUser, allWorkouts))
         }
     } catch (err) {

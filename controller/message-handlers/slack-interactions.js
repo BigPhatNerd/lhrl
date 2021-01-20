@@ -304,8 +304,8 @@ if(payload.view.callback_id === "homepage_modal"){
             }
 
             const deleteSessions = await Session.deleteMany({});
-            const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
-            const createUser = await User.findOneAndUpdate({ user_id: user_id }, { $set: { team_id: team_id, user_name: name } }, { upsert: true, new: true });
+            const createSession = await Session.create({ userId: id, team_id: team_id, api_app_id: api_app_id });
+            const createUser = await User.findOneAndUpdate({ user_id: id }, { $set: { team_id: team_id, user_name: name } }, { upsert: true, new: true });
            
         } else if(value === 'Deauthorize Strava') {
             const user = payload.user.id;

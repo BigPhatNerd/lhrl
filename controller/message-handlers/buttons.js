@@ -35,8 +35,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         var username = payload.user.username;
         var user_id = payload.user.id;
         if(value === "complete_created_workouts") {
-        	console.log("line 37 of buttons.js")
-        	console.log("payload is view the same as view I pass into updatedWorkouts?", payload);
+        	
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
              const workoutSelected = await Workout.find({ _id: buttonPressed });

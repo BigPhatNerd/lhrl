@@ -22,7 +22,6 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
 
         "user_id": user.id,
         "view_id":  homeModal_view_id,
-        "response_action": "update",
         view: {
             "type": "modal",
             "callback_id": "homepage_modal",

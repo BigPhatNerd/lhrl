@@ -203,15 +203,18 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const passUser = userInfo.user;
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-     
+     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
 if(home_or_slash === "slash"){
         
-        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-        const updateWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+        
+        console.log("homeModal_view_id: ", homeModal_view_id);
+        console.log("root id: ", payload.view.root_view_id)
+
+        const updatedWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
 web.views.update(updatedWorkouts); 
 return       
     }
-        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+       
         const updateHome = await homepage(passUser, allWorkouts, wod[0])
         await web.views.publish(updateHome);
 
@@ -225,6 +228,7 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
     try {
 
         const metadata = JSON.parse(payload.view.private_metadata);
+        console.log("metadata: ", metadata)
         const { score_type, name, description, home_or_slash, homeModal_view_id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
@@ -284,15 +288,17 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         const passUser = userInfo.user;
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        console.log("home_or_slash line 610: ", home_or_slash);
+    console.log("home_or_slash: ", home_or_slash);
+     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
        if(home_or_slash === "slash"){
-        const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-        const updateWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+       
+        console.log("wod: ", wod);
+        const updatedWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
 web.views.update(updatedWorkouts); 
 return       
     }
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts))
+        await web.views.publish(homepage(passUser, allWorkouts, wod[0]))
 
       
 

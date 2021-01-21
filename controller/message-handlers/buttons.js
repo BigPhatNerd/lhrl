@@ -20,6 +20,7 @@ const submitTime = require('../forms/selectedProgram/submitTime.js');
 const setGoals = require('../forms/weeklyGoals/createGoals');
 const updateGoals = require('../forms/weeklyGoals/updateGoals');
 const addRepsToGoals = require('../forms/addRepsToGoals');
+const submitScore = require('../forms/cfWOD/submitScore');
 const { url } = require('../../lib/keys');
 const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit } = require('../../models/');
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
@@ -35,7 +36,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         var username = payload.user.username;
         var user_id = payload.user.id;
         if(value === "complete_created_workouts") {
-        	
+
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
              const workoutSelected = await Workout.find({ _id: buttonPressed });
@@ -81,23 +82,49 @@ const awaitWorkouts = await editWorkout(payload, workoutSelected[0])
             const deleteWorkout = await axios.delete(`${urlString}/slack/delete-workout/${buttonPressed}`);
 
             const metadata = JSON.parse(payload.view.private_metadata);
-    const {  homeModal_view_id } = metadata;
+            console.log("metadata: ", metadata);
+    const {  home_or_slash, homeModal_view_id } = metadata;
 
             const updatedIndex = await(updatedWorkouts(payload.view.id, user_id, homeModal_view_id))
             web.views.update(updatedIndex);
         } else if(value === "complete_completed_workouts") {
+        	 const metadata = JSON.parse(payload.view.private_metadata);
+            console.log("metadata: ", metadata);
+    const {  home_or_slash, homeModal_view_id } = metadata;
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
-            if(workoutSelected[0].type === "Rounds + Reps") {
-                web.views.push(roundsPlusRepsModal(payload, workoutSelected[0]));
+            //
+            //
+ if(workoutSelected[0].type === "Rounds + Reps") {
+                if(home_or_slash === "slash"){
+                    web.views.push(roundsPlusRepsModal(payload, workoutSelected[0], "slash", homeModal_view_id));
+                }
+                web.views.push(roundsPlusRepsModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Time") {
-                web.views.push(timeModal(payload, workoutSelected[0]));
+                if(home_or_slash === "slash"){
+                    web.views.push(timeModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(timeModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Load") {
-                web.views.push(loadModal(payload, workoutSelected[0]));
+                if(home_or_slash === "slash"){
+                    web.views.push(loadModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(loadModal(payload, workoutSelected[0], "home", "noModal"));
+            }  else if(workoutSelected[0].type === "Other") {
+                if(home_or_slash === "slash"){
+                    web.views.push(otherModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(otherModal(payload, workoutSelected[0], "home", "noModal"));
             } else if(workoutSelected[0].type === "Distance") {
-                web.views.push(distanceModal(payload, workoutSelected[0]));
+                if(home_or_slash === "slash"){
+                    web.views.push(distanceModal(payload, workoutSelected[0], "slash", homeModal_view_id))
+                }
+                web.views.push(distanceModal(payload, workoutSelected[0], "home", "noModal"));
             }
+
+
+
         } else if(value === "edit_completed_workouts") {
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("delete", "");

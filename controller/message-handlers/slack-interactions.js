@@ -173,8 +173,9 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
     }
 });
 slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
-//   Nothing is happening here. Is that cool?
-console.log("do what")
+
+console.log("payload: ", payload.view.blocks.length);
+
 
 });
 

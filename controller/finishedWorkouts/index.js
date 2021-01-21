@@ -24,7 +24,9 @@ const finishedWorkouts = {
         const userWorkouts = await User.find({ user_id })
             .populate({
                 path: 'finishedWorkouts',
+                options: { sort: { 'date': -1 } },
                 select: '-__v'
+
             })
             .select('-__v');
         res.json(userWorkouts)

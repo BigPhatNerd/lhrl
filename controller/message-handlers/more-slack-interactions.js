@@ -3,7 +3,7 @@ const moreSlackInteractions = require('./../../config/slack-interactions.js');
 var CronJob = require('cron').CronJob;
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
-const { User, Workout, Program, FinishedWorkout } = require('../../models/');
+const { User, Workout, Program, FinishedWorkout, CrossFit } = require('../../models/');
 const { createGoalsMessage } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
@@ -27,13 +27,8 @@ var viewId;
 var value;
 
 moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) =>{
-    console.log("line 28 moreSlackInteractions");
-    console.log("payload: ", payload);
     const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;
-    console.log("home_or_slash: ", home_or_slash);
-    console.log("homeModal_view_id: ", homeModal_view_id);
-
     const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
@@ -48,8 +43,7 @@ web.views.publish(homepage(passUser, allWorkouts))
 })
 
 moreSlackInteractions.viewSubmission('homepage_modal', async (payload, respond) => {
-console.log("YesSS");
-console.log("payload in homepage: ", payload);
+
 })
 
 moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respond) => {
@@ -89,11 +83,10 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const squatSummary = goalCount(repsComplete, "squats");
         const mileSummary = goalCount(repsComplete, "miles");
 
-        // const confirm = await axios.post(slack.lhrl_Webhook, { "text": `${username} just added reps of: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+         const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
 
-        // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts))
-        const confirm = await axios.post(lhrlWebhook, {
+    const confirm = await axios.post(lhrlWebhook, {
             "text": `${username} just did some work! 💪`,
             "blocks": [{
                 "type": "section",
@@ -108,6 +101,16 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
                 }
             }]
         }, config);
+if(home_or_slash === "slash"){
+     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+     const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
+web.views.update(update) 
+return      
+}
+const updateHomepage = await homepage(passUser, allWorkouts);
+        await web.views.publish(updateHomepage);
+        
+
     } catch (err) {
 
         console.error(err.message);
@@ -141,7 +144,17 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts))
+        const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id } = metadata;
+if(home_or_slash === "slash"){
+  
+     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+     const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+web.views.update(update) 
+return      
+}
+const updateHome = await homepage(passUser, allWorkouts);
+        await web.views.publish(updateHome);
 
     } catch (err) {
 
@@ -151,8 +164,9 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 });
 moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) => {
     try {
-
-        const weeklyGoalId = payload.view.private_metadata
+const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash, homeModal_view_id, id } = metadata;
+        
         const username = payload.user.username;
         const user_id = payload.user.id;
         
@@ -168,7 +182,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
             squats: parseInt(squats),
             miles: parseInt(miles)
         }
-        const sendGoals = await axios.put(`${urlString}/weeklyGoals/${weeklyGoalId}`, data);
+        const sendGoals = await axios.put(`${urlString}/weeklyGoals/${id}`, data);
         const confirm = await axios.post(lhrlWebhook, { "text": `${username} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
@@ -176,7 +190,15 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        await web.views.publish(homepage(passUser, allWorkouts))
+
+if(home_or_slash === "slash"){
+const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+web.views.update( update) 
+return      
+}
+const updateHome = await homepage(passUser, allWorkouts);
+        await web.views.publish(updateHome)
     } catch (err) {
 
         console.error(err.message);
@@ -190,7 +212,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         const metadata = JSON.parse(payload.view.private_metadata);
 
-        const { title, description, score_type } = metadata;
+        const { title, description, score_type,home_or_slash, id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
        
@@ -234,12 +256,36 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
                 weight: parseInt(weight),
                 notes: notes
             }
+        }else if(score_type === "Other / Text") {
+
+            weight = weight.weight.value;
+            notes = notes.notes.value;
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                notes: notes
+            }
         }
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+
+        const passUser = userInfo.user;
+const view_id = payload.view.root_view_id;
+       
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
         const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just finished a CrossFit workout 🏋` }, config);
-        return Promise.resolve({
-            "response_action": "clear"
-        })
+         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+
+
+ const wod = await CrossFit.find().limit(1).sort({$natural:-1});
+       if(home_or_slash === "slash"){
+        const update = await updateHomeModal(view_id, passUser, allWorkouts, wod[0])
+web.views.update(update) 
+return      
+}
+const homePage = await homepage(passUser, allWorkouts, wod[0]);
+        await web.views.publish(homePage);
     } catch (err) {
         console.error(err.message);
 
@@ -247,9 +293,6 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
 
 })
-
-
-
 
 
 module.exports = {

@@ -6,6 +6,7 @@ const everything = {
         const everything = await User.find({ user_id })
             .populate([
                 { path: 'workouts' },
+                { path: 'cfWods' },
                 { path: 'selectedProgram' },
                 { path: 'finishedWorkouts' },
                 {

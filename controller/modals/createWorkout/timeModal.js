@@ -1,7 +1,7 @@
-const distanceModal = (payload, workout) => {
+const timeModal = (payload, workout, slashOrHome, homeModal_view_id) => {
     const { trigger_id } = payload;
     const { type, name, description, minutes, seconds, notes } = workout;
-    const distance = {
+    const time = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
@@ -10,11 +10,14 @@ const distanceModal = (payload, workout) => {
                 "score_type": "Time",
                 "type": type,
                 "name": name,
-                "description": description
+                "description": description,
+                 "home_or_slash": slashOrHome,
+                  "homeModal_view_id": homeModal_view_id,
+                   "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Distance Workout",
+                "text": "Complete Timed Workout",
                 "emoji": true
             },
             "submit": {
@@ -31,39 +34,49 @@ const distanceModal = (payload, workout) => {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Type:* " + type,
-                        "emoji": true
+                        "text": "*Type:* " + type
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Name:* " + name,
-                        "emoji": true
+                        "text": "*Name:* " + name
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Description:* " + description,
+                        "text": "*Description:* " + description
+                    }
+                },
+                {
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "minutes",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "minutes"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Minutes",
                         "emoji": true
                     }
                 },
                 {
                     "type": "input",
                     "optional": true,
-                    "block_id": "miles",
+                    "block_id": "seconds",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "miles"
+                        "action_id": "seconds"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Miles",
+                        "text": "Seconds",
                         "emoji": true
                     }
                 },
-
                 {
                     "type": "input",
                     "optional": true,
@@ -84,7 +97,7 @@ const distanceModal = (payload, workout) => {
             ]
         }
     }
-    return distance
+    return time
 }
 
-module.exports = distanceModal;
+module.exports = timeModal;

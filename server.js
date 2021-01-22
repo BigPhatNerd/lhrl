@@ -23,11 +23,13 @@ const getEverything = require('./routes/getEverything');
 process.env.NODE_DEBUG = 'request';
 const slackInteractions = require('./controller/message-handlers/slack-interactions.js')
 const moreSlackInteractions = require('./controller/message-handlers/more-slack-interactions.js');
+const static_select = require('./controller/message-handlers/static_select.js');
+const buttons = require('./controller/message-handlers/buttons.js');
 
 
 mongoose.set('debug', true);
 
-app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware]);
+app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware, static_select.middleware, buttons.middleware]);
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 console.log("urlString: ", urlString);

@@ -1,26 +1,20 @@
+const axios = require('axios');
 var dayjs = require("dayjs");
+const { url } = require('../../../lib/keys');
 
-const viewFinishedWorkouts = async (payload, workouts) => {
-    const { trigger_id } = payload;
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
+const updatedCompletedWorkouts = async (viewId, workouts) => {
 
-    var shortData;
-    if(workouts.data.length === 0) {
-        shortData = [];
-    } else {
-        shortData = workouts.data[0].finishedWorkouts;
-    }
-    // const shortData = workouts.data[0].workouts;
+    const shortData = workouts.data[0].finishedWorkouts;
     const array = []
     const blockData = (info) => {
-
-        // const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(shortData.length === 0) {
             array.push({
 
                 "type": "section",
                 "text": {
                     "type": "plain_text",
-                    "text": "You have not completed any workouts yet.",
+                    "text": "You have not created any workouts yet.",
                     "emoji": true
                 }
 
@@ -412,8 +406,7 @@ const viewFinishedWorkouts = async (payload, workouts) => {
 
 
     const mapWorkouts = {
-        "trigger_id": trigger_id,
-        "response_action": "clear",
+        "view_id": viewId,
         view: {
             "type": "modal",
             "callback_id": "view_workouts",
@@ -425,13 +418,11 @@ const viewFinishedWorkouts = async (payload, workouts) => {
             "submit": {
                 "type": "plain_text",
                 "text": "Submit",
-                "emoji": true,
-
+                "emoji": true
             },
-
             "close": {
                 "type": "plain_text",
-                "text": "Cancel",
+                "text": "Close",
                 "emoji": true
             },
             "blocks": (blockData(shortData))
@@ -443,4 +434,4 @@ const viewFinishedWorkouts = async (payload, workouts) => {
     return mapWorkouts
 }
 
-module.exports = viewFinishedWorkouts;
+module.exports = updatedCompletedWorkouts;

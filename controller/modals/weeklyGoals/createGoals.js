@@ -1,25 +1,18 @@
-const updateGoals = (payload, goalSelected) => {
-const { trigger_id } = payload;
-    const { _id, userId, pushups, situps, squats, miles, date } = goalSelected;
-    //Check to see if the movement exists
-
-    const checkForMovement = (movement) => {
-        if(typeof movement !== "undefined" && movement !== null) {
-            return movement.toString();
-        }
-        return ''
-    }
+const createGoals = (payload, slashOrHome) => {
+    const { trigger_id } = payload;
     const goalModal = {
-
         "trigger_id": trigger_id,
-        "external_id": _id,
         "view": {
             "type": "modal",
-            "callback_id": "update_goals",
-            "private_metadata": _id,
+            "callback_id": "create_goals",
+            "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": payload.view.id,
+
+              }),
             "title": {
                 "type": "plain_text",
-                "text": "Update Goals",
+                "text": "Create Goals",
                 "emoji": true
             },
             "submit": {
@@ -37,9 +30,12 @@ const { trigger_id } = payload;
                     "optional": true,
                     "block_id": "pushups",
                     "element": {
-
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Weekly Pushup Goal",
+                            "emoji": true
+                        },
                         "type": "plain_text_input",
-                        "initial_value": checkForMovement(pushups),
                         "action_id": "pushups"
                     },
                     "label": {
@@ -53,9 +49,12 @@ const { trigger_id } = payload;
                     "optional": true,
                     "block_id": "situps",
                     "element": {
-
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Weekly Situp Goal",
+                            "emoji": true
+                        },
                         "type": "plain_text_input",
-                        "initial_value": checkForMovement(situps),
                         "action_id": "situps"
                     },
                     "label": {
@@ -69,9 +68,12 @@ const { trigger_id } = payload;
                     "optional": true,
                     "block_id": "squats",
                     "element": {
-
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Weekly Squat Goal",
+                            "emoji": true
+                        },
                         "type": "plain_text_input",
-                        "initial_value": checkForMovement(squats),
                         "action_id": "squats"
                     },
                     "label": {
@@ -85,9 +87,12 @@ const { trigger_id } = payload;
                     "optional": true,
                     "block_id": "miles",
                     "element": {
-
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Weekly Mileage Goal",
+                            "emoji": true
+                        },
                         "type": "plain_text_input",
-                        "initial_value": checkForMovement(miles),
                         "action_id": "miles"
                     },
                     "label": {
@@ -103,4 +108,4 @@ const { trigger_id } = payload;
     return goalModal
 }
 
-module.exports = updateGoals
+module.exports = createGoals

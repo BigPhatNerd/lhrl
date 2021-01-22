@@ -1,7 +1,7 @@
 const axios = require("axios");
-const { User } = require('../models');
+const { User } = require('../../models');
 const passport = require('passport');
-const { strava } = require('../lib/keys');
+const { strava } = require('../../lib/keys');
 
 
 const { clientId, clientSecret } = strava;
@@ -43,25 +43,6 @@ const stravaController = {
 
 
 
-// const newUser = new User({
-//     stravaId: "filter test (should not be here)",
-//     provider: "strava",
-//     displayName: "Another Test user",
-//     name: "Another" + " " + "User",
-//     stravaAvatar: "Some avatar",
-//     emails: { value: "nothing" },
-//     created: Date.now(),
-//     modified: Date.now(),
-//     stravaAccessToken: "123456",
-//     stravaRefreshToken: "789123",
-//     expires_at: Date.now() + 261600
-// })
-// newUser.save();
-// stravaController.stravaRefresh();
-//stravaController.refreshToken()
-//Sets strava refresh to run every 5 hours
-//setInterval(stravaController.refreshToken(), 18000000);
-//stravaController.stravaAttempt();
 
 
 

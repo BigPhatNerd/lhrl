@@ -11,7 +11,7 @@ const {
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homeModal = (homeModal_view_id, user, allWorkouts) => {
+const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
 // const metadata = JSON.parse(payload.view.private_metadata)
 
 // console.log("payload in update home(find viewId): ",payload)
@@ -22,7 +22,6 @@ const homeModal = (homeModal_view_id, user, allWorkouts) => {
 
         "user_id": user.id,
         "view_id":  homeModal_view_id,
-        "response_action": "update",
         view: {
             "type": "modal",
             "callback_id": "homepage_modal",
@@ -257,7 +256,9 @@ const homeModal = (homeModal_view_id, user, allWorkouts) => {
                         "text": "CrossFit HQ Workout of the Day",
                         "emoji": true
                     }
-                }
+                }, 
+
+                cfWOD(wod),
              
 
 
@@ -272,4 +273,8 @@ const homeModal = (homeModal_view_id, user, allWorkouts) => {
     }
     return view
 }
-module.exports = homeModal
+module.exports = updateHomeModal;
+
+
+
+//

@@ -1,20 +1,23 @@
-const timeModal = (payload, workout) => {
+const otherModal = (payload, workout,slashOrHome, homeModal_view_id) => {
     const { trigger_id } = payload;
-    const { type, name, description, minutes, seconds, notes } = workout;
-    const time = {
+    const { type, name, description, weight, notes } = workout;
+    const other = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Time",
+                "score_type": "Other",
                 "type": type,
                 "name": name,
-                "description": description
+                "description": description,
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": homeModal_view_id,
+                   "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Timed Workout",
+                "text": "Complete Workout",
                 "emoji": true
             },
             "submit": {
@@ -31,49 +34,26 @@ const timeModal = (payload, workout) => {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Type:* " + type
+                        "text": "*Type:* " + type,
+                        "emoji": true
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Name:* " + name
+                        "text": "*Name:* " + name,
+                        "emoji": true
                     }
-                }, {
+                },
+                {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Description:* " + description
-                    }
-                },
-                {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "minutes",
-                    "element": {
-                        "type": "plain_text_input",
-                        "action_id": "minutes"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Minutes",
+                        "text": "*Description:* " + description,
                         "emoji": true
                     }
                 },
-                {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "seconds",
-                    "element": {
-                        "type": "plain_text_input",
-                        "action_id": "seconds"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Seconds",
-                        "emoji": true
-                    }
-                },
+               
                 {
                     "type": "input",
                     "optional": true,
@@ -94,7 +74,7 @@ const timeModal = (payload, workout) => {
             ]
         }
     }
-    return time
+    return other
 }
 
-module.exports = timeModal;
+module.exports = otherModal;

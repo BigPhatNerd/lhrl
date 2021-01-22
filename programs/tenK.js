@@ -15,6 +15,7 @@ let tenK = (start, user) => {
         },
         {
             "userId": user,
+            "name": "6-Weeks to 10K",
             "startDate": dateHelper(start, 2),
             "week": 1,
             "day": 2,
@@ -24,6 +25,7 @@ let tenK = (start, user) => {
         },
         {
             "userId": user,
+            "name": "6-Weeks to 10K",
             "startDate": dateHelper(start, 2),
             "week": 1,
             "day": 3,

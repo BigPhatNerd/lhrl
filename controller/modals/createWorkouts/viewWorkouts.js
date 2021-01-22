@@ -1,6 +1,6 @@
 var dayjs = require("dayjs");
 
-const viewWorkouts = async (payload, workouts) => {
+const viewWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
 
     var shortData;
@@ -10,7 +10,8 @@ const viewWorkouts = async (payload, workouts) => {
         shortData = workouts.data[0].workouts;
     }
     // const shortData = workouts.data[0].workouts;
-    const array = []
+    const array = [];
+    
     const blockData = (info) => {
 
         const date = dayjs(info.day).format('dddd MMMM D YYYY')
@@ -117,7 +118,9 @@ const viewWorkouts = async (payload, workouts) => {
             "type": "modal",
             "callback_id": "view_workouts",
              "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
                   "homeModal_view_id": payload.view.id,
+
               }),
                    
             "title": {

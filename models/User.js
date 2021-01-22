@@ -53,7 +53,6 @@ var UserSchema = new Schema({
     email: {
         type: String,
 
-        unique: true,
 
     },
     // The password cannot be null
@@ -64,6 +63,10 @@ var UserSchema = new Schema({
     goalReps: [{
         type: Schema.Types.ObjectId,
         ref: "GoalReps"
+    }],
+     cfWods: [{
+        type: Schema.Types.ObjectId,
+        ref: "CrossFit"
     }],
     workouts: [{
         type: Schema.Types.ObjectId,

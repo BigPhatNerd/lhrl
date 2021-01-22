@@ -1,20 +1,23 @@
-const otherModal = (payload, workout) => {
+const distanceModal = (payload, workout) => {
     const { trigger_id } = payload;
-    const { type, name, description, weight, notes } = workout;
-    const other = {
+    const { type, name, description, minutes, seconds, notes } = workout;
+    const distance = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Other",
+                "score_type": "Time",
                 "type": type,
                 "name": name,
-                "description": description
+                "description": description,
+               "home_or_slash": slashOrHome,
+                  "homeModal_view_id": homeModal_view_id,
+                   "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Workout",
+                "text": "Complete Distance Workout",
                 "emoji": true
             },
             "submit": {
@@ -41,8 +44,7 @@ const otherModal = (payload, workout) => {
                         "text": "*Name:* " + name,
                         "emoji": true
                     }
-                },
-                {
+                }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
@@ -50,7 +52,21 @@ const otherModal = (payload, workout) => {
                         "emoji": true
                     }
                 },
-               
+                {
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "miles",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "miles"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Miles",
+                        "emoji": true
+                    }
+                },
+
                 {
                     "type": "input",
                     "optional": true,
@@ -71,7 +87,7 @@ const otherModal = (payload, workout) => {
             ]
         }
     }
-    return other
+    return distance
 }
 
-module.exports = otherModal;
+module.exports = distanceModal;

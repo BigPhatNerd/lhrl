@@ -1,4 +1,4 @@
-const loadModal = (payload, workout) => {
+const loadModal = (payload, workout, slashOrHome, homeModal_view_id) => {
     const { trigger_id } = payload;
     const { type, name, description, weight, notes } = workout;
     const load = {
@@ -10,7 +10,11 @@ const loadModal = (payload, workout) => {
                 "score_type": "Load",
                 "type": type,
                 "name": name,
-                "description": description
+                "description": description,
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": homeModal_view_id,
+                   "action": payload.actions[0].value
+
             }),
             "title": {
                 "type": "plain_text",

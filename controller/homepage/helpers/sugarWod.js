@@ -3,7 +3,7 @@ const axios = require('axios');
 module.exports = {
     cfWOD: (wod) => {
         try {
-           console.log(" helpers/sugarWod wod: ", wod);
+           
                 var { title, description, type, _id } = wod;
             const workoutOfTheDay = {
                 "type": "section",

@@ -1,7 +1,7 @@
 const axios = require("axios");
-const { User } = require('../models');
+const { User } = require('../../models');
 const passport = require('passport');
-const { strava } = require('../lib/keys');
+const { strava } = require('../../lib/keys');
 
 
 const { clientId, clientSecret } = strava;

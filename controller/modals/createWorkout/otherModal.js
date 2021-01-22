@@ -1,18 +1,19 @@
-const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) => {
+const otherModal = (payload, workout,slashOrHome, homeModal_view_id) => {
     const { trigger_id } = payload;
-    const { type, name, description, rounds, reps, notes } = workout;
-    const roundsPlusReps = {
+    const { type, name, description, weight, notes } = workout;
+    const other = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Rounds + Reps",
+                "score_type": "Other",
                 "type": type,
                 "name": name,
                 "description": description,
                 "home_or_slash": slashOrHome,
                   "homeModal_view_id": homeModal_view_id,
+                   "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",
@@ -34,53 +35,25 @@ const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) =
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Type:* " + type,
-
+                        "emoji": true
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Name:* " + name,
-
+                        "emoji": true
                     }
-                }, {
+                },
+                {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Description:* " + description,
-
-                    }
-                },
-
-
-                {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "rounds",
-                    "element": {
-                        "type": "plain_text_input",
-                        "action_id": "rounds"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Rounds",
                         "emoji": true
                     }
                 },
-                {
-                    "type": "input",
-                    "optional": true,
-                    "block_id": "reps",
-                    "element": {
-                        "type": "plain_text_input",
-                        "action_id": "reps"
-                    },
-                    "label": {
-                        "type": "plain_text",
-                        "text": "Reps",
-                        "emoji": true
-                    }
-                },
+               
                 {
                     "type": "input",
                     "optional": true,
@@ -101,7 +74,7 @@ const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) =
             ]
         }
     }
-    return roundsPlusReps
+    return other
 }
 
-module.exports = roundsPlusRepsModal;
+module.exports = otherModal;

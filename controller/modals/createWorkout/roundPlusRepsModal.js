@@ -1,20 +1,23 @@
-const distanceModal = (payload, workout) => {
+const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) => {
     const { trigger_id } = payload;
-    const { type, name, description, minutes, seconds, notes } = workout;
-    const distance = {
+    const { type, name, description, rounds, reps, notes } = workout;
+    const roundsPlusReps = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Time",
+                "score_type": "Rounds + Reps",
                 "type": type,
                 "name": name,
-                "description": description
+                "description": description,
+                "home_or_slash": slashOrHome,
+                  "homeModal_view_id": homeModal_view_id,
+                   "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Distance Workout",
+                "text": "Complete Workout",
                 "emoji": true
             },
             "submit": {
@@ -32,38 +35,53 @@ const distanceModal = (payload, workout) => {
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Type:* " + type,
-                        "emoji": true
+
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Name:* " + name,
-                        "emoji": true
+
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Description:* " + description,
+
+                    }
+                },
+
+
+                {
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "rounds",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "rounds"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Rounds",
                         "emoji": true
                     }
                 },
                 {
                     "type": "input",
                     "optional": true,
-                    "block_id": "miles",
+                    "block_id": "reps",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "miles"
+                        "action_id": "reps"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Miles",
+                        "text": "Reps",
                         "emoji": true
                     }
                 },
-
                 {
                     "type": "input",
                     "optional": true,
@@ -84,7 +102,7 @@ const distanceModal = (payload, workout) => {
             ]
         }
     }
-    return distance
+    return roundsPlusReps
 }
 
-module.exports = distanceModal;
+module.exports = roundsPlusRepsModal;

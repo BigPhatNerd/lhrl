@@ -304,7 +304,7 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
                 return
             }
             const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
-            console.log('wod: ', wod);
+
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             const updatedWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
             web.views.update(updatedWorkouts);

@@ -1,4 +1,4 @@
-const editCompletedWorkout = (payload, workoutSelected) => {
+const editCompletedWorkout = (payload, workoutSelected, slashOrHome) => {
     const { trigger_id } = payload;
     const { _id, type, name, weight, minutes, seconds, reps, rounds, description, notes } = workoutSelected;
 
@@ -11,7 +11,9 @@ const editCompletedWorkout = (payload, workoutSelected) => {
                 "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
-                    "score_type": "Rounds + Reps"
+                    "score_type": "Rounds + Reps",
+                    "homeModal_view_id": payload.view.root_view_id,
+                    "home_or_slash": slashOrHome
                 }),
                 "title": {
                     "type": "plain_text",

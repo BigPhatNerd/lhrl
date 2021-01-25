@@ -1,4 +1,4 @@
-const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) => {
+const roundsPlusRepsModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, rounds, reps, notes } = workout;
     const roundsPlusReps = {
@@ -12,8 +12,8 @@ const roundsPlusRepsModal = (payload, workout, slashOrHome, homeModal_view_id) =
                 "name": name,
                 "description": description,
                 "home_or_slash": slashOrHome,
-                  "homeModal_view_id": homeModal_view_id,
-                   "action": payload.actions[0].value
+                "homeModal_view_id": payload.view.root_view_id,
+                "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",

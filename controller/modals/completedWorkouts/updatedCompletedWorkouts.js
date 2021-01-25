@@ -3,7 +3,7 @@ var dayjs = require("dayjs");
 const { url } = require('../../../lib/keys');
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-const updatedCompletedWorkouts = async (viewId, workouts) => {
+const updatedCompletedWorkouts = async (viewId, workouts, slashOrHome) => {
 
     const shortData = workouts.data[0].finishedWorkouts;
     const array = []
@@ -410,6 +410,10 @@ const updatedCompletedWorkouts = async (viewId, workouts) => {
         view: {
             "type": "modal",
             "callback_id": "view_workouts",
+            "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
+
+            }),
             "title": {
                 "type": "plain_text",
                 "text": "Workouts Completed: ",

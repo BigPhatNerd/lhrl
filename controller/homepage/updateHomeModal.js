@@ -12,23 +12,23 @@ const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
 const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
-// const metadata = JSON.parse(payload.view.private_metadata)
+    // const metadata = JSON.parse(payload.view.private_metadata)
 
-// console.log("payload in update home(find viewId): ",payload)
+    // console.log("payload in update home(find viewId): ",payload)
     //user and userProgram is set in controller/slack-controller publishHomepage
 
 
     const view = {
 
         "user_id": user.id,
-        "view_id":  homeModal_view_id,
+        "view_id": homeModal_view_id,
         view: {
             "type": "modal",
             "callback_id": "homepage_modal",
             "private_metadata": JSON.stringify({
                 "home_or_slash": "slash"
             }),
-              "title": {
+            "title": {
                 "type": "plain_text",
                 "text": "LHRL APP",
                 "emoji": true
@@ -256,10 +256,10 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
                         "text": "CrossFit HQ Workout of the Day",
                         "emoji": true
                     }
-                }, 
+                },
 
                 cfWOD(wod),
-             
+
 
 
 

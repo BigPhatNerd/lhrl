@@ -419,9 +419,9 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
             "callback_id": "view_workouts",
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
-                  "homeModal_view_id": payload.view.id,
+                "homeModal_view_id": payload.view.root_view_id,
 
-              }),
+            }),
             "title": {
                 "type": "plain_text",
                 "text": "Workouts Completed: ",

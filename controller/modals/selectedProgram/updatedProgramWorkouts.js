@@ -2,7 +2,7 @@ const axios = require('axios');
 var dayjs = require("dayjs");
 const { url } = require("../../../lib/keys");
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-const updatedProgramWorkouts = async (viewId, username, homeModal_view_id, slashOrHome) => {
+const updatedProgramWorkouts = async (viewId, username, slashOrHome) => {
     const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${username}`);
 
     const shortData = workouts.data[0].selectedProgram;
@@ -94,10 +94,9 @@ const updatedProgramWorkouts = async (viewId, username, homeModal_view_id, slash
         view: {
             "type": "modal",
             "callback_id": "selected_program_workouts_index",
-             "private_metadata": JSON.stringify({
-                  "homeModal_view_id": homeModal_view_id,
-                  "home_or_slash": slashOrHome,
-              }),
+            "private_metadata": JSON.stringify({
+                "home_or_slash": slashOrHome,
+            }),
 
             "title": {
                 "type": "plain_text",

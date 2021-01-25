@@ -29,7 +29,8 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
         }
         //VIEW CREATED WORKOUTS to view or create a workout
         else if(value === "view_workout") {
-            const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
+            const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`);
+            console.log("payload: ", payload);
             if(payload.view.callback_id === "homepage_modal") {
 
 
@@ -45,7 +46,7 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
         // VIEW COMPLETED WORKOUTS to view or complete a workout
         else if(value === "completed_workouts") {
             const finishedWorkouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
-
+            console.log("payload: ", payload);
             if(payload.view.callback_id === "homepage_modal") {
 
                 const finishedWorkoutIndex = await viewFinishedWorkouts(payload, finishedWorkouts, "slash");

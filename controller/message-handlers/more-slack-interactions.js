@@ -26,19 +26,20 @@ const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook :
 var viewId;
 var value;
 
-moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) =>{
+moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) => {
     const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;
     const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
-        const passUser = userInfo.user;
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);      
-    if(home_or_slash === "slash"){
-web.views.update(updateHomeModal(homeModal_view_id, passUser, allWorkouts)) 
-return       
+    const userInfo = await web.users.info({ user: user });
+    const passUser = userInfo.user;
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+    const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+    if(home_or_slash === "slash") {
+        web.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
+        return
     }
 
-web.views.publish(homepage(passUser, allWorkouts))
+    web.views.publish(homepage(passUser, allWorkouts, wod[0]))
 
 })
 
@@ -83,33 +84,34 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const squatSummary = goalCount(repsComplete, "squats");
         const mileSummary = goalCount(repsComplete, "miles");
 
-         const metadata = JSON.parse(payload.view.private_metadata);
-    const { home_or_slash, homeModal_view_id } = metadata;
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { home_or_slash } = metadata;
 
-    const confirm = await axios.post(lhrlWebhook, {
-            "text": `${username} just did some work! 💪`,
-            "blocks": [{
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": `${username} just completed reps of: \n${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}\n *Goal summary for this week:* ${goalSummaryMessage("pushups", weeklyGoals.pushups, pushupSummary)} ${goalSummaryMessage("situps", weeklyGoals.situps, situpSummary, username)} ${goalSummaryMessage("squats", weeklyGoals.squats, squatSummary, username)} ${goalSummaryMessage("miles", weeklyGoals.miles, mileSummary, username)}`
-                },
-                "accessory": {
-                    "type": "image",
-                    "image_url": sendGraphView(percentage),
-                    "alt_text": "Graph for weekly workouts/weekly goals"
-                }
-            }]
-        }, config);
-if(home_or_slash === "slash"){
-     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-     const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
-web.views.update(update) 
-return      
-}
-const updateHomepage = await homepage(passUser, allWorkouts);
+        // const confirm = await axios.post(lhrlWebhook, {
+        //     "text": `${passUser.realName} just did some work! 💪`,
+        //     "blocks": [{
+        //         "type": "section",
+        //         "text": {
+        //             "type": "mrkdwn",
+        //             "text": `${username} just completed reps of: \n${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}\n *Goal summary for this week:* ${goalSummaryMessage("pushups", weeklyGoals.pushups, pushupSummary)} ${goalSummaryMessage("situps", weeklyGoals.situps, situpSummary, username)} ${goalSummaryMessage("squats", weeklyGoals.squats, squatSummary, username)} ${goalSummaryMessage("miles", weeklyGoals.miles, mileSummary, username)}`
+        //         },
+        //         "accessory": {
+        //             "type": "image",
+        //             "image_url": sendGraphView(percentage),
+        //             "alt_text": "Graph for weekly workouts/weekly goals"
+        //         }
+        //     }]
+        // }, config);
+        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        if(home_or_slash === "slash") {
+
+            const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]);
+            web.views.update(update)
+            return
+        }
+        const updateHomepage = await homepage(passUser, allWorkouts, wod[0]);
         await web.views.publish(updateHomepage);
-        
+
 
     } catch (err) {
 
@@ -123,7 +125,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 
         const username = payload.user.username;
         const user_id = payload.user.id;
-        
+
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
         situps = situps.situps.value;
@@ -138,22 +140,23 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         }
 
         const sendGoals = await axios.post(`${urlString}/weeklyGoals/${user_id}`, data);
-        const confirm = await axios.post(lhrlWebhook, { "text": `${username} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+        // const confirm = await axios.post(lhrlWebhook, { "text": `${passUser.real_name} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const metadata = JSON.parse(payload.view.private_metadata);
-    const { home_or_slash, homeModal_view_id } = metadata;
-if(home_or_slash === "slash"){
-  
-     const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-     const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
-web.views.update(update) 
-return      
-}
-const updateHome = await homepage(passUser, allWorkouts);
+        const { home_or_slash } = metadata;
+        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        if(home_or_slash === "slash") {
+
+
+            const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
+            web.views.update(update)
+            return
+        }
+        const updateHome = await homepage(passUser, allWorkouts, wod[0]);
         await web.views.publish(updateHome);
 
     } catch (err) {
@@ -164,12 +167,12 @@ const updateHome = await homepage(passUser, allWorkouts);
 });
 moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) => {
     try {
-const metadata = JSON.parse(payload.view.private_metadata);
-    const { home_or_slash, homeModal_view_id, id } = metadata;
-        
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { home_or_slash, homeModal_view_id, id } = metadata;
+
         const username = payload.user.username;
         const user_id = payload.user.id;
-        
+
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
         situps = situps.situps.value;
@@ -183,21 +186,21 @@ const metadata = JSON.parse(payload.view.private_metadata);
             miles: parseInt(miles)
         }
         const sendGoals = await axios.put(`${urlString}/weeklyGoals/${id}`, data);
-        const confirm = await axios.post(lhrlWebhook, { "text": `${username} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+        // const confirm = await axios.post(lhrlWebhook, { "text": `${passUser.real_name} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
 
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        if(home_or_slash === "slash") {
 
-if(home_or_slash === "slash"){
-const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
-web.views.update( update) 
-return      
-}
-const updateHome = await homepage(passUser, allWorkouts);
+            const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
+            web.views.update(update)
+            return
+        }
+        const updateHome = await homepage(passUser, allWorkouts, wod[0]);
         await web.views.publish(updateHome)
     } catch (err) {
 
@@ -212,10 +215,10 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         const metadata = JSON.parse(payload.view.private_metadata);
 
-        const { title, description, score_type,home_or_slash, id } = metadata;
+        const { title, description, score_type, home_or_slash, id } = metadata;
         const username = payload.user.username;
         const user_id = payload.user.id;
-       
+
         var data;
 
         var { minutes, seconds, rounds, reps, weight, notes } = payload.view.state.values;
@@ -256,7 +259,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
                 weight: parseInt(weight),
                 notes: notes
             }
-        }else if(score_type === "Other / Text") {
+        } else if(score_type === "Other / Text") {
 
             weight = weight.weight.value;
             notes = notes.notes.value;
@@ -271,20 +274,21 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const userInfo = await web.users.info({ user: user });
 
         const passUser = userInfo.user;
-const view_id = payload.view.root_view_id;
-       
+        const view_id = payload.view.root_view_id;
+
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
-        const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${username} just finished a CrossFit workout 🏋` }, config);
-         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        console.log("passUser: ", passUser);
+        // const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
 
- const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-       if(home_or_slash === "slash"){
-        const update = await updateHomeModal(view_id, passUser, allWorkouts, wod[0])
-web.views.update(update) 
-return      
-}
-const homePage = await homepage(passUser, allWorkouts, wod[0]);
+        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        if(home_or_slash === "slash") {
+            const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
+            web.views.update(update)
+            return
+        }
+        const homePage = await homepage(passUser, allWorkouts, wod[0]);
         await web.views.publish(homePage);
     } catch (err) {
         console.error(err.message);

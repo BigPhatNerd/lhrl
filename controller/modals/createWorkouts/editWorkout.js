@@ -1,9 +1,9 @@
-const editWorkout = (payload, workoutSelected) => {
+const editWorkout = (payload, workoutSelected, slashOrHome) => {
     const { trigger_id } = payload;
     const { _id, type, name, description } = workoutSelected;
     const metadata = JSON.parse(payload.view.private_metadata)
-    
-console.log("payload in edit*: ", payload)
+
+
     const roundRepsModal = {
         "trigger_id": trigger_id,
         "external_id": _id,
@@ -13,7 +13,8 @@ console.log("payload in edit*: ", payload)
             "private_metadata": JSON.stringify({
                 "id": _id,
                 "score_type": "Rounds + Reps",
-                 "homeModal_view_id": metadata.homeModal_view_id
+                "homeModal_view_id": payload.view.root_view_id,
+                "home_or_slash": slashOrHome
 
             }),
             "title": {

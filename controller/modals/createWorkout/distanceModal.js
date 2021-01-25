@@ -1,4 +1,4 @@
-const distanceModal = (payload, workout) => {
+const distanceModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, minutes, seconds, notes } = workout;
     const distance = {
@@ -11,9 +11,9 @@ const distanceModal = (payload, workout) => {
                 "type": type,
                 "name": name,
                 "description": description,
-               "home_or_slash": slashOrHome,
-                  "homeModal_view_id": homeModal_view_id,
-                   "action": payload.actions[0].value
+                "home_or_slash": slashOrHome,
+                "homeModal_view_id": payload.view.root_view_id,
+                "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",

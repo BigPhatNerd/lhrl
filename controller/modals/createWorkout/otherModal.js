@@ -1,4 +1,4 @@
-const otherModal = (payload, workout,slashOrHome, homeModal_view_id) => {
+const otherModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, weight, notes } = workout;
     const other = {
@@ -12,8 +12,8 @@ const otherModal = (payload, workout,slashOrHome, homeModal_view_id) => {
                 "name": name,
                 "description": description,
                 "home_or_slash": slashOrHome,
-                  "homeModal_view_id": homeModal_view_id,
-                   "action": payload.actions[0].value
+                "homeModal_view_id": payload.view.root_view_id,
+                "action": payload.actions[0].value
             }),
             "title": {
                 "type": "plain_text",
@@ -53,7 +53,7 @@ const otherModal = (payload, workout,slashOrHome, homeModal_view_id) => {
                         "emoji": true
                     }
                 },
-               
+
                 {
                     "type": "input",
                     "optional": true,

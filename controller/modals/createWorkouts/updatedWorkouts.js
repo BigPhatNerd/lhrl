@@ -2,7 +2,7 @@ const axios = require('axios');
 var dayjs = require("dayjs");
 const { url } = require("../../../lib/keys");
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development
-const updatedWorkouts = async (viewId, workouts, user_id, homeModal_view_id) => {
+const updatedWorkouts = async (viewId, workouts, slashOrHome) => {
 
     const shortData = workouts.data[0].workouts;
     const array = []
@@ -108,7 +108,7 @@ const updatedWorkouts = async (viewId, workouts, user_id, homeModal_view_id) => 
             "type": "modal",
             "callback_id": "view_workouts",
             "private_metadata": JSON.stringify({
-                "homeModal_view_id": homeModal_view_id,
+                "home_or_slash": slashOrHome,
             }),
             "title": {
                 "type": "plain_text",

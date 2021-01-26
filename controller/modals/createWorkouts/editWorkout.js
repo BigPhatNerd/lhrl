@@ -1,7 +1,10 @@
 const editWorkout = (payload, workoutSelected, slashOrHome) => {
     const { trigger_id } = payload;
+
     const { _id, type, name, description } = workoutSelected;
+
     const metadata = JSON.parse(payload.view.private_metadata)
+
 
 
     const roundRepsModal = {
@@ -12,7 +15,7 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
             "callback_id": "edit_created_workout",
             "private_metadata": JSON.stringify({
                 "id": _id,
-                "score_type": "Rounds + Reps",
+                "score_type": type,
                 "homeModal_view_id": payload.view.root_view_id,
                 "home_or_slash": slashOrHome
 
@@ -34,24 +37,34 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
             },
             "blocks": [{
                     "type": "section",
+                    "block_id": "type",
                     "text": {
                         "type": "mrkdwn",
                         "text": "Edit Type:"
                     },
                     "accessory": {
                         "type": "static_select",
+
                         "placeholder": {
                             "type": "plain_text",
                             "text": type,
+
                             "emoji": true
                         },
                         "options": [{
                                 "text": {
                                     "type": "plain_text",
+                                    "text": "Reps",
+                                    "emoji": true
+                                },
+                                "value": "Reps",
+                            }, {
+                                "text": {
+                                    "type": "plain_text",
                                     "text": "Rounds + Reps",
                                     "emoji": true
                                 },
-                                "value": "rounds_plus_reps",
+                                "value": "Rounds + Reps",
                             },
                             {
                                 "text": {
@@ -59,7 +72,7 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
                                     "text": "Time",
                                     "emoji": true
                                 },
-                                "value": "time"
+                                "value": "Time"
                             },
                             {
                                 "text": {
@@ -67,7 +80,7 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
                                     "text": "Load",
                                     "emoji": true
                                 },
-                                "value": "load"
+                                "value": "Load"
                             },
                             {
                                 "text": {
@@ -75,12 +88,12 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
                                     "text": "Distance",
                                     "emoji": true
                                 },
-                                "value": "distance"
+                                "value": "Distance"
                             },
 
 
                         ],
-                        "action_id": "create"
+                        "action_id": "edit"
                     }
                 },
                 {

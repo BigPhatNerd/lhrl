@@ -52,10 +52,6 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
 
-
-            console.log("homeModal_view_id: ", homeModal_view_id);
-            console.log("root id: ", payload.view.root_view_id)
-
             const updatedWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
             web.views.update(updatedWorkouts);
             return
@@ -215,69 +211,6 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
     }
 });
 
-//5k MODAL SUBMISSION
-slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
-    try {
-        const metadata = JSON.parse(payload.view.private_metadata);
-        const { distance, home_or_slash, homeModal_view_id } = metadata;
-        const date = payload.view.state.values.date.date.selected_date;
-        const user_id = payload.user.id;
-        const username = payload.user.username;
-
-        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${distance}`, { startDate: date });
-        const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
-        const passUser = userInfo.user
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-        if(home_or_slash === "slash") {
-
-            const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
-            web.views.update(update)
-        } else {
-            const updateHome = homepage(passUser, allWorkouts, wod[0])
-            web.views.publish(updateHome);
-        }
-        // const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️` }, config)
-        return
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-//10K MODAL SUBMISSION
-
-slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) => {
-    try {
-        const metadata = JSON.parse(payload.view.private_metadata);
-        const { distance, home_or_slash, homeModal_view_id } = metadata;
-
-        const user_id = payload.user.id;
-        const date = payload.view.state.values.date.date.selected_date;
-        const username = payload.user.username;
-        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${value}`, { startDate: date });
-        const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
-        const passUser = userInfo.user;
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-        if(home_or_slash === "slash") {
-            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
-
-            web.views.update(update);
-        } else {
-            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
-            web.views.publish(updateHome);
-        }
-        // const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 10k program 🏃‍♂️` }, config)
-        return
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-
-
 // EDIT WORKOUT in completedWorkouts/editCompletedWorkouts
 slackInteractions.viewSubmission('edit_completed_workout', async (payload, respond) => {
     try {
@@ -365,12 +298,101 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
     }
 });
 
+//5k MODAL SUBMISSION
+slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
+    try {
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { distance, home_or_slash, homeModal_view_id } = metadata;
+        const date = payload.view.state.values.date.date.selected_date;
+        const user_id = payload.user.id;
+        const username = payload.user.username;
+
+        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${distance}`, { startDate: date });
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        if(home_or_slash === "slash") {
+
+            const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
+            web.views.update(update)
+        } else {
+            const updateHome = homepage(passUser, allWorkouts, wod[0])
+            web.views.publish(updateHome);
+        }
+        // const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️` }, config)
+        return
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//10K MODAL SUBMISSION
+
+slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) => {
+    try {
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { distance, home_or_slash, homeModal_view_id } = metadata;
+
+        const user_id = payload.user.id;
+        const date = payload.view.state.values.date.date.selected_date;
+        const username = payload.user.username;
+        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${value}`, { startDate: date });
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        if(home_or_slash === "slash") {
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+
+            web.views.update(update);
+
+        } else {
+            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            web.views.publish(updateHome);
+        }
+        // const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 10k program 🏃‍♂️` }, config)
+        return
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
+
+
+
 //??
 slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
-    console.log("payload: ", payload);
-    console.log("\n\n\n\n\n DO I NEED TO ADD A SLASH OR HOME HERE!!");
-    console.log("payload: ", payload.view.blocks.length);
+    try {
+        console.log("payload: ", payload);
+        console.log("\n\n\n\n\n DO I NEED TO ADD A SLASH OR HOME HERE!!");
+        console.log("payload: ", payload.view.blocks.length);
+        //TEST THIS
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { home_or_slash, homeModal_view_id } = metadata;
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        if(home_or_slash === "slash") {
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
 
+            web.views.update(update);
+            return
+        } else {
+            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            web.views.publish(updateHome);
+            return
+        }
+    } catch (err) {
+
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 
 });
 

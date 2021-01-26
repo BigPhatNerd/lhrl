@@ -1,7 +1,9 @@
 const createWorkoutModal = (payload, value, slashOrHome) => {
     const { trigger_id } = payload;
     const type = (value) => {
-        if(value === "rounds_plus_reps") {
+        if(value === "reps") {
+            return "Reps"
+        } else if(value === "rounds_plus_reps") {
             return "Rounds + Reps"
         } else if(value === "time") {
             return "Time"
@@ -12,7 +14,9 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
         }
     };
     const description = (value) => {
-        if(value === "rounds_plus_reps") {
+        if(value === "reps") {
+            return "Reps Workout"
+        } else if(value === "rounds_plus_reps") {
             return "Rounds + Reps Workout"
         } else if(value === "time") {
             return "Timed Workout"

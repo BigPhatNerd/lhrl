@@ -3,6 +3,8 @@ const buttons = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
 
 const roundsPlusRepsModal = require('../modals/createWorkout/roundPlusRepsModal');
+const repsModal = require('../modals/createWorkout/repsModal');
+
 const loadModal = require('../modals/createWorkout/loadModal');
 const otherModal = require('../modals/createWorkout/otherModal');
 
@@ -83,7 +85,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+            const wod = await CrossFit.find().limit(1).sort({ date: -1 });
             if(payload.view.callback_id === "homepage_modal") {
 
                 const update = await updateHomeModal(payload.view.id, passUser, allWorkouts, wod[0])
@@ -134,8 +136,8 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         // ENTER SCORE cf workout of the day
         else if(value === 'cf_wod_score') {
 
-            const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
-
+            const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+            console.log("wod: ", wod);
             if(payload.view.callback_id === "homepage_modal") {
 
                 const score = await submitScore(payload, wod[0], "slash");
@@ -159,7 +161,15 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const metadata = JSON.parse(payload.view.private_metadata);
             const { home_or_slash, homeModal_view_id } = metadata;
             console.log("home_or_slash (complete created workouts): ", home_or_slash);
-            if(workoutSelected[0].type === "Rounds + Reps") {
+            if(workoutSelected[0].type === "Reps") {
+                if(home_or_slash === "slash") {
+                    const modal = await repsModal(payload, workoutSelected[0], "slash")
+                    return web.views.push(modal);
+
+                }
+                const modal = await repsModal(payload, workoutSelected[0], "home")
+                return web.views.push(modal);
+            } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
                     const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash")
                     return web.views.push(modal);
@@ -251,7 +261,15 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
             //
             //
-            if(workoutSelected[0].type === "Rounds + Reps") {
+            if(workoutSelected[0].type === "Reps") {
+                if(home_or_slash === "slash") {
+                    const modal = await repsModal(payload, workoutSelected[0], "slash")
+                    return web.views.push(modal);
+
+                }
+                const modal = await repsModal(payload, workoutSelected[0], "home")
+                return web.views.push(modal);
+            } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
                     console.log("whatever");
                     const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash")
@@ -373,7 +391,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
             if(payload.view.callback_id === "homepage_modal") {
 
-                const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+                // const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
                 const update = updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]);
                 web.views.update(update)
                 return

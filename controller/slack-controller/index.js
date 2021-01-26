@@ -86,7 +86,7 @@ const slackController = {
             //OBCF WOD url http://lhrlslacktest.ngrok.io/sugarwod/obcf-wod
             //CF WOD url https://api.sugarwod.com/v2/workoutshq
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-            const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+            const wod = await CrossFit.find().limit(1).sort({ date: -1 });
             console.log("\n\nwod in slack controller: ", wod)
             web.views.publish(homepage(passUser, allWorkouts, wod[0]));
         } catch (err) {

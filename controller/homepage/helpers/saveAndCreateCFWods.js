@@ -8,16 +8,18 @@ const urlString = process.env.NODE_ENV === "production" ? url.produ : url.develo
 const array = [];
 const getEverything = (apiCall) => {
     apiCall.data.map(wod => {
-        const { title, description, score_type } = wod.attributes;
-        const name = wod.attributes.track.attributes_for.name;
-        const data = {
-            name: name,
-            description: description,
-            type: score_type,
-            title: title
+        if(wod.name !== "Fundamentals") {
+            const { title, description, score_type } = wod.attributes;
+            const name = wod.attributes.track.attributes_for.name;
+            const data = {
+                name: name,
+                description: description,
+                type: score_type,
+                title: title
 
+            }
+            array.push(data);
         }
-        array.push(data);
     })
     return array
 }
@@ -40,4 +42,3 @@ const cfFunction = async () => {
 }
 
 // cfFunction();
-

@@ -8,6 +8,7 @@ const finishedWorkouts = {
     async createFinishedWorkouts({ params, body }, res) {
         try {
             const user_id = params.user_id;
+            console.log("\n\n\nbody: ", body);
             const finishedWorkout = await FinishedWorkout.create(body);
 
             const addFinishedWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: finishedWorkout } }, { new: true })

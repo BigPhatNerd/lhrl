@@ -49,7 +49,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
         const passUser = userInfo.user;
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
 
 
@@ -121,7 +121,17 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         var data;
         var { minutes, seconds, rounds, reps, weight, miles, notes } = payload.view.state.values;
         console.log(" here?");
-        if(score_type === "Rounds + Reps") {
+        if(score_type === "Reps") {
+            reps = reps.reps.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            data = {
+                type: score_type,
+                name: name,
+                description: description,
+                reps: parseInt(reps),
+                notes: notes
+            }
+        } else if(score_type === "Rounds + Reps") {
             rounds = rounds.rounds.value || 0;
             reps = reps.reps.value || 0;
             notes = notes.notes.value || "No notes provided.";
@@ -191,7 +201,7 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
             return
         }
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         const showHome = await homepage(passUser, allWorkouts, wod[0]);
         return web.views.publish(showHome);
 
@@ -216,7 +226,7 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
 
             const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
@@ -247,7 +257,7 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
             const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
 
@@ -278,7 +288,20 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
         const passUser = userInfo.user;
         var { minutes, seconds, rounds, reps, weight, notes, name, description } = payload.view.state.values;
 
-        if(score_type === "Rounds + Reps") {
+        if(score_type === "Reps") {
+
+            reps = reps.reps.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            description = description.description.value || "No description provided.";
+            name = name.name.value;
+            data = {
+                type: score_type,
+                name: name,
+                description: description,
+                reps: parseInt(reps),
+                notes: notes
+            }
+        } else if(score_type === "Rounds + Reps") {
             rounds = rounds.rounds.value || 0;
             reps = reps.reps.value || 0;
             notes = notes.notes.value || "No notes provided.";
@@ -396,7 +419,7 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
             const passUser = userInfo.user;
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
-            const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+            const wod = await CrossFit.find().limit(1).sort({ date: -1 });
             web.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
             return
         }

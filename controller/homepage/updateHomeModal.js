@@ -80,6 +80,13 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
                         "options": [{
                                 "text": {
                                     "type": "plain_text",
+                                    "text": "Reps",
+                                    "emoji": true
+                                },
+                                "value": "reps",
+                            }, {
+                                "text": {
+                                    "type": "plain_text",
                                     "text": "Rounds + Reps",
                                     "emoji": true
                                 },

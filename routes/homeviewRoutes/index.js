@@ -91,26 +91,27 @@ router.post('/cf-wod', async (req, res) => {
 
 router.post('/lhrl', async (req, res) => {
     try {
-console.log("req.body: ", req.body);
-   
-const { user_id, api_app_id, trigger_id, response_url } = req.body;
+        console.log("req.body: ", req.body);
 
-res.send(200, "Opening LHRL Modal");
-            const userInfo = await web.users.info({ user: user_id });
-            const passUser = userInfo.user;
-            const team_id = userInfo.user.team_id;
+        const { user_id, api_app_id, trigger_id, response_url } = req.body;
 
-            const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
-            
-            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            const wod = await CrossFit.find().limit(1).sort({$natural:-1});
-            web.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
+        res.send(200, "Opening LHRL Modal");
+        const userInfo = await web.users.info({ user: user_id });
+        const passUser = userInfo.user;
+        const team_id = userInfo.user.team_id;
 
-         
+        const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
 
-    
-    } catch(err) {
-        
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        // const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        web.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
+
+
+
+
+    } catch (err) {
+
         console.error(err.message);
         res.status(500).send('Server Error');
     }

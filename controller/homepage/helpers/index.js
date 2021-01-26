@@ -18,24 +18,24 @@ const urlString = process.env.NODE_ENV === "production" ? url.production : url.d
 
 module.exports = {
     authorizePrograms: (allWorkouts) => {
-       //
-if(allWorkouts.data[0].authorizeStrava){
-    const stravaButton = {
-            "type": "actions",
-            "elements": [{
-                "type": "button",
-                "text": {
-                    "type": "plain_text",
-                    "text": "Deauthorize Strava",
-                    "emoji": true
-                },
-                "value": "Deauthorize Strava",
-                "action_id": "Deauthorize Strava"
-            }]
-        };
-        return stravaButton
-}
-     
+        //
+        if(allWorkouts.data[0].authorizeStrava) {
+            const stravaButton = {
+                "type": "actions",
+                "elements": [{
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Deauthorize Strava",
+                        "emoji": true
+                    },
+                    "value": "Deauthorize Strava",
+                    "action_id": "Deauthorize Strava"
+                }]
+            };
+            return stravaButton
+        }
+
         const stravaButton = {
             "type": "actions",
             "elements": [{
@@ -112,144 +112,152 @@ if(allWorkouts.data[0].authorizeStrava){
 
         return hasProgram
     },
-    viewOrComplete: () =>{
+    viewOrComplete: () => {
         const view = {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "View or Complete a Workout:"
-                    },
-                    "accessory": {
-                        "type": "static_select",
-                        "placeholder": {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "View or Complete a Workout:"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select an item",
+                    "emoji": true
+                },
+                "options": [{
+                        "text": {
                             "type": "plain_text",
-                            "text": "Select an item",
+                            "text": "View Created Workouts",
                             "emoji": true
                         },
-                        "options": [{
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "View Created Workouts",
-                                    "emoji": true
-                                },
-                                "value": "view_workout"
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "View Completed Workouts",
-                                    "emoji": true
-                                },
-                                "value": "completed_workouts"
-                            },
+                        "value": "view_workout"
+                    },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "View Completed Workouts",
+                            "emoji": true
+                        },
+                        "value": "completed_workouts"
+                    },
 
-                        ],
-                        "action_id": "create_edit_view"
-                    }
-                }
-                return view
+                ],
+                "action_id": "create_edit_view"
+            }
+        }
+        return view
     },
     createWorkout: () => {
-const view = {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Create a Workout:"
-                    },
-                    "accessory": {
-                        "type": "static_select",
-                        "placeholder": {
+        const view = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Create a Workout:"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select workout type",
+                    "emoji": true
+                },
+                "options": [{
+                        "text": {
                             "type": "plain_text",
-                            "text": "Select workout type",
+                            "text": "Reps",
                             "emoji": true
                         },
-                        "options": [{
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Rounds + Reps",
-                                    "emoji": true
-                                },
-                                "value": "rounds_plus_reps",
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Time",
-                                    "emoji": true
-                                },
-                                "value": "time"
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Load",
-                                    "emoji": true
-                                },
-                                "value": "load"
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Distance",
-                                    "emoji": true
-                                },
-                                "value": "distance"
-                            },
-
-
-                        ],
-                        "action_id": "create"
-                    }
-                }
-                return view
-    },
-    header: (title) =>{
-const view = {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": title,
-                        "emoji": true
-                    }
-                }
-                return view
-    },
-    choosePlan: () =>{
-        const view =  {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Choose a plan:"
+                        "value": "reps",
                     },
-                    "accessory": {
-                        "type": "static_select",
-                        "placeholder": {
+                    {
+                        "text": {
                             "type": "plain_text",
-                            "text": "Select an item",
+                            "text": "Rounds + Reps",
                             "emoji": true
                         },
-                        "options": [{
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "6-Weeks to 5K",
-                                    "emoji": true
-                                },
-                                "value": "5K",
-                            },
-                            {
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "6-Weeks to 10K",
-                                    "emoji": true
-                                },
-                                "value": "10K"
-                            },
+                        "value": "rounds_plus_reps",
+                    },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Time",
+                            "emoji": true
+                        },
+                        "value": "time"
+                    },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Load",
+                            "emoji": true
+                        },
+                        "value": "load"
+                    },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Distance",
+                            "emoji": true
+                        },
+                        "value": "distance"
+                    },
 
-                        ],
-                        "action_id": "choose_plan"
-                    }
-                }
-                return view
+
+                ],
+                "action_id": "create"
+            }
+        }
+        return view
+    },
+    header: (title) => {
+        const view = {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": title,
+                "emoji": true
+            }
+        }
+        return view
+    },
+    choosePlan: () => {
+        const view = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Choose a plan:"
+            },
+            "accessory": {
+                "type": "static_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select an item",
+                    "emoji": true
+                },
+                "options": [{
+                        "text": {
+                            "type": "plain_text",
+                            "text": "6-Weeks to 5K",
+                            "emoji": true
+                        },
+                        "value": "5K",
+                    },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "6-Weeks to 10K",
+                            "emoji": true
+                        },
+                        "value": "10K"
+                    },
+
+                ],
+                "action_id": "choose_plan"
+            }
+        }
+        return view
     },
 
 

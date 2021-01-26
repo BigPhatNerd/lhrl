@@ -33,7 +33,7 @@ moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (p
     const userInfo = await web.users.info({ user: user });
     const passUser = userInfo.user;
     const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-    const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+    const wod = await CrossFit.find().limit(1).sort({ date: -1 });
     if(home_or_slash === "slash") {
         web.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
         return
@@ -102,7 +102,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         //         }
         //     }]
         // }, config);
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]);
@@ -148,7 +148,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash } = metadata;
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
 
 
@@ -193,7 +193,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
@@ -223,7 +223,18 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         var { minutes, seconds, rounds, reps, weight, notes } = payload.view.state.values;
 
-        if(score_type === "Rounds + Reps") {
+        if(score_type === "Reps") {
+
+            reps = reps.reps.value;
+            notes = notes.notes.value || "No notes provided.";
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                reps: parseInt(reps),
+                notes: notes
+            }
+        } else if(score_type === "Rounds + Reps") {
             rounds = rounds.rounds.value;
             reps = reps.reps.value;
             notes = notes.notes.value || "No notes provided.";
@@ -282,7 +293,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
 
-        const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
             web.views.update(update)

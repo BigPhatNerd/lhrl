@@ -1,21 +1,24 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
-
+var CronJob = require('cron').CronJob;
 const { sugarwod, url } = require('../../../lib/keys.js');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const { CrossFit } = require('../../../models');
 const urlString = process.env.NODE_ENV === "production" ? url.produ : url.development
 const array = [];
+
 const getEverything = (apiCall) => {
     apiCall.data.map(wod => {
-        if(wod.name !== "Fundamentals") {
-            const { title, description, score_type } = wod.attributes;
-            const name = wod.attributes.track.attributes_for.name;
+        const { title, description, score_type } = wod.attributes;
+        const name = wod.attributes.track.attributes_for.name;
+        if(name !== "Fundamentals" && description !== "Rest Day!" && score_type !== "Not Scored") {
             const data = {
                 name: name,
                 description: description,
                 type: score_type,
-                title: title
+                title: title,
+                date: new Date()
+
 
             }
             array.push(data);
@@ -25,6 +28,8 @@ const getEverything = (apiCall) => {
 }
 const cfFunction = async () => {
     try {
+        var now = new Date();
+        console.log("RUNNING CRON JOB AT: ", now.toUTCString());
         const getCFWod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const getObcfWod = await axios.get(`${urlString}/sugarwod/obcf-wod`, { headers: sugarWodConfig });
         getEverything(getCFWod.data);
@@ -40,5 +45,16 @@ const cfFunction = async () => {
     }
 
 }
+var job = new CronJob('00 00 3 * * 1-5', cfFunction(), null, true, 'America/Chicago');
+
+job.start()
 
 // cfFunction();
+
+
+
+
+
+
+
+//

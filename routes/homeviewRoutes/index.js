@@ -105,6 +105,7 @@ router.post('/lhrl', async (req, res) => {
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        console.log("\n\n\nwod: ", wod);
         web.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
 
 

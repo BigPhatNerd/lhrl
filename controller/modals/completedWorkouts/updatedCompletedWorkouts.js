@@ -508,9 +508,7 @@ var maxRecords = paginateInteger + 6;
                 })
             }
         }
-         console.log("paginateInteger: ", paginateInteger);
-        console.log("shortData.length: ",shortData.length);
-        console.log("maxRecords: ", maxRecords);
+        
         if( paginateInteger >= 6 && (shortData.length - paginateInteger) < 7 ){
             array.push({
             "type": "actions",
@@ -519,7 +517,7 @@ var maxRecords = paginateInteger + 6;
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev 6",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev",
                         "emoji": true
                     },
                     "value": "completed_prev",
@@ -536,7 +534,7 @@ var maxRecords = paginateInteger + 6;
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Next 6 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
                         "emoji": true
                     },
                     "value": "completed_next",
@@ -552,7 +550,7 @@ var maxRecords = paginateInteger + 6;
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev 6",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev",
                         "emoji": true
                     },
                     "value": "completed_prev",
@@ -562,7 +560,7 @@ var maxRecords = paginateInteger + 6;
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Next 6 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
                         "emoji": true
                     },
                     "value": "completed_next",

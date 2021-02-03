@@ -116,7 +116,7 @@ var paginate = 0;
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Next 5 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
                         "emoji": true
                     },
                     "value": "created_next",

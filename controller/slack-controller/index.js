@@ -26,10 +26,11 @@ const slackController = {
         User.find({ user_id })
             .populate({
                 path: 'workouts',
+                 options: { sort: { 'date': -1 } },
                 select: '-__v'
             })
             .select('-__v')
-            .sort({ _id: -1 })
+            // .sort({ _id: -1 })
             .then(dbRes => {
                 res.json(dbRes)
             })

@@ -13,7 +13,8 @@ const distanceModal = (payload, workout, slashOrHome) => {
                 "description": description,
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
-                "action": payload.actions[0].value
+                "action": payload.actions[0].value,
+                "view_paginate": String(0)
             }),
             "title": {
                 "type": "plain_text",

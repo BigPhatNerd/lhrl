@@ -16,7 +16,7 @@ var paginate = 0;
     
     const blockData = (info) => {
 
-        const date = dayjs(info.day).format('dddd MMMM D YYYY')
+        // const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(shortData.length === 0) {
             array.push({
 
@@ -33,7 +33,7 @@ var paginate = 0;
         for(paginate;
             (paginate < shortData.length && paginate < maxRecords); paginate++) {
 
-            const date = dayjs(info[paginate].day).format('dddd MMMM D YYYY')
+            const date = dayjs(info[paginate].date).format('dddd MMMM D YYYY')
             ///Beginning to test different workout types below:
             array.push({
                 type: "section",

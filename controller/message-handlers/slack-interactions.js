@@ -83,9 +83,9 @@ slackInteractions.viewSubmission('edit_created_workout', async (payload, respond
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
         var { name, description, type } = payload.view.state.values;
-        console.log("payload.view.state.values ", payload.view.state.values);
-        console.log("type: ", type.edit.selected_option.value);;
-        type = type.edit.selected_option.value;
+        
+        type = type.edit.selected_option == null ? payload.view.blocks[0].accessory.placeholder.text : type.edit.selected_option.value;
+     
         description = description.description.value;
         name = name.name.value;
         data = {

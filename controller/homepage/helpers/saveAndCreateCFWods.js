@@ -28,6 +28,7 @@ const getEverything = (apiCall) => {
 }
 const cfFunction = async () => {
     try {
+        if(process.env.NODE_ENV === "production"){
         var now = new Date();
         console.log("RUNNING CRON JOB AT: ", now.toUTCString());
         const getCFWod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
@@ -38,6 +39,7 @@ const cfFunction = async () => {
         //Have run once a day and save all of these to database. 
         const addCFWods = await CrossFit.collection.insertMany(array, { ordered: false });
         console.log('addCFWod: ', addCFWods);
+    }
     } catch (err) {
 
         console.error(err.message);
@@ -45,11 +47,17 @@ const cfFunction = async () => {
     }
 
 }
- // var job = new CronJob('10 00 3 * * 1-5', cfFunction(), null, true, 'America/Chicago');
 
-// job.start()
 
-// cfFunction();
+
+
+
+
+ var job = new CronJob('* 00 3 * * 1-5', cfFunction(), null, true, 'America/Chicago');
+
+job.start()
+
+cfFunction();
 
 
 

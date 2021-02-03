@@ -35,6 +35,7 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
                 "score_type": type(value),
                 "homeModal_view_id": payload.view.root_view_id,
                 "home_or_slash": slashOrHome,
+                "view_paginate": String(0)
 
 
             }),

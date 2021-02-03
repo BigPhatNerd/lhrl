@@ -5,7 +5,9 @@ const everything = {
         const user_id = params.user_id;
         const everything = await User.find({ user_id })
             .populate([
-                { path: 'workouts' },
+                { path: 'workouts',
+                options: { sort: { 'date': -1 } }
+            },
                 { path: 'cfWods' },
                 { path: 'selectedProgram' },
                 { path: 'finishedWorkouts' },

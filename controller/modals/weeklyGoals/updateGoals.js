@@ -38,6 +38,41 @@ const { trigger_id } = payload;
                 "emoji": true
             },
             "blocks": [{
+            "type": "input",
+            "block_id": "radio",
+            "element": {
+                "type": "radio_buttons",
+                "initial_option": {
+                    "text": {
+                            "type": "mrkdwn",
+                            "text": "*Keep this private.* :shushing_face:"
+                        },
+                        "value": "private"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Keep this private.* :shushing_face:"
+                        },
+                        "value": "private"
+                    },
+                    {
+                       "text": {
+                            "type": "mrkdwn",
+                            "text": "*Share with channel* :loud_sound:"
+                        },
+                        "value": "public"
+                    }
+                ],
+                "action_id": "radio_buttons-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Privacy Settings:",
+                "emoji": true
+            }
+        },{
                     "type": "input",
                     "optional": true,
                     "block_id": "pushups",

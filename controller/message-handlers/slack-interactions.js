@@ -323,7 +323,10 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
             const updateHome = homepage(passUser, allWorkouts, wod[0])
             web.views.publish(updateHome);
         }
-        // const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️` }, config)
+        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+if(radioButton === "public"){
+         const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️` }, config)
+    }
         return
     } catch (err) {
         console.error(err.message);
@@ -355,7 +358,10 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
             const updateHome = await homepage(passUser, allWorkouts, wod[0]);
             web.views.publish(updateHome);
         }
-        // const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 10k program 🏃‍♂️` }, config)
+        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+if(radioButton === "public"){
+         const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 10k program 🏃‍♂️` }, config)
+    }
         return
     } catch (err) {
         console.error(err.message);

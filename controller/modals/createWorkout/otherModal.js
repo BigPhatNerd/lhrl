@@ -33,21 +33,17 @@ const otherModal = (payload, workout, slashOrHome) => {
             },
             "blocks": [
             {
-            "type": "section",
-            "block_id": "public_private",
-            "text": {
-                "type": "mrkdwn",
-                "text": "Privacy Settings:"
-            },
-            "accessory": {
-                "type": "checkboxes",
-                "initial_options": [ {
-                        "text": {
+            "type": "input",
+            "block_id": "radio",
+            "element": {
+                "type": "radio_buttons",
+                "initial_option": {
+                    "text": {
                             "type": "mrkdwn",
                             "text": "*Keep this private.* :shushing_face:"
                         },
                         "value": "private"
-                    }],
+                },
                 "options": [
                     {
                         "text": {
@@ -57,14 +53,19 @@ const otherModal = (payload, workout, slashOrHome) => {
                         "value": "private"
                     },
                     {
-                        "text": {
+                       "text": {
                             "type": "mrkdwn",
                             "text": "*Share with channel* :loud_sound:"
                         },
                         "value": "public"
                     }
                 ],
-                "action_id": "checkboxes-action"
+                "action_id": "radio_buttons-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Privacy Settings:",
+                "emoji": true
             }
         },{
                     "type": "section",

@@ -31,7 +31,42 @@ const roundsPlusRepsModal = (payload, workout, slashOrHome) => {
                 "text": "Cancel",
                 "emoji": true
             },
-            "blocks": [{
+            "blocks": [
+            {
+            "type": "section",
+            "block_id": "public_private",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Privacy Settings:"
+            },
+            "accessory": {
+                "type": "checkboxes",
+                "initial_options": [ {
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Keep this private.* :shushing_face:"
+                        },
+                        "value": "private"
+                    }],
+                "options": [
+                    {
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Keep this private.* :shushing_face:"
+                        },
+                        "value": "private"
+                    },
+                    {
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Share with channel* :loud_sound:"
+                        },
+                        "value": "public"
+                    }
+                ],
+                "action_id": "checkboxes-action"
+            }
+        },{
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",

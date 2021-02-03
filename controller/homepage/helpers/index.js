@@ -53,6 +53,7 @@ module.exports = {
         return stravaButton
     },
 
+
     divider: () => {
         const divider = {
             "type": "divider"

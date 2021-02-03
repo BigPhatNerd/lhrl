@@ -21,6 +21,10 @@ var UserSchema = new Schema({
         type: Boolean,
         default: false
     },
+    private: {
+type: Boolean,
+default: true
+    },
 
     displayName: {
         type: String,

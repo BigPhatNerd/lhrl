@@ -47,6 +47,7 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
                 ////
                 //////////////
                 authorizePrograms(allWorkouts),
+
                 //////
                 {
                     "type": "header",

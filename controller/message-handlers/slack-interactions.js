@@ -176,15 +176,17 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
                 notes: notes
             }
         }
+const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+
 
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
-        // const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋` }, config)
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
-
-        console.log("home_or_slash: ", home_or_slash);
-        console.log("action: ", action)
+        if(radioButton === "public"){
+    const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋` }, config)
+    }
+          
         if(home_or_slash === "slash") {
             if(action === "complete_completed_workouts") {
                 const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)

@@ -2,12 +2,15 @@ var dayjs = require("dayjs");
 
 const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
-
+    const filteredWorkouts = workouts.data[0].finishedWorkouts.filter(workout => workout.type !== undefined);
+    
+    var paginate = 0;
+    var maxRecords = paginate + 6;
     var shortData;
     if(workouts.data.length === 0) {
         shortData = [];
     } else {
-        shortData = workouts.data[0].finishedWorkouts;
+        shortData = filteredWorkouts;
     }
     // const shortData = workouts.data[0].workouts;
     const array = []
@@ -25,13 +28,15 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 }
 
             })
+            return array
         }
-        for(var i = 0; i < shortData.length; i++) {
-
-            const date = dayjs(info[i].date).format('dddd MMMM D YYYY');
+        for(paginate;
+            (paginate < shortData.length && paginate < maxRecords); paginate++) {
+            console.log("\n\npaginate: ", paginate);
+            const date = dayjs(info[paginate].date).format('dddd MMMM D YYYY');
 
             ///Beginning to test different workout types below:
-            if(info[i].type === "Reps") {
+            if(info[paginate].type === "Reps") {
                 array.push({
                     type: "section",
                     text: {
@@ -45,7 +50,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Type: " + info[i].type,
+                        text: "Type: " + info[paginate].type,
                         emoji: true
                     },
 
@@ -54,7 +59,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Name: " + info[i].name,
+                        text: "Name: " + info[paginate].name,
                         emoji: true
                     },
 
@@ -63,7 +68,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Description: " + info[i].description,
+                        text: "Description: " + info[paginate].description,
                         emoji: true
                     },
 
@@ -71,7 +76,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Reps: " + info[i].reps,
+                        text: "Reps: " + info[paginate].reps,
                         emoji: true
                     },
 
@@ -79,7 +84,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Notes: " + info[i].notes,
+                        text: "Notes: " + info[paginate].notes,
                         emoji: true
                     },
 
@@ -93,7 +98,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "complete_completed_workouts",
-                            action_id: "complete" + info[i]._id
+                            action_id: "complete" + info[paginate]._id
                         },
                         {
                             type: "button",
@@ -103,7 +108,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
-                            action_id: info[i]._id
+                            action_id: info[paginate]._id
                         },
                         {
                             type: "button",
@@ -113,14 +118,14 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "delete_completed_workouts",
-                            action_id: "delete" + info[i]._id,
+                            action_id: "delete" + info[paginate]._id,
 
                         }
                     ]
                 }, {
                     type: "divider"
                 })
-            } else if(info[i].type === "Rounds + Reps") {
+            } else if(info[paginate].type === "Rounds + Reps") {
                 array.push({
                     type: "section",
                     text: {
@@ -134,7 +139,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Type: " + info[i].type,
+                        text: "Type: " + info[paginate].type,
                         emoji: true
                     },
 
@@ -143,7 +148,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Name: " + info[i].name,
+                        text: "Name: " + info[paginate].name,
                         emoji: true
                     },
 
@@ -152,7 +157,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Description: " + info[i].description,
+                        text: "Description: " + info[paginate].description,
                         emoji: true
                     },
 
@@ -160,7 +165,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Rounds: " + info[i].rounds,
+                        text: "Rounds: " + info[paginate].rounds,
                         emoji: true
                     },
 
@@ -168,7 +173,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Reps: " + info[i].reps,
+                        text: "Reps: " + info[paginate].reps,
                         emoji: true
                     },
 
@@ -176,7 +181,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Notes: " + info[i].notes,
+                        text: "Notes: " + info[paginate].notes,
                         emoji: true
                     },
 
@@ -190,7 +195,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "complete_completed_workouts",
-                            action_id: "complete" + info[i]._id
+                            action_id: "complete" + info[paginate]._id
                         },
                         {
                             type: "button",
@@ -200,7 +205,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
-                            action_id: info[i]._id
+                            action_id: info[paginate]._id
                         },
                         {
                             type: "button",
@@ -210,14 +215,14 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "delete_completed_workouts",
-                            action_id: "delete" + info[i]._id,
+                            action_id: "delete" + info[paginate]._id,
 
                         }
                     ]
                 }, {
                     type: "divider"
                 })
-            } else if(info[i].type === "Time") {
+            } else if(info[paginate].type === "Time") {
                 array.push({
                     type: "section",
                     text: {
@@ -231,7 +236,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Type: " + info[i].type,
+                        text: "Type: " + info[paginate].type,
                         emoji: true
                     },
 
@@ -240,7 +245,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Name: " + info[i].name,
+                        text: "Name: " + info[paginate].name,
                         emoji: true
                     },
 
@@ -249,7 +254,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Description: " + info[i].description,
+                        text: "Description: " + info[paginate].description,
                         emoji: true
                     },
 
@@ -257,7 +262,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Minutes: " + info[i].minutes,
+                        text: "Minutes: " + info[paginate].minutes,
                         emoji: true
                     },
 
@@ -265,7 +270,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Seconds: " + info[i].seconds,
+                        text: "Seconds: " + info[paginate].seconds,
                         emoji: true
                     },
 
@@ -273,7 +278,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Notes: " + info[i].notes,
+                        text: "Notes: " + info[paginate].notes,
                         emoji: true
                     },
 
@@ -287,7 +292,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "complete_completed_workouts",
-                            action_id: "complete" + info[i]._id
+                            action_id: "complete" + info[paginate]._id
                         }, {
                             type: "button",
                             text: {
@@ -296,7 +301,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
-                            action_id: info[i]._id
+                            action_id: info[paginate]._id
                         },
                         {
                             type: "button",
@@ -306,14 +311,14 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "delete_completed_workouts",
-                            action_id: "delete" + info[i]._id,
+                            action_id: "delete" + info[paginate]._id,
 
                         }
                     ]
                 }, {
                     type: "divider"
                 })
-            } else if(info[i].type === "Load") {
+            } else if(info[paginate].type === "Load") {
                 array.push({
                     type: "section",
                     text: {
@@ -327,7 +332,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Type: " + info[i].type,
+                        text: "Type: " + info[paginate].type,
                         emoji: true
                     },
 
@@ -336,7 +341,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Name: " + info[i].name,
+                        text: "Name: " + info[paginate].name,
                         emoji: true
                     },
 
@@ -345,7 +350,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Description: " + info[i].description,
+                        text: "Description: " + info[paginate].description,
                         emoji: true
                     },
 
@@ -353,7 +358,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Weight: " + info[i].weight,
+                        text: "Weight: " + info[paginate].weight,
                         emoji: true
                     },
 
@@ -361,7 +366,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Notes: " + info[i].notes,
+                        text: "Notes: " + info[paginate].notes,
                         emoji: true
                     },
 
@@ -375,7 +380,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "complete_completed_workouts",
-                            action_id: "complete" + info[i]._id
+                            action_id: "complete" + info[paginate]._id
                         }, {
                             type: "button",
                             text: {
@@ -384,7 +389,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
-                            action_id: info[i]._id
+                            action_id: info[paginate]._id
                         },
                         {
                             type: "button",
@@ -394,7 +399,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "delete_completed_workouts",
-                            action_id: "delete" + info[i]._id,
+                            action_id: "delete" + info[paginate]._id,
 
                         }
                     ]
@@ -404,7 +409,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
             }
 
             ///^^^ Testing workout type
-            else if(info[i].type === "Distance") {
+            else if(info[paginate].type === "Distance") {
                 array.push({
                     type: "section",
                     text: {
@@ -418,7 +423,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Type: " + info[i].type,
+                        text: "Type: " + info[paginate].type,
                         emoji: true
                     },
 
@@ -427,7 +432,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Name: " + info[i].name,
+                        text: "Name: " + info[paginate].name,
                         emoji: true
                     },
 
@@ -436,7 +441,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Description: " + info[i].description,
+                        text: "Description: " + info[paginate].description,
                         emoji: true
                     },
 
@@ -444,7 +449,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Miles: " + info[i].miles,
+                        text: "Miles: " + info[paginate].miles,
                         emoji: true
                     },
 
@@ -452,7 +457,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     type: "section",
                     text: {
                         type: "plain_text",
-                        text: "Notes: " + info[i].notes,
+                        text: "Notes: " + info[paginate].notes,
                         emoji: true
                     },
 
@@ -466,7 +471,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "complete_completed_workouts",
-                            action_id: "complete" + info[i]._id
+                            action_id: "complete" + info[paginate]._id
                         }, {
                             type: "button",
                             text: {
@@ -475,7 +480,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "edit_completed_workouts",
-                            action_id: info[i]._id
+                            action_id: info[paginate]._id
                         },
                         {
                             type: "button",
@@ -485,7 +490,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 emoji: true
                             },
                             value: "delete_completed_workouts",
-                            action_id: "delete" + info[i]._id,
+                            action_id: "delete" + info[paginate]._id,
 
                         }
                     ]
@@ -494,7 +499,23 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 })
             }
         }
-        return array;
+         array.push({
+            "type": "actions",
+            "elements": [
+               
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next 5 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "completed_next",
+                    "action_id": "completed_next"
+                }
+            ]
+        });
+         return array
     }
 
 
@@ -509,6 +530,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
+                "paginate": String(0)
 
             }),
             "title": {
@@ -534,6 +556,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
 
         }
     }
+    
     return mapWorkouts
 }
 

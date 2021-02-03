@@ -96,11 +96,11 @@ slackInteractions.viewSubmission('edit_created_workout', async (payload, respond
         const sendWorkout = await axios.put(`${urlString}/slack/edit-workout/${id}`, data);
         const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`)
         if(home_or_slash === "slash") {
-            const updated = await updatedWorkouts(payload.view.previous_view_id, workouts, "slash");
+            const updated = await updatedWorkouts(payload, payload.view.previous_view_id, workouts, "slash");
             web.views.update(updated)
             return
         }
-        const updated = await updatedWorkouts(payload.view.previous_view_id, workouts, "home");
+        const updated = await updatedWorkouts(payload, payload.view.previous_view_id, workouts, "home");
         web.views.update(updated)
         return
     } catch (err) {
@@ -189,13 +189,13 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
             if(action === "complete_completed_workouts") {
                 const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
                 console.log("payload in complete workout: ", payload);
-                const updated = await (updatedCompletedWorkouts(payload.view.previous_view_id, workouts, "slash"))
+                const updated = await (updatedCompletedWorkouts(payload, payload.view.previous_view_id, workouts, "slash"))
                 web.views.update(updated)
                 return
             }
 
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`);
-            const updated = await updatedWorkouts(payload.view.previous_view_id, workouts, "slash")
+            const updated = await updatedWorkouts(payload, payload.view.previous_view_id, workouts, "slash")
             web.views.update(updated)
             return
         }
@@ -286,12 +286,12 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
         const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
         console.log("home_or_slash: ", home_or_slash);
         if(home_or_slash === "slash") {
-            const updated = await updatedCompletedWorkouts(payload.view.previous_view_id, workouts, "slash");
+            const updated = await updatedCompletedWorkouts(payload, payload.view.previous_view_id, workouts, "slash");
             web.views.update(updated)
             return
         }
 
-        const updated = await updatedCompletedWorkouts(payload.view.previous_view_id, workouts, "home");
+        const updated = await updatedCompletedWorkouts(payload, payload.view.previous_view_id, workouts, "home");
         web.views.update(updated)
     } catch (err) {
         console.error(err.message);
@@ -338,7 +338,7 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const user_id = payload.user.id;
         const date = payload.view.state.values.date.date.selected_date;
         const username = payload.user.username;
-        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${value}`, { startDate: date });
+        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${distance}`, { startDate: date });
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;

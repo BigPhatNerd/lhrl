@@ -2,8 +2,23 @@ const axios = require('axios');
 var dayjs = require("dayjs");
 const { url } = require("../../../lib/keys");
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development
-const updatedWorkouts = async (viewId, workouts, slashOrHome) => {
+const updatedWorkouts = async (payload, viewId, workouts, slashOrHome) => {
 
+const metadata = JSON.parse(payload.view.private_metadata);
+
+var { view_paginate } = metadata;
+console.log("metadata: ", metadata);
+var paginateInteger = parseInt(view_paginate);
+
+if ( payload.actions !== undefined && payload.actions[0].value === "created_next"){
+    paginateInteger += 6;
+   
+} else if (payload.actions !== undefined && payload.actions[0].value === "created_prev"){
+    
+    paginateInteger -= 6;
+}
+
+var maxRecords = paginateInteger + 6;
     const shortData = workouts.data[0].workouts;
     const array = []
     const blockData = (info) => {
@@ -19,7 +34,8 @@ const updatedWorkouts = async (viewId, workouts, slashOrHome) => {
 
             })
         }
-        for(var i = 0; i < shortData.length; i++) {
+        var i = paginateInteger;
+        for(var i; i < shortData.length && i < maxRecords; i++) {
 
             const date = dayjs(info[i].day).format('dddd MMMM D YYYY');
 
@@ -96,6 +112,66 @@ const updatedWorkouts = async (viewId, workouts, slashOrHome) => {
             })
 
         }
+          if( paginateInteger >= 6 && (shortData.length - paginateInteger) < 7 ){
+            array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev 6",
+                        "emoji": true
+                    },
+                    "value": "created_prev",
+                    "action_id": "created_prev"
+                },
+               
+            ]
+        }); 
+        } else if( paginateInteger <= 0 && (shortData.length - paginateInteger) >= 7){
+             array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next 6 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "created_next",
+                    "action_id": "created_next"
+                }
+            ]
+        });
+        } else {
+        array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev 6",
+                        "emoji": true
+                    },
+                    "value": "completed_prev",
+                    "action_id": "created_prev"
+                },
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next 6 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "completed_next",
+                    "action_id": "created_next"
+                }
+            ]
+        });
+    }
         return array;
     }
 
@@ -109,6 +185,7 @@ const updatedWorkouts = async (viewId, workouts, slashOrHome) => {
             "callback_id": "view_workouts",
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
+                "view_paginate": paginateInteger
             }),
             "title": {
                 "type": "plain_text",

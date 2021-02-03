@@ -38,8 +38,10 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         var username = payload.user.username;
         var user_id = payload.user.id;
 
+        
+
         // VIEW PROGRAM WORKOUTS
-        if(value === "program_workouts") {
+         if(value === "program_workouts") {
 
 
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`)
@@ -243,12 +245,31 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const { home_or_slash, homeModal_view_id } = metadata;
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`);
             if(home_or_slash === "slash") {
-                const updatedIndex = await (updatedWorkouts(payload.view.id, workouts, "slash"))
+                const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "slash"))
                 web.views.update(updatedIndex);
             }
-            const updatedIndex = await (updatedWorkouts(payload.view.id, workouts, "home"))
+            const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "home"))
+            web.views.update(updatedIndex);
+        }  else if(value === "created_next" || value === "created_prev"){
+console.log("Yeppers");
+const metadata = JSON.parse(payload.view.private_metadata);
+const { home_or_slash } = metadata;
+const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`);
+
+
+if(home_or_slash === "slash") {
+    console.log("Am I here");
+                const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "slash"))
+
+                web.views.update(updatedIndex);
+            }
+            const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "home"))
             web.views.update(updatedIndex);
         }
+
+
+
+
         //REDO WORKOUT inside viewCompleteWorkouts
         else if(value === "complete_completed_workouts") {
             console.log("what");
@@ -338,12 +359,33 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const deleteWorkout = await FinishedWorkout.deleteOne({ _id: buttonPressed });
             const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
             if(home_or_slash === "slash") {
-                const workoutIndex = await updatedCompletedWorkouts(payload.view.id, workouts, "slash");
+                const workoutIndex = await updatedCompletedWorkouts(payload, payload.view.id, workouts, "slash");
                 web.views.update(workoutIndex);
             }
-            const workoutIndex = await updatedCompletedWorkouts(payload.view.id, workouts, "home");
+            const workoutIndex = await updatedCompletedWorkouts(payload, payload.view.id, workouts, "home");
             web.views.update(workoutIndex);
         }
+
+//NEXT AND PREVIOUS BUTTON IN COMPLETED
+       // else if(value === "completed_prev"){
+       //      console.log("Yessir");
+       //  }
+        else if(value === "completed_next" || value === "completed_prev"){
+console.log("Yeppers");
+const metadata = JSON.parse(payload.view.private_metadata);
+const { home_or_slash } = metadata;
+const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`);
+
+
+if(home_or_slash === "slash") {
+    console.log("Am I here");
+                const updatedIndex = await (updatedCompletedWorkouts(payload, payload.view.id, workouts, "slash"))
+                web.views.update(updatedIndex);
+            }
+            const updatedIndex = await (updatedCompletedWorkouts(payload, payload.view.id, workouts, "home"))
+            web.views.update(updatedIndex);
+        }
+
         //ENTER SCORE inside of 6-weeks to whatever
         else if(value === "selected_program_score") {
             console.log("blahh");

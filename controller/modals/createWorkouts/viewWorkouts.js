@@ -3,6 +3,8 @@ var dayjs = require("dayjs");
 const viewWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
 
+var paginate = 0;
+    var maxRecords = paginate + 6;
     var shortData;
     if(workouts.data.length === 0) {
         shortData = [];
@@ -28,9 +30,10 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
             })
         }
 
-        for(var i = 0; i < shortData.length; i++) {
+        for(paginate;
+            (paginate < shortData.length && paginate < maxRecords); paginate++) {
 
-            const date = dayjs(info[i].day).format('dddd MMMM D YYYY')
+            const date = dayjs(info[paginate].day).format('dddd MMMM D YYYY')
             ///Beginning to test different workout types below:
             array.push({
                 type: "section",
@@ -45,7 +48,7 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Type: " + info[i].type,
+                    text: "Type: " + info[paginate].type,
                     emoji: true
                 },
 
@@ -54,14 +57,14 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Name: " + info[i].name,
+                    text: "Name: " + info[paginate].name,
                     emoji: true
                 },
             }, {
                 type: "section",
                 text: {
                     type: "plain_text",
-                    text: "Description: " + info[i].description,
+                    text: "Description: " + info[paginate].description,
                     emoji: true
                 },
 
@@ -75,7 +78,7 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
                             emoji: true
                         },
                         value: "complete_created_workouts",
-                        action_id: "complete" + info[i]._id
+                        action_id: "complete" + info[paginate]._id
                     }, {
                         type: "button",
                         text: {
@@ -84,7 +87,7 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
                             emoji: true
                         },
                         value: "edit_created_workouts",
-                        action_id: info[i]._id
+                        action_id: info[paginate]._id
                     },
                     {
                         type: "button",
@@ -94,7 +97,7 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
                             emoji: true
                         },
                         value: "delete_created_workouts",
-                        action_id: "delete" + info[i]._id,
+                        action_id: "delete" + info[paginate]._id,
 
                     }
                 ]
@@ -105,6 +108,22 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
             ///^^^ Testing workout type
 
         }
+          array.push({
+            "type": "actions",
+            "elements": [
+               
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next 5 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "created_next",
+                    "action_id": "created_next"
+                }
+            ]
+        });
         return array;
     }
 
@@ -120,6 +139,7 @@ const viewWorkouts = async (payload, workouts, slashOrHome) => {
              "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
                   "homeModal_view_id": payload.view.id,
+                  "view_paginate": String(0)
 
               }),
                    

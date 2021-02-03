@@ -3,9 +3,27 @@ var dayjs = require("dayjs");
 const { url } = require('../../../lib/keys');
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-const updatedCompletedWorkouts = async (viewId, workouts, slashOrHome) => {
+const updatedCompletedWorkouts = async (payload, viewId, workouts, slashOrHome) => {
+const filteredWorkouts = workouts.data[0].finishedWorkouts.filter(workout => workout.type !== undefined);
+const metadata = JSON.parse(payload.view.private_metadata);
 
-    const shortData = workouts.data[0].finishedWorkouts;
+var { paginate } = metadata;
+//Check payload to see if that last button pressed was delete, in which case paginateInteger DOES NOT CHANGE
+
+var paginateInteger = parseInt(paginate);
+
+if ( payload.actions !== undefined && payload.actions[0].value === "completed_next"){
+    paginateInteger += 6;
+   
+} else if (payload.actions !== undefined && payload.actions[0].value === "completed_prev"){
+    
+    paginateInteger -= 6;
+}
+
+var maxRecords = paginateInteger + 6;
+
+    const shortData = filteredWorkouts;
+  
     const array = []
     const blockData = (info) => {
         if(shortData.length === 0) {
@@ -20,7 +38,9 @@ const updatedCompletedWorkouts = async (viewId, workouts, slashOrHome) => {
 
             })
         }
-        for(var i = 0; i < shortData.length; i++) {
+   var i = paginateInteger    
+
+        for(i; (i < shortData.length && i < maxRecords); i++) {
 
             const date = dayjs(info[i].date).format('dddd MMMM D YYYY');
 
@@ -488,6 +508,69 @@ const updatedCompletedWorkouts = async (viewId, workouts, slashOrHome) => {
                 })
             }
         }
+         console.log("paginateInteger: ", paginateInteger);
+        console.log("shortData.length: ",shortData.length);
+        console.log("maxRecords: ", maxRecords);
+        if( paginateInteger >= 6 && (shortData.length - paginateInteger) < 7 ){
+            array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev 6",
+                        "emoji": true
+                    },
+                    "value": "completed_prev",
+                    "action_id": "completed_prev"
+                },
+               
+            ]
+        }); 
+        } else if( paginateInteger <= 0 && (shortData.length - paginateInteger) >= 7){
+             array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next 6 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "completed_next",
+                    "action_id": "completed_next"
+                }
+            ]
+        });
+        } else {
+        array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev 6",
+                        "emoji": true
+                    },
+                    "value": "completed_prev",
+                    "action_id": "completed_prev"
+                },
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next 6 :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "completed_next",
+                    "action_id": "completed_next"
+                }
+            ]
+        });
+    }
         return array;
     }
 
@@ -501,6 +584,7 @@ const updatedCompletedWorkouts = async (viewId, workouts, slashOrHome) => {
             "callback_id": "view_workouts",
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
+                "paginate": paginateInteger
 
             }),
             "title": {

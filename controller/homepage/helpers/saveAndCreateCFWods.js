@@ -45,9 +45,9 @@ const cfFunction = async () => {
     }
 
 }
-var job = new CronJob('00 00 3 * * 1-5', cfFunction(), null, true, 'America/Chicago');
+ // var job = new CronJob('10 00 3 * * 1-5', cfFunction(), null, true, 'America/Chicago');
 
-job.start()
+// job.start()
 
 // cfFunction();
 

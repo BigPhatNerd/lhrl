@@ -7,7 +7,7 @@ const repsModal = (payload, workout, slashOrHome) => {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Rounds + Reps",
+                "score_type": "Reps",
                 "type": type,
                 "name": name,
                 "description": description,

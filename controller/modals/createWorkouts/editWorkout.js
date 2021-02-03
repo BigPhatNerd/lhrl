@@ -5,7 +5,8 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
 
     const metadata = JSON.parse(payload.view.private_metadata)
 
-
+var { view_paginate } = metadata;
+var paginateInteger = parseInt(view_paginate);
 
     const roundRepsModal = {
         "trigger_id": trigger_id,
@@ -17,7 +18,8 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
                 "id": _id,
                 "score_type": type,
                 "homeModal_view_id": payload.view.root_view_id,
-                "home_or_slash": slashOrHome
+                "home_or_slash": slashOrHome,
+                "view_paginate": paginateInteger
 
             }),
             "title": {

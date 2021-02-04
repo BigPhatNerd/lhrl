@@ -16,6 +16,7 @@ const updatedWorkouts = require('../modals/createWorkouts/updatedWorkouts.js');
 const editCompletedWorkout = require('../modals/completedWorkouts/editCompletedWorkouts');
 const updatedCompletedWorkouts = require('../modals/completedWorkouts/updatedCompletedWorkouts');
 const selectedProgramWorkouts = require('../modals/selectedProgram/selectedProgramWorkouts');
+const updatedProgramWorkouts = require('../modals/selectedProgram/updatedProgramWorkouts');
 const updateHomeModal = require('../homepage/updateHomeModal');
 const homepage = require('../homepage/homeview.js');
 const submitTime = require('../modals/selectedProgram/submitTime.js');
@@ -53,6 +54,25 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             }
             const listWorkouts = await selectedProgramWorkouts(payload, workouts, "home");
             web.views.open(listWorkouts)
+        }
+        //pagination for selected program workouts
+        else if(value === "selected_program_next" || value === "selected_program_prev"){
+
+const metadata = JSON.parse(payload.view.private_metadata);
+const { home_or_slash } = metadata;
+const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`)
+
+
+if(home_or_slash === "slash") {
+    console.log("Am I here");
+                const selectedProgramIndex = await (updatedProgramWorkouts(payload, payload.view.id, workouts, "slash"))
+
+                web.views.update(selectedProgramIndex);
+                return
+            }
+            const selectedProgramIndex = await (updatedProgramWorkouts(payload, payload.view.id, workouts, "home"))
+            web.views.update(selectedProgramIndex);
+            return
         }
         // ENTER SCORE on today's scheduled workout
         else if(value === 'daily_program_score') {
@@ -250,7 +270,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             }
             const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "home"))
             web.views.update(updatedIndex);
-        }  else if(value === "created_next" || value === "created_prev"){
+            return
+        }  
+
+//Pagination for created workouts
+        else if(value === "created_next" || value === "created_prev"){
 console.log("Yeppers");
 const metadata = JSON.parse(payload.view.private_metadata);
 const { home_or_slash } = metadata;
@@ -262,9 +286,11 @@ if(home_or_slash === "slash") {
                 const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "slash"))
 
                 web.views.update(updatedIndex);
+                return
             }
             const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "home"))
             web.views.update(updatedIndex);
+            return
         }
 
 
@@ -366,24 +392,23 @@ if(home_or_slash === "slash") {
             web.views.update(workoutIndex);
         }
 
-//NEXT AND PREVIOUS BUTTON IN COMPLETED
-       // else if(value === "completed_prev"){
-       //      console.log("Yessir");
-       //  }
+//Pgination for complete workouts
         else if(value === "completed_next" || value === "completed_prev"){
-console.log("Yeppers");
+
 const metadata = JSON.parse(payload.view.private_metadata);
 const { home_or_slash } = metadata;
 const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`);
 
 
 if(home_or_slash === "slash") {
-    console.log("Am I here");
+   
                 const updatedIndex = await (updatedCompletedWorkouts(payload, payload.view.id, workouts, "slash"))
                 web.views.update(updatedIndex);
+                return
             }
             const updatedIndex = await (updatedCompletedWorkouts(payload, payload.view.id, workouts, "home"))
             web.views.update(updatedIndex);
+            return
         }
 
         //ENTER SCORE inside of 6-weeks to whatever
@@ -404,7 +429,9 @@ if(home_or_slash === "slash") {
                 web.views.push(submitTimeView);
             }
 
-        } //AUTHORIZE STRAVA (at the very top of the page)
+        } 
+
+        //AUTHORIZE STRAVA (at the very top of the page)
         else if(value === 'Authorize Strava') {
             const user = payload.user.id;
             const userInfo = await web.users.info({ user: user });

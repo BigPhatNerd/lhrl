@@ -4,7 +4,8 @@ var dayjs = require("dayjs");
 const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) => {
     const { trigger_id } = payload;
     const { _id, name, week, day, startDate, type, description, minutes, seconds, completed, miles } = workoutSelected;
-
+const metadata = JSON.parse(payload.view.private_metadata);
+    const { selected_program_paginate } = metadata;
 
     const date = dayjs(startDate).format('dddd MMMM D YYYY');
     if(type === "Time") {
@@ -19,7 +20,8 @@ const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) =>
                     "home_or_slash": slashOrHome,
 
                     "enter_score_slash": enter_score_slash,
-                    "score_type": type
+                    "score_type": type,
+                    "selected_program_paginate": String(selected_program_paginate)
 
                 }),
 
@@ -77,36 +79,36 @@ const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) =>
         },{
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Workout for: " + date,
-                            emoji: true
+                            type: "mrkdwn",
+                            text: "*Workout for:* " + date,
+                         
                         },
 
 
                     }, {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Week " + week + " Day " + day,
-                            emoji: true
+                            type: "mrkdwn",
+                            text: "*Week " + week + " Day " + day + "*",
+                           
                         },
 
 
                     }, {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + type,
-                            emoji: true
+                            type: "mrkdwn",
+                            text: "*Type:* " + type,
+                         
                         },
 
 
                     }, {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Descripton: " + description,
-                            emoji: true
+                            type: "mrkdwn",
+                            text: "*Descripton:* " + description,
+                            
                         },
 
                     },
@@ -176,7 +178,8 @@ const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) =>
                     "id": _id,
                     "home_or_slash": slashOrHome,
                     "enter_score_slash": enter_score_slash,
-                    "score_type": type
+                    "score_type": type,
+                      "selected_program_paginate": String(selected_program_paginate)
 
 
                 }),
@@ -228,25 +231,25 @@ const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) =>
                 "action_id": "radio_buttons-action"
             },
             "label": {
-                "type": "plain_text",
-                "text": "Privacy Settings:",
-                "emoji": true
+                "type": "mrkdwn",
+                "text": "*Privacy Settings:*",
+                
             }
         },{
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Workout for: " + date,
-                            emoji: true
+                            "type": "mrkdwn",
+                            text: "*Workout for:* " + date,
+                           
                         },
 
 
                     }, {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Week " + week + " Day " + day,
-                            emoji: true
+                            "type": "mrkdwn",
+                            text: "*Week " + week + " Day " + day + "*",
+                          
                         },
 
 
@@ -262,9 +265,9 @@ const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) =>
                     }, {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Descripton: " + description,
-                            emoji: true
+                            "type": "mrkdwn",
+                            text: "*Descripton:* " + description,
+                           
                         },
 
                     },

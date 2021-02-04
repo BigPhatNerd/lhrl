@@ -72,33 +72,41 @@ array.push({
                 "text": "Privacy Settings:",
                 "emoji": true
             }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": ":arrow_down: *Two-Week Glance* :arrow_down:",
+                
+            }
         })
-        for(var i = 0; i < shortData.length; i++) {
+        for(var i = 0; i < 6; i++) {
 
             array.push({
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Week " + (info[i].week) + " Day " + info[i].day,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Week " + (info[i].week) + " Day " + info[i].day + "*",
+                    
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Type: " + info[i].type,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Type:* " + info[i].type,
+                    
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Description: " + info[i].description,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Description:* " + info[i].description,
+                    
                 },
 
 
@@ -128,7 +136,7 @@ array.push({
             
             "title": {
                 "type": "plain_text",
-                "text": "5K Workouts: ",
+                "text": "5K Workouts:",
                 "emoji": true
             },
             "submit": {

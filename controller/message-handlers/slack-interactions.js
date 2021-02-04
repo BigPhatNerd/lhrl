@@ -460,14 +460,15 @@ if(radioButton === "public"){
             web.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
             return
         }
+         const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`);
         if(home_or_slash === "slash") {
             console.log("payload: ", payload);
             console.log("viewId: ", viewId)
-            const updated = await updatedProgramWorkouts(payload.view.previous_view_id, user_id, "slash");
+            const updated = await updatedProgramWorkouts(payload, payload.view.previous_view_id, workouts, "slash");
             web.views.update(updated)
             return
         }
-        const updated = await updatedProgramWorkouts(payload.view.previous_view_id, user_id, "home");
+        const updated = await updatedProgramWorkouts(payload, payload.view.previous_view_id, workouts, "home");
         web.views.update(updated)
 
 

@@ -38,34 +38,34 @@ var paginate = 0;
             array.push({
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Date Created: " + date,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Date Created:* " + date,
+                    
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Type: " + info[paginate].type,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Type:* " + info[paginate].type,
+                   
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Name: " + info[paginate].name,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Name:* " + info[paginate].name,
+                   
                 },
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Description: " + info[paginate].description,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Description:* " + info[paginate].description,
+                 
                 },
 
             }, {

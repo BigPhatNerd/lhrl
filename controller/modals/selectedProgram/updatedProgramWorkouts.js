@@ -2,24 +2,39 @@ const axios = require('axios');
 var dayjs = require("dayjs");
 const { url } = require("../../../lib/keys");
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-const updatedProgramWorkouts = async (viewId, username, slashOrHome) => {
-    const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${username}`);
+const updatedProgramWorkouts = async (payload,viewId, workouts, slashOrHome) => {
+   
+const metadata = JSON.parse(payload.view.private_metadata);
 
+var { selected_program_paginate } = metadata;
+
+var paginateInteger = parseInt(selected_program_paginate);
+
+if ( payload.actions !== undefined && payload.actions[0].value === "selected_program_next"){
+    paginateInteger += 6;
+   
+} else if (payload.actions !== undefined && payload.actions[0].value === "selected_program_prev"){
+    
+    paginateInteger -= 6;
+}
+
+var maxRecords = paginateInteger + 6;
     const shortData = workouts.data[0].selectedProgram;
 
     const array = [];
 
     const blockData = (info) => {
-        for(var i = 0; i < shortData.length; i++) {
+        var i = paginateInteger;
+        for(var i; i < shortData.length && i < maxRecords; i++) {
             const slicedDate = info[i].startDate.slice(0, -14);
             const date = dayjs(slicedDate).format('dddd MMMM D YYYY')
 
             const completed = () => {
                 if(info[i].completed) {
                     if(info[i].type === "Time") {
-                        return "You completed this workout on " + dayjs(info[i].dateCompleted).format('dddd MMMM D YYYY') + " \nin " + info[i].minutes + " minutes " + info[i].seconds + " seconds!"
+                        return "*You completed this workout on " + dayjs(info[i].dateCompleted).format('dddd MMMM D YYYY') + "* \n *in " + info[i].minutes + " minutes " + info[i].seconds + " seconds!*"
                     } else if(info[i].type === "Distance") {
-                        return "You completed this workout on " + dayjs(info[i].dateCompleted).format('dddd MMMM D YYYY') + ". \n You ran " + info[i].miles + " miles!"
+                        return "*You completed this workout on " + dayjs(info[i].dateCompleted).format('dddd MMMM D YYYY') + ".* \n *You ran " + info[i].miles + " miles!*"
                     }
                 }
                 return "Workout for: " + date
@@ -33,37 +48,36 @@ const updatedProgramWorkouts = async (viewId, username, slashOrHome) => {
             array.push({
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    // text: "Workout for: " + date,
-                    text: completed(),
-                    emoji: true
+                   type: "mrkdwn",
+                    text:  completed(),
+                  
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Week " + info[i].week + " Day " + info[i].day,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Week " + info[i].week + " Day " + info[i].day + "*",
+                    
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Type: " + info[i].type,
-                    emoji: true
+                  type: "mrkdwn",
+                    text: "*Type:* " + info[i].type,
+                   
                 },
 
 
             }, {
                 type: "section",
                 text: {
-                    type: "plain_text",
-                    text: "Descripton: " + info[i].description,
-                    emoji: true
+                    type: "mrkdwn",
+                    text: "*Descripton:* " + info[i].description,
+                  
                 },
 
             }, {
@@ -85,6 +99,67 @@ const updatedProgramWorkouts = async (viewId, username, slashOrHome) => {
 
 
         }
+         if( paginateInteger >= 6 && (shortData.length - paginateInteger) < 7 ){
+            array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev",
+                        "emoji": true
+                    },
+                    "value": "selected_program_prev",
+                    "action_id": "selected_program_prev"
+                },
+               
+            ]
+        }); 
+        } else if( paginateInteger <= 0 && (shortData.length - paginateInteger) >= 7){
+             array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "More  :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "selected_program_next",
+                    "action_id": "selected_program_next"
+                }
+            ]
+        });
+        } else {
+            console.log("why am I here and nothing else?");
+        array.push({
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev",
+                        "emoji": true
+                    },
+                    "value": "selected_program_prev",
+                    "action_id": "selected_program_prev"
+                },
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "More  :black_right_pointing_double_triangle_with_vertical_bar:",
+                        "emoji": true
+                    },
+                    "value": "selected_program_next",
+                    "action_id": "selected_program_next"
+                }
+            ]
+        });
+    }
         return array;
 
     }
@@ -96,6 +171,7 @@ const updatedProgramWorkouts = async (viewId, username, slashOrHome) => {
             "callback_id": "selected_program_workouts_index",
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
+                "selected_program_paginate": paginateInteger
             }),
 
             "title": {

@@ -156,7 +156,7 @@ var maxRecords = paginateInteger + 6;
                         "text": ":black_left_pointing_double_triangle_with_vertical_bar: Prev",
                         "emoji": true
                     },
-                    "value": "completed_prev",
+                    "value": "created_prev",
                     "action_id": "created_prev"
                 },
                 {
@@ -166,7 +166,7 @@ var maxRecords = paginateInteger + 6;
                         "text": "More  :black_right_pointing_double_triangle_with_vertical_bar:",
                         "emoji": true
                     },
-                    "value": "completed_next",
+                    "value": "created_next",
                     "action_id": "created_next"
                 }
             ]

@@ -6,7 +6,7 @@ const urlString = process.env.NODE_ENV === "production" ? url.production : url.d
 const updatedCompletedWorkouts = async (payload, viewId, workouts, slashOrHome) => {
 const filteredWorkouts = workouts.data[0].finishedWorkouts.filter(workout => workout.type !== undefined);
 const metadata = JSON.parse(payload.view.private_metadata);
-
+console.log("metadat: ", metadata);
 var { paginate } = metadata;
 //Check payload to see if that last button pressed was delete, in which case paginateInteger DOES NOT CHANGE
 
@@ -38,7 +38,10 @@ var maxRecords = paginateInteger + 6;
 
             })
         }
-   var i = paginateInteger    
+   var i = paginateInteger  
+   console.log("paginateInteger: ", paginateInteger);
+   console.log("paginate: ", paginate);
+   console.log("metadata: ", metadata);  
 
         for(i; (i < shortData.length && i < maxRecords); i++) {
 

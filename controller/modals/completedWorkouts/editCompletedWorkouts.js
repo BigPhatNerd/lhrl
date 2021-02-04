@@ -4,7 +4,7 @@ const editCompletedWorkout = (payload, workoutSelected, slashOrHome) => {
 const metadata = JSON.parse(payload.view.private_metadata);
 var { paginate } = metadata;
 var paginateInteger = parseInt(paginate);
-
+console.log("metadata in editCompletedWorkouts: ", metadata);
     if(workoutSelected.type === "Reps") {
         const repsModal = {
             "trigger_id": trigger_id,
@@ -114,7 +114,8 @@ var paginateInteger = parseInt(paginate);
                     "id": _id,
                     "score_type": "Rounds + Reps",
                     "homeModal_view_id": payload.view.root_view_id,
-                    "home_or_slash": slashOrHome
+                    "home_or_slash": slashOrHome,
+                     "paginate": paginateInteger
                 }),
                 "title": {
                     "type": "plain_text",
@@ -225,7 +226,10 @@ var paginateInteger = parseInt(paginate);
                 "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
-                    "score_type": "Time"
+                    "score_type": "Time",
+                     "homeModal_view_id": payload.view.root_view_id,
+                    "home_or_slash": slashOrHome,
+                     "paginate": paginateInteger
                 }),
                 "title": {
                     "type": "plain_text",
@@ -336,7 +340,10 @@ var paginateInteger = parseInt(paginate);
                 "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
-                    "score_type": "Load"
+                    "score_type": "Load",
+                     "homeModal_view_id": payload.view.root_view_id,
+                    "home_or_slash": slashOrHome,
+                     "paginate": paginateInteger
                 }),
                 "title": {
                     "type": "plain_text",
@@ -431,7 +438,10 @@ var paginateInteger = parseInt(paginate);
                 "callback_id": "edit_completed_workout",
                 "private_metadata": JSON.stringify({
                     "id": _id,
-                    "score_type": "Time"
+                    "score_type": "Time",
+                     "homeModal_view_id": payload.view.root_view_id,
+                    "home_or_slash": slashOrHome,
+                     "paginate": paginateInteger
                 }),
                 "title": {
                     "type": "plain_text",

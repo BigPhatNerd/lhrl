@@ -1,5 +1,7 @@
 const createWorkoutModal = (payload, value, slashOrHome) => {
     const { trigger_id } = payload;
+     const metadata = JSON.parse(payload.view.private_metadata);
+    const { paginate } = metadata;
     const type = (value) => {
         if(value === "reps") {
             return "Reps"
@@ -35,7 +37,8 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
                 "score_type": type(value),
                 "homeModal_view_id": payload.view.root_view_id,
                 "home_or_slash": slashOrHome,
-                "view_paginate": String(0)
+                "view_paginate": String(0),
+                 "paginate": paginate
 
 
             }),

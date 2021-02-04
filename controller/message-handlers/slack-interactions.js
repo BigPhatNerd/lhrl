@@ -444,12 +444,16 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
 
 
         const sendWorkout = await axios.post(`${urlString}/programs/selectedProgram/enter-score/${user_id}/${id}`, data);
-
-        if(enter_score_slash === "yes") {
-
-            const user = payload.user.id;
+const user = payload.user.id;
             const userInfo = await web.users.info({ user: user });
             const passUser = userInfo.user;
+             const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+if(radioButton === "public"){
+        const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just finished a program workout 🏃‍♂️` }, config);
+    }
+        if(enter_score_slash === "yes") {
+
+            
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });

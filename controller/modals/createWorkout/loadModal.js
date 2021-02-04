@@ -1,6 +1,8 @@
 const loadModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, weight, notes } = workout;
+    const metadata = JSON.parse(payload.view.private_metadata);
+    const { paginate } = metadata;
     const load = {
         "trigger_id": trigger_id,
         view: {
@@ -14,7 +16,8 @@ const loadModal = (payload, workout, slashOrHome) => {
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
-                "view_paginate": String(0)
+                "view_paginate": String(0),
+                
 
             }),
             "title": {
@@ -73,14 +76,14 @@ const loadModal = (payload, workout, slashOrHome) => {
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Type:* " + type,
-                        "emoji": true
+                       
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Name:* " + name,
-                        "emoji": true
+                       
                     }
                 },
                 {
@@ -88,7 +91,7 @@ const loadModal = (payload, workout, slashOrHome) => {
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Description:* " + description,
-                        "emoji": true
+                      
                     }
                 },
                 {

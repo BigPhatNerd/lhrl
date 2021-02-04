@@ -1,6 +1,9 @@
 const timeModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, minutes, seconds, notes } = workout;
+    const metadata = JSON.parse(payload.view.private_metadata);
+    const { paginate } = metadata;
+
     const time = {
         "trigger_id": trigger_id,
         view: {
@@ -14,7 +17,8 @@ const timeModal = (payload, workout, slashOrHome) => {
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
-                "view_paginate": String(0)
+                "view_paginate": String(0),
+                "paginate": paginate
             }),
             "title": {
                 "type": "plain_text",

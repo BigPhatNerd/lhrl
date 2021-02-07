@@ -4,7 +4,7 @@ var CronJob = require('cron').CronJob;
 const { sugarwod, url } = require('../../../lib/keys.js');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const { CrossFit } = require('../../../models');
-const urlString = process.env.NODE_ENV === "production" ? url.produ : url.development
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const array = [];
 
 const getEverything = (apiCall) => {
@@ -53,11 +53,11 @@ const cfFunction = async () => {
 
 
 
- var job = new CronJob('* 00 3 * * 1-5', cfFunction(), null, true, 'America/Chicago');
+ var job = new CronJob('* 2 * * * *, cfFunction(), null, true, 'America/Chicago');
 
 job.start()
 
-cfFunction();
+// cfFunction();
 
 
 

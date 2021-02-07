@@ -47,7 +47,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
 //Create route for STRAVA webhook to go to Slack
 router.post('/webhook', async (req, res) => {
     try {
-       
+
         const {
             aspect_type,
             object_id,

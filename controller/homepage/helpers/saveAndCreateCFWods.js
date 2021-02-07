@@ -53,7 +53,7 @@ const cfFunction = async () => {
 
 
 
- var job = new CronJob('* 2 * * * *, cfFunction(), null, true, 'America/Chicago');
+ var job = new CronJob('* 2 * * * *', cfFunction(), null, true, 'America/Chicago');
 
 job.start()
 

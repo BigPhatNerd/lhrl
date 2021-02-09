@@ -9,6 +9,8 @@ const {
     createWorkout,
     header,
     choosePlan,
+    stravaWorkout,
+    calendar,
 
 
 
@@ -27,8 +29,8 @@ const homepage = (user, allWorkouts, wod) => {
 
         "user_id": user.id,
         "external_id": "whatever",
-         "private_metadata": "something",
-       
+        "private_metadata": "something",
+
         view: {
             "type": "home",
             "callback_id": "homepage_menu",
@@ -45,9 +47,9 @@ const homepage = (user, allWorkouts, wod) => {
                     "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
                     "alt_text": "logo"
                 },
-               
+
                 authorizePrograms(allWorkouts),
-           
+
                 header("Workouts Section"),
                 {
                     "type": "divider"
@@ -55,11 +57,11 @@ const homepage = (user, allWorkouts, wod) => {
                 createWorkout(),
                 viewOrComplete(),
                 header("Subscribe to Program"),
-               choosePlan(),
+                choosePlan(),
                 {
                     "type": "divider"
                 },
-               header(user.real_name),
+                header(user.real_name),
                 currentlySubscribed(allWorkouts),
                 {
                     "type": "divider"
@@ -72,7 +74,7 @@ const homepage = (user, allWorkouts, wod) => {
                 {
                     "type": "divider"
                 },
-                 header("Here is your goal summary for this week"),
+                header("Here is your goal summary for this week"),
                 weeklyGoals(allWorkouts),
 
                 {
@@ -85,13 +87,16 @@ const homepage = (user, allWorkouts, wod) => {
                 },
                 header("Workout of the Day"),
                 cfWOD(wod),
-
-
-
-
-
-
-
+                {
+                    "type": "divider"
+                },
+                header("Latest Strava Workout"),
+                stravaWorkout(allWorkouts),
+                {
+                    "type": "divider"
+                },
+                header("Activity Calendar"),
+                calendar(allWorkouts)
 
             ]
         }

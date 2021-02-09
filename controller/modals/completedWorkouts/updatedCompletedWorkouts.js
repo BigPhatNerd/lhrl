@@ -509,7 +509,175 @@ var maxRecords = paginateInteger + 6;
                 }, {
                     type: "divider"
                 })
-            }
+            }  else if(info[i].type === "Meters") {
+                array.push({
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Date Completed: " + date,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Type: " + info[i].type,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Name: " + info[i].name,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Description: " + info[i].description,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Meters: " + info[i].meters,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Notes: " + info[i].notes,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "actions",
+                    elements: [{
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[i]._id
+                        }, {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
+                                emoji: true
+                            },
+                            value: "edit_completed_workouts",
+                            action_id: info[i]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Delete Workout",
+                                emoji: true
+                            },
+                            value: "delete_completed_workouts",
+                            action_id: "delete" + info[i]._id,
+
+                        }
+                    ]
+                }, {
+                    type: "divider"
+                })
+            } else if(info[i].type === "Other / Text") {
+                array.push({
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Date Completed: " + date,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Type: " + info[i].type,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Name: " + info[i].name,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Description: " + info[i].description,
+                        emoji: true
+                    },
+
+                },  {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Notes: " + info[i].notes,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "actions",
+                    elements: [{
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[i]._id
+                        }, {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
+                                emoji: true
+                            },
+                            value: "edit_completed_workouts",
+                            action_id: info[i]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Delete Workout",
+                                emoji: true
+                            },
+                            value: "delete_completed_workouts",
+                            action_id: "delete" + info[i]._id,
+
+                        }
+                    ]
+                }, {
+                    type: "divider"
+                })
+            } 
         }
         
         if( paginateInteger >= 6 && (shortData.length - paginateInteger) < 7 ){

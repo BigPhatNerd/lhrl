@@ -8,7 +8,9 @@ const {
     viewOrComplete,
     createWorkout,
     header,
-    choosePlan
+    choosePlan,
+    stravaWorkout,
+    calendar
 
 
 } = require('./helpers');
@@ -25,8 +27,8 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
     const view = {
 
         "user_id": user.id,
-         "external_id": "whatever",
-        
+        "external_id": "whatever",
+
         "trigger_id": trigger_id,
         "response_action": "clear",
         view: {
@@ -35,7 +37,7 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
             "private_metadata": JSON.stringify({
                 "home_or_slash": "slash"
             }),
-              "title": {
+            "title": {
                 "type": "plain_text",
                 "text": "LHRL APP",
                 "emoji": true
@@ -51,21 +53,21 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                 "emoji": true
             },
             "blocks": [
-  
+
                 authorizePrograms(allWorkouts),
-               header("Workouts Section"),
+                header("Workouts Section"),
                 {
                     "type": "divider"
                 },
 
                 createWorkout(),
-               viewOrComplete(),
+                viewOrComplete(),
                 header("Subscribe to Program"),
-             choosePlan(),
+                choosePlan(),
                 {
                     "type": "divider"
                 },
-               header(user.real_name),
+                header(user.real_name),
                 currentlySubscribed(allWorkouts),
                 {
                     "type": "divider"
@@ -89,7 +91,17 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                 },
                 header("Workout of the Day"),
                 cfWOD(wod),
-            
+                {
+                    "type": "divider"
+                },
+                header("Latest Strava Workout"),
+                stravaWorkout(allWorkouts),
+                {
+                    "type": "divider"
+                },
+                header("Activity Calendar"),
+                calendar(allWorkouts)
+
 
 
 

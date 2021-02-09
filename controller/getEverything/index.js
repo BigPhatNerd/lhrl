@@ -7,6 +7,8 @@ const everything = {
             .populate([
                 { path: 'workouts',
                 options: { sort: { 'date': -1 } }
+            },{ path: 'stravaWorkouts',
+                options: { sort: { 'date': -1 } }
             },
                 { path: 'cfWods' },
                 { path: 'selectedProgram' },

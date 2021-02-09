@@ -1,16 +1,16 @@
-const repsModal = (payload, workout, slashOrHome) => {
+const metersModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
-    const { type, name, description, reps, notes } = workout;
-    console.log("payload: ", payload);
-    const metadata = JSON.parse(payload.view.private_metadata); 
+    const { type, name, description, meters, notes } = workout;
+    const metadata = JSON.parse(payload.view.private_metadata);
     const { paginate } = metadata;
-    const repsView = {
+
+    const metersView = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Reps",
+                "score_type": "Time",
                 "type": type,
                 "name": name,
                 "description": description,
@@ -18,12 +18,11 @@ const repsModal = (payload, workout, slashOrHome) => {
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
                 "view_paginate": String(0),
-                "paginate": String(paginate)
-
+                "paginate": paginate
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Workout",
+                "text": "Complete Meters Workout",
                 "emoji": true
             },
             "submit": {
@@ -37,7 +36,7 @@ const repsModal = (payload, workout, slashOrHome) => {
                 "emoji": true
             },
             "blocks": [
-            {
+{
             "type": "input",
             "block_id": "radio",
             "element": {
@@ -72,45 +71,41 @@ const repsModal = (payload, workout, slashOrHome) => {
                 "text": "Privacy Settings:",
                 "emoji": true
             }
-        },{
+        }
+            ,{
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Type:* " + type,
-
+                        "text": "*Type:* " + type
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Name:* " + name,
-
+                        "text": "*Name:* " + name
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Description:* " + description,
-
+                        "text": "*Description:* " + description
                     }
                 },
-
-
-
                 {
                     "type": "input",
                     "optional": true,
-                    "block_id": "reps",
+                    "block_id": "meters",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "reps"
+                        "action_id": "meters"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Reps",
+                        "text": "Meters",
                         "emoji": true
                     }
                 },
+               
                 {
                     "type": "input",
                     "optional": true,
@@ -131,7 +126,7 @@ const repsModal = (payload, workout, slashOrHome) => {
             ]
         }
     }
-    return repsView
+    return metersView
 }
 
-module.exports = repsModal;
+module.exports = metersModal;

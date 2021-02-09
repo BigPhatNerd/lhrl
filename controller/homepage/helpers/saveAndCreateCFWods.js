@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
-var CronJob = require('cron').CronJob;
+var cron = require('node-cron');
 const { sugarwod, url } = require('../../../lib/keys.js');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const { CrossFit } = require('../../../models');
@@ -48,16 +48,16 @@ const cfFunction = async () => {
 
 }
 
+cron.schedule('0 3 * * * *', ()=> console.log("running"), {
+    scheduled: true,
+    timezone: 'America/Chicago'
+});
+cron.schedule('0 3 * * * *', async () => cfFunction(), {
+    scheduled: true,
+    timezone: 'America/Chicago'
+});
 
 
-
-
-
- var job = new CronJob('* 2 * * * *', cfFunction(), null, true, 'America/Chicago');
-
-job.start()
-
-// cfFunction();
 
 
 

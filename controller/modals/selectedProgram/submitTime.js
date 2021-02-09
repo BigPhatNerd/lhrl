@@ -231,9 +231,9 @@ const metadata = JSON.parse(payload.view.private_metadata);
                 "action_id": "radio_buttons-action"
             },
             "label": {
-                "type": "mrkdwn",
-                "text": "*Privacy Settings:*",
-                
+                "type": "plain_text",
+                "text": "Privacy Settings:",
+                "emoji": true
             }
         },{
                         type: "section",

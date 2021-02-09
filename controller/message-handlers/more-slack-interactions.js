@@ -231,7 +231,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         var data;
 
-        var { minutes, seconds, rounds, reps, weight, notes } = payload.view.state.values;
+        var { minutes, seconds, rounds, reps, weight, meters, notes } = payload.view.state.values;
 
         if(score_type === "Reps") {
 
@@ -259,7 +259,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         } else if(score_type === "Time") {
             minutes = minutes.minutes.value;
             seconds = seconds.seconds.value;
-            notes = notes.notes.value;
+            notes = notes.notes.value || "No notes provided";
             data = {
                 type: score_type,
                 name: title,
@@ -272,7 +272,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         } else if(score_type === "Load") {
 
             weight = weight.weight.value;
-            notes = notes.notes.value;
+            notes = notes.notes.value || "No notes provided";
             data = {
                 type: score_type,
                 name: title,
@@ -282,12 +282,23 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
             }
         } else if(score_type === "Other / Text") {
 
-            weight = weight.weight.value;
+           
             notes = notes.notes.value;
             data = {
                 type: score_type,
                 name: title,
                 description: description,
+                notes: notes
+            }
+        } else if(score_type === "Meters") {
+
+            meters = meters.meters.value;
+            notes = notes.notes.value || "No notes provided";
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                meters: parseInt(meters),
                 notes: notes
             }
         }

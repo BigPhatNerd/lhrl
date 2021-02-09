@@ -4,6 +4,13 @@ const finishedWorkoutSchema = new Schema({
     userId: {
         type: String
     },
+    stravaId: {
+        type: String
+    },
+
+    stravaAvatar: {
+        type: String
+    },
     name: {
         type: String
     },

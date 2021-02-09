@@ -8,6 +8,13 @@ const {
     accumulatedReps,
     graphPercentage
 } = require('../../message-handlers/helpers/weeklyGoals');
+const {
+    activityType,
+    getMiles,
+    getKilometers,
+    timeOfWorkout,
+    avgMile
+} = require('../../../utils/strava');
 var weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear)
 var utc = require('dayjs/plugin/utc')
@@ -526,6 +533,71 @@ module.exports = {
 
         return noGoals
     },
+
+    stravaWorkout: (allWorkouts) => {
+        try {
+
+            const strava = allWorkouts.data[0].finishedWorkouts.filter(workout => {
+                return workout.type === "Run"
+            })
+
+            if(strava[0] !== undefined) {
+                const { type, distance, seconds } = strava[0];
+
+                const lastStravaWorkout = {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Type of Exercise: " + activityType(type) + "\n" +
+                            "Distance: " + getMiles(distance) + "miles / " + getKilometers(distance) + "km's\n" +
+                            "Time: " + timeOfWorkout(seconds) + "\n" +
+                            "Average Speed: " + avgMile(seconds, distance) + "\n"
+                    },
+                    "accessory": {
+                        "type": "image",
+                        "image_url": allWorkouts.data[0].stravaAvatar,
+                        "alt_text": "alt text for image"
+                    }
+                };
+
+                return lastStravaWorkout
+            }
+            const noWorkout = {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "No Strava workouts have been completed."
+                }
+            };
+            return noWorkout
+        } catch (err) {
+
+            console.error(err.message);
+
+        }
+    },
+
+    calendar: (allWorkouts) => {
+
+        const today = dayjs().format('YYYY-MM-D');
+        console.log("today", today);
+        const datePicker = {
+    "type": "actions",
+    "block_id": "calendar",
+    "elements": [{
+        "type": "datepicker",
+        "initial_date": today,
+        "placeholder": {
+            "type": "plain_text",
+            "text": "Select a date",
+            "emoji": true
+        },
+        "action_id": "calendar",
+
+    }]
+}
+        return datePicker
+    }
 
 
 

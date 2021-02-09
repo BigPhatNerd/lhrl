@@ -4,7 +4,9 @@ const {
     todaysWorkout,
     weeklyGoals,
     enterGoalReps,
-    authorizePrograms
+    authorizePrograms,
+    stravaWorkout,
+    calendar
 
 
 } = require('./helpers');
@@ -267,6 +269,16 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
                 },
 
                 cfWOD(wod),
+                {
+                    "type": "divider"
+                },
+                header("Latest Strava Workout"),
+                stravaWorkout(allWorkouts),
+                {
+                    "type": "divider"
+                },
+                header("Activity Calendar"),
+                calendar(allWorkouts)
 
 
 

@@ -675,6 +675,135 @@ const submitScore = (payload, wod, slashOrHome) => {
 
         }
         return load
+    } else if(type === "Meters") {
+        const load = {
+            "trigger_id": trigger_id,
+            // 'external_id': _id,
+            view: {
+                "type": "modal",
+                "callback_id": "cf_daily",
+                "private_metadata": JSON.stringify({
+                    "title": title,
+                    "description": description,
+                    "score_type": type,
+                    "home_or_slash": slashOrHome,
+                    "id": _id,
+                }),
+
+
+                "title": {
+                    "type": "plain_text",
+                    "text": "CF WOD",
+                    "emoji": true
+                },
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true,
+
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Close",
+                    "emoji": true
+                },
+                "blocks": [{
+            "type": "input",
+            "block_id": "radio",
+            "element": {
+                "type": "radio_buttons",
+                "initial_option": {
+                    "text": {
+                            "type": "mrkdwn",
+                            "text": "*Keep this private.* :shushing_face:"
+                        },
+                        "value": "private"
+                },
+                "options": [
+                    {
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Keep this private.* :shushing_face:"
+                        },
+                        "value": "private"
+                    },
+                    {
+                       "text": {
+                            "type": "mrkdwn",
+                            "text": "*Share with channel* :loud_sound:"
+                        },
+                        "value": "public"
+                    }
+                ],
+                "action_id": "radio_buttons-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Privacy Settings:",
+                "emoji": true
+            }
+        },{
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*Title:* ${title}`
+
+                        },
+
+
+                    }, {
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*Description:* ${description}`
+
+                        },
+
+
+                    }, {
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*Score Type:* ${type}`
+
+                        },
+
+
+                    },
+
+ {
+                        "type": "input",
+                        "optional": false,
+                        "block_id": "meters",
+                        "element": {
+                            "type": "plain_text_input",
+                            "action_id": "meters"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Meters",
+                            "emoji": true
+                        }
+                    },
+                    {
+                        "type": "input",
+                        "block_id": "notes",
+                        "element": {
+                            "type": "plain_text_input",
+                            "multiline": true,
+                            "action_id": "notes"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Notes",
+                            "emoji": true
+                        }
+                    },
+                ]
+            }
+
+        }
+        return load
     }
 
 }

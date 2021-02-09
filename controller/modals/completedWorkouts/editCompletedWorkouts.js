@@ -1,6 +1,6 @@
 const editCompletedWorkout = (payload, workoutSelected, slashOrHome) => {
     const { trigger_id } = payload;
-    const { _id, type, name, weight, minutes, seconds, reps, rounds, description, notes } = workoutSelected;
+    const { _id, type, name, weight, minutes, seconds, reps, rounds, description, meters,notes } = workoutSelected;
 const metadata = JSON.parse(payload.view.private_metadata);
 var { paginate } = metadata;
 var paginateInteger = parseInt(paginate);
@@ -527,6 +527,187 @@ console.log("metadata in editCompletedWorkouts: ", metadata);
             }
         }
         return timeModal
+    } else if(workoutSelected.type === "Meters") {
+        const metersModal = {
+            "trigger_id": trigger_id,
+            "external_id": _id,
+            view: {
+                "type": "modal",
+                "callback_id": "edit_completed_workout",
+                "private_metadata": JSON.stringify({
+                    "id": _id,
+                    "score_type": "Load",
+                     "homeModal_view_id": payload.view.root_view_id,
+                    "home_or_slash": slashOrHome,
+                     "paginate": paginateInteger
+                }),
+                "title": {
+                    "type": "plain_text",
+                    "text": "Edit Completed Workout",
+                    "emoji": true
+                },
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Close",
+                    "emoji": true
+                },
+                "blocks": [{
+                        "type": "input",
+                        "block_id": "name",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": name,
+                            "action_id": "name"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Name",
+                            "emoji": true
+                        }
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "description",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": description,
+                            "multiline": true,
+                            "action_id": "description"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Description",
+                            "emoji": true
+                        }
+                    },
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "meters",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": meters.toString(),
+                            "action_id": "meters"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Meters",
+                            "emoji": true
+                        }
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "notes",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": notes,
+                            "multiline": true,
+                            "action_id": "notes"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Notes",
+                            "emoji": true
+                        }
+                    },
+
+
+                ]
+            }
+        }
+        return metersModal
+    } else if(workoutSelected.type === "Other / Text") {
+        const otherModal = {
+            "trigger_id": trigger_id,
+            "external_id": _id,
+            view: {
+                "type": "modal",
+                "callback_id": "edit_completed_workout",
+                "private_metadata": JSON.stringify({
+                    "id": _id,
+                    "score_type": "Load",
+                     "homeModal_view_id": payload.view.root_view_id,
+                    "home_or_slash": slashOrHome,
+                     "paginate": paginateInteger
+                }),
+                "title": {
+                    "type": "plain_text",
+                    "text": "Edit Completed Workout",
+                    "emoji": true
+                },
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Close",
+                    "emoji": true
+                },
+                "blocks": [{
+                        "type": "input",
+                        "block_id": "name",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": name,
+                            "action_id": "name"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Name",
+                            "emoji": true
+                        }
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "description",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": description,
+                            "multiline": true,
+                            "action_id": "description"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Description",
+                            "emoji": true
+                        }
+                    },
+
+                    {
+                        "type": "input",
+                        "optional": true,
+                        "block_id": "notes",
+                        "element": {
+                            "type": "plain_text_input",
+                            "initial_value": notes,
+                            "multiline": true,
+                            "action_id": "notes"
+                        },
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Notes",
+                            "emoji": true
+                        }
+                    },
+
+
+                ]
+            }
+        }
+        return otherModal
     }
 
 };

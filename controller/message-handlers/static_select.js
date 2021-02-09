@@ -16,8 +16,9 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
         value = payload.actions[0].selected_option.value;
 
         //SELECT WORKOUT TYPE  to create a workout
-        if(value === "reps" || value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance") {
+        if(value === "reps" || value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance" || value === "meters") {
             if(payload.view.callback_id === "homepage_modal") {
+                console.log("\n\n\ntrigger_id in static select: ", payload);
                 const create = await createWorkoutModal(payload, value, "slash")
                 web.views.push(create);
                 return

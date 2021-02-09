@@ -118,7 +118,7 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         const username = payload.user.username;
         const user_id = payload.user.id;
         var data;
-        var { minutes, seconds, rounds, reps, weight, miles, notes } = payload.view.state.values;
+        var { minutes, seconds, rounds, reps, weight, miles, meters, notes } = payload.view.state.values;
         console.log(" here?");
         if(score_type === "Reps") {
             reps = reps.reps.value || 0;
@@ -175,6 +175,26 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
                 miles: parseInt(miles),
                 notes: notes
             }
+        }else if(score_type === "Meters") {
+            meters = meters.meters.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            data = {
+                type: score_type,
+                name: name,
+                description: description,
+                meters: parseInt(meters),
+                notes: notes
+            }
+        } else if(score_type === "Other / Text") {
+
+           
+            notes = notes.notes.value;
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
+                notes: notes
+            }
         }
 const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
 
@@ -224,7 +244,7 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
         const user = payload.user.id;
         const userInfo = await web.users.info({ user: user });
         const passUser = userInfo.user;
-        var { minutes, seconds, rounds, reps, weight, notes, name, description } = payload.view.state.values;
+        var { minutes, seconds, rounds, reps, weight, notes, name, miles, meters,description } = payload.view.state.values;
 
         if(score_type === "Reps") {
 
@@ -280,6 +300,34 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
                 name: name,
                 description: description,
                 weight: parseInt(weight),
+                notes: notes
+            }
+        } else if(score_type === "Distance") {
+            miles = miles.miles.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            data = {
+                type: score_type,
+                name: name,
+                description: description,
+                miles: parseInt(miles),
+                notes: notes
+            }
+        }else if(score_type === "Meters") {
+            meters = meters.meters.value || 0;
+            notes = notes.notes.value || "No notes provided.";
+            data = {
+                type: score_type,
+                name: name,
+                description: description,
+                meters: parseInt(meters),
+                notes: notes
+            }
+        } else if(score_type === "Other / Text") {
+            notes = notes.notes.value || "No notes provided."
+            data = {
+                type: score_type,
+                name: title,
+                description: description,
                 notes: notes
             }
         }

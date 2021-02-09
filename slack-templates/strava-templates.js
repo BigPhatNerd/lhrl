@@ -1,7 +1,9 @@
 const {
     activityType,
     getMiles,
-    getKilometers
+    getKilometers,
+    timeOfWorkout,
+    avgMile
 } = require('../utils/strava');
 const slackTemplates = {
     stravaHook(response, username, avatar) {
@@ -17,18 +19,18 @@ const slackTemplates = {
             map
         } = response;
         array = [];
+
         const blockData = (username, distance, elapsed_time, moving_time, average_speed, max_speed) => {
             array.push({
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": " Athlete: " + username + "\n" +
+                    "text": "Athlete: " + username + "\n" +
                         "Type of Exercise: " + activityType(type) + "\n" +
-                        "Distance: " + getMiles(distance) + "miles. " + getKilometers(distance) + "km's\n" +
-                        "Elapsed Time: " + elapsed_time + "\n" +
-                        "Moving Time: " + moving_time + "\n" +
-                        "Average Speed: " + average_speed + "\n" +
-                        "Max Speed: " + max_speed + ""
+                        "Distance: " + getMiles(distance) + "miles / " + getKilometers(distance) + "km's\n" +
+                        "Time: " + timeOfWorkout(elapsed_time) + "\n" +
+                        "Average Speed: " + avgMile(elapsed_time, distance) + "\n"
+
 
                 },
                 "accessory": {

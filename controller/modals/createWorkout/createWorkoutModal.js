@@ -13,6 +13,8 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
             return "Load"
         } else if(value === "distance") {
             return "Distance"
+        } else if(value === "meters") {
+            return "Meters"
         }
     };
     const description = (value) => {
@@ -26,6 +28,8 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
             return "Load Workout"
         } else if(value === "distance") {
             return "Distance Workout"
+        } else if(value === "meters") {
+            return "Meters Workout"
         }
     };
     const modal = {

@@ -8,7 +8,7 @@ const editWorkout = (payload, workoutSelected, slashOrHome) => {
 var { view_paginate } = metadata;
 var paginateInteger = parseInt(view_paginate);
 
-    const roundRepsModal = {
+    const editModal = {
         "trigger_id": trigger_id,
         "external_id": _id,
         view: {
@@ -92,6 +92,14 @@ var paginateInteger = parseInt(view_paginate);
                                 },
                                 "value": "Distance"
                             },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "Meters",
+                                    "emoji": true
+                                },
+                                "value": "Meters"
+                            },
 
 
                         ],
@@ -134,7 +142,7 @@ var paginateInteger = parseInt(view_paginate);
             ]
         }
     }
-    return roundRepsModal
+    return editModal
 
 
 

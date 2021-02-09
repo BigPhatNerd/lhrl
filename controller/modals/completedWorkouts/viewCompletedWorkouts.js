@@ -497,6 +497,175 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 }, {
                     type: "divider"
                 })
+            }  else if(info[paginate].type === "Meters") {
+                array.push({
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Date Completed: " + date,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Type: " + info[paginate].type,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Name: " + info[paginate].name,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Description: " + info[paginate].description,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Meters: " + info[paginate].meters,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Notes: " + info[paginate].notes,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "actions",
+                    elements: [{
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[paginate]._id
+                        }, {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
+                                emoji: true
+                            },
+                            value: "edit_completed_workouts",
+                            action_id: info[paginate]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Delete Workout",
+                                emoji: true
+                            },
+                            value: "delete_completed_workouts",
+                            action_id: "delete" + info[paginate]._id,
+
+                        }
+                    ]
+                }, {
+                    type: "divider"
+                })
+            } else if(info[paginate].type === "Other / Text") {
+                array.push({
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Date Completed: " + date,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Type: " + info[paginate].type,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Name: " + info[paginate].name,
+                        emoji: true
+                    },
+
+
+                }, {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Description: " + info[paginate].description,
+                        emoji: true
+                    },
+
+                },   {
+                    type: "section",
+                    text: {
+                        type: "plain_text",
+                        text: "Notes: " + info[paginate].notes,
+                        emoji: true
+                    },
+
+                }, {
+                    type: "actions",
+                    elements: [{
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Redo Workout",
+                                emoji: true
+                            },
+                            value: "complete_completed_workouts",
+                            action_id: "complete" + info[paginate]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Edit Completed Workout",
+                                emoji: true
+                            },
+                            value: "edit_completed_workouts",
+                            action_id: info[paginate]._id
+                        },
+                        {
+                            type: "button",
+                            text: {
+                                type: "plain_text",
+                                text: "Delete Workout",
+                                emoji: true
+                            },
+                            value: "delete_completed_workouts",
+                            action_id: "delete" + info[paginate]._id,
+
+                        }
+                    ]
+                }, {
+                    type: "divider"
+                })
             }
         }
          array.push({

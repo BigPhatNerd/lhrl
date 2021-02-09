@@ -27,7 +27,7 @@ router.get('/find', async (req, res) => {
 
 //deauthorize strava by removing access and refresh tokens
 router.put('/deauth/:stravaId', async (req, res) => {
-    
+
     const stravaId = req.params.stravaId;
     const update = {
         stravaAccessToken: '',
@@ -41,7 +41,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
     const { team_id, api_app_id } = user
 
     res.json(user)
-    
+
 })
 
 //Create route for STRAVA webhook to go to Slack
@@ -76,8 +76,18 @@ router.post('/webhook', async (req, res) => {
             max_speed,
             map
         } = stravaData.data[0];
+        const stravaBody = {
+            type: type,
+            distance: distance,
+            seconds: elapsed_time,
+            stravaId: owner_id
+
+
+        }
+        const finishedWorkouts = await FinishedWorkout.create(stravaBody);
+        const addFinishedWorkout = await User.findOneAndUpdate({ stravaId: owner_id }, { $push: { finishedWorkouts: finishedWorkouts } }, { new: true })
         //Save the information to mongoose by searching for stravaId
-        
+
         const body = {
             type: type,
             owner_id: athlete.id,
@@ -89,6 +99,7 @@ router.post('/webhook', async (req, res) => {
             max_speed: max_speed,
             stravaMap: map.summary_polyline
         };
+
         Strava.create(body)
             .then(({ _id }) => {
                 return User.findOneAndUpdate({ stravaId: owner_id }, { $addToSet: { stravaWorkouts: _id } }, { new: true })
@@ -104,6 +115,7 @@ router.post('/webhook', async (req, res) => {
                 axios.post(slack.lhrl_Webhook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
 
             })
+
 
         res.status(200).send("EVENT_RECEIVED");
     } catch (err) {
@@ -140,7 +152,7 @@ router.route('/loginfromslack')
             req.session.userId = user_id;
             const deleteSessions = await Session.deleteMany({});
             const createSession = await Session.create({ userId: user_id, team_id: team_id, api_app_id: api_app_id });
-            const createUser = await User.findOneAndUpdate({ user_id: user_id  }, { $set: { team_id: team_id, user_name: user_name } }, { upsert: true, new: true });
+            const createUser = await User.findOneAndUpdate({ user_id: user_id }, { $set: { team_id: team_id, user_name: user_name } }, { upsert: true, new: true });
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.goto(`${urlString}/strava/login`);
@@ -159,7 +171,7 @@ router.get('/login', passport.authenticate('strava', {
 }));
 
 router.get('/redirect', passport.authenticate('strava'), async (req, res) => {
-  
+
     const session = await Session.find({});
     const { team_id, api_app_id } = session[0];
     res.redirect(`${urlString}/auth`)

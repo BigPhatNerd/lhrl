@@ -1,4 +1,4 @@
-const loadModal = (payload, workout, slashOrHome) => {
+const calendarLoad = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, weight, notes } = workout;
     const metadata = JSON.parse(payload.view.private_metadata);
@@ -7,7 +7,7 @@ const loadModal = (payload, workout, slashOrHome) => {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "complete_workout",
+            "callback_id": "calendar_workout",
             "private_metadata": JSON.stringify({
                 "score_type": "Load",
                 "type": type,
@@ -16,8 +16,7 @@ const loadModal = (payload, workout, slashOrHome) => {
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
-                "view_paginate": String(0),
-                "paginate": paginate
+
 
 
             }),
@@ -129,4 +128,4 @@ const loadModal = (payload, workout, slashOrHome) => {
     return load
 }
 
-module.exports = loadModal;
+module.exports = calendarLoad;

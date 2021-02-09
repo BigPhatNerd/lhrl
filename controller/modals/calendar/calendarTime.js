@@ -1,29 +1,27 @@
-const loadModal = (payload, workout, slashOrHome) => {
+const calendarTime = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
-    const { type, name, description, weight, notes } = workout;
+    const { type, name, description, minutes, seconds, notes } = workout;
     const metadata = JSON.parse(payload.view.private_metadata);
     const { paginate } = metadata;
-    const load = {
+
+    const time = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "complete_workout",
+            "callback_id": "calendar_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Load",
+                "score_type": "Time",
                 "type": type,
                 "name": name,
                 "description": description,
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
-                "view_paginate": String(0),
-                "paginate": paginate
-
 
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Load Workout",
+                "text": "Complete Timed Workout",
                 "emoji": true
             },
             "submit": {
@@ -74,35 +72,46 @@ const loadModal = (payload, workout, slashOrHome) => {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Type:* " + type,
-
+                        "text": "*Type:* " + type
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Name:* " + name,
-
+                        "text": "*Name:* " + name
                     }
-                },
-                {
+                }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Description:* " + description,
-
+                        "text": "*Description:* " + description
                     }
                 },
                 {
                     "type": "input",
-                    "block_id": "weight",
+                    "optional": true,
+                    "block_id": "minutes",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "weight"
+                        "action_id": "minutes"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Weight in lbs",
+                        "text": "Minutes",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "seconds",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "seconds"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Seconds",
                         "emoji": true
                     }
                 },
@@ -126,7 +135,7 @@ const loadModal = (payload, workout, slashOrHome) => {
             ]
         }
     }
-    return load
+    return time
 }
 
-module.exports = loadModal;
+module.exports = calendarTime;

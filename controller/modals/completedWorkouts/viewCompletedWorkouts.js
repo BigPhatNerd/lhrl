@@ -3,7 +3,7 @@ var dayjs = require("dayjs");
 const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
     const filteredWorkouts = workouts.data[0].finishedWorkouts.filter(workout => workout.type !== undefined);
-    
+
     var paginate = 0;
     var maxRecords = paginate + 6;
     var shortData;
@@ -497,7 +497,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 }, {
                     type: "divider"
                 })
-            }  else if(info[paginate].type === "Meters") {
+            } else if(info[paginate].type === "Meters") {
                 array.push({
                     type: "section",
                     text: {
@@ -621,7 +621,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                         emoji: true
                     },
 
-                },   {
+                }, {
                     type: "section",
                     text: {
                         type: "plain_text",
@@ -668,10 +668,10 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 })
             }
         }
-         array.push({
+        array.push({
             "type": "actions",
             "elements": [
-               
+
                 {
                     "type": "button",
                     "text": {
@@ -684,7 +684,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 }
             ]
         });
-         return array
+        return array
     }
 
 
@@ -725,7 +725,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
 
         }
     }
-    
+
     return mapWorkouts
 }
 

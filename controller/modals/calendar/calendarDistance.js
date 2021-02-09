@@ -1,29 +1,26 @@
-const loadModal = (payload, workout, slashOrHome) => {
+const calendarDistance = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
-    const { type, name, description, weight, notes } = workout;
+    const { type, name, description, minutes, seconds, notes } = workout;
     const metadata = JSON.parse(payload.view.private_metadata);
     const { paginate } = metadata;
-    const load = {
+    const distance = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "complete_workout",
+            "callback_id": "calendar_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Load",
+                "score_type": "Time",
                 "type": type,
                 "name": name,
                 "description": description,
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
-                "view_paginate": String(0),
-                "paginate": paginate
-
 
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Load Workout",
+                "text": "Complete Distance Workout",
                 "emoji": true
             },
             "submit": {
@@ -75,37 +72,38 @@ const loadModal = (payload, workout, slashOrHome) => {
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Type:* " + type,
-
+                        "emoji": true
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Name:* " + name,
-
+                        "emoji": true
                     }
-                },
-                {
+                }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Description:* " + description,
-
+                        "emoji": true
                     }
                 },
                 {
                     "type": "input",
-                    "block_id": "weight",
+                    "optional": true,
+                    "block_id": "miles",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "weight"
+                        "action_id": "miles"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Weight in lbs",
+                        "text": "Miles",
                         "emoji": true
                     }
                 },
+
                 {
                     "type": "input",
                     "optional": true,
@@ -126,7 +124,7 @@ const loadModal = (payload, workout, slashOrHome) => {
             ]
         }
     }
-    return load
+    return distance
 }
 
-module.exports = loadModal;
+module.exports = calendarDistance;

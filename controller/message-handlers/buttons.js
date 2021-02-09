@@ -13,7 +13,16 @@ const timeModal = require('../modals/createWorkout/timeModal');
 const distanceModal = require("../modals/createWorkout/distanceModal");
 const editWorkout = require('../modals/createWorkouts/editWorkout.js');
 const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedWorkouts');
-const viewCalendar = require('../modals/calendar/viewCalendar')
+const viewCalendarWorkouts = require('../modals/calendar/viewCalendar');
+const editCalendarWorkout = require('../modals/calendar/editCalendarworkout');
+const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar');
+const calendarDistance = require('../modals/calendar/calendarDistance');
+const calendarLoad = require('../modals/calendar/calendarLoad');
+const calendarMeters = require('../modals/calendar/calendarMeters');
+const calendarOther = require('../modals/calendar/calendarOther');
+const calendarReps = require('../modals/calendar/calendarReps');
+const calendarRoundsPlusReps = require('../modals/calendar/calendarRoundsPlusReps');
+const calendarTime = require('../modals/calendar/calendarTime');
 const updatedWorkouts = require('../modals/createWorkouts/updatedWorkouts.js');
 const editCompletedWorkout = require('../modals/completedWorkouts/editCompletedWorkouts');
 const updatedCompletedWorkouts = require('../modals/completedWorkouts/updatedCompletedWorkouts');
@@ -32,26 +41,25 @@ const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf
 //buttons pressed from the homepage view
 buttons.action({ type: 'datepicker' }, async (payload, respond) => {
 
-
-    console.log("\n\n\n\n\nYOOOOO")
     const user = payload.user.id;
     const userInfo = await web.users.info({ user: user });
     const passUser = userInfo.user;
 
     const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-    console.log("\n\n\n\nI am here!!!\n\n\n\n\n")
-    if(home_or_slash === "slash") {
-        if(payload.view.callback_id === "homepage_modal") {
-            console.log("I made it here");
-            const calendar = await viewCalendar(payload, allWorkouts, "slash");
-            web.views.push(calendar);
-            return
-        }
-        const calendar = await viewCalendar(payload, allWorkouts, "slash");
+
+
+
+    if(payload.view.callback_id === "homepage_modal") {
+
+        const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
         web.views.push(calendar);
         return
-
     }
+    const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
+    web.views.open(calendar);
+    return
+
+
 
 
 })
@@ -257,7 +265,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
                 const modal = await loadModal(payload, workoutSelected[0], "home")
                 web.views.push(modal);
                 return
-            } else if(workoutSelected[0].type === "Other") {
+            } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
                     const modal = await otherModal(payload, workoutSelected[0], "slash")
@@ -405,7 +413,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
                 const modal = await loadModal(payload, workoutSelected[0], "home")
                 web.views.push(modal);
                 return
-            } else if(workoutSelected[0].type === "Other") {
+            } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
                     const modal = await otherModal(payload, workoutSelected[0], "slash")
@@ -513,6 +521,136 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             }
 
         }
+
+
+        //INSIDE CALENDAR
+        //REDO WORKOUT inside viewCalendar
+        else if(value === "calendar_workouts") {
+            console.log("what");
+            console.log("payload: ", payload);
+            const metadata = JSON.parse(payload.view.private_metadata);
+            console.log("metadata: ", metadata);
+            const { home_or_slash, homeModal_view_id } = metadata;
+            viewId = payload.container.view_id;
+            buttonPressed = buttonPressed.replace("calendar", "");
+            const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
+            //
+            //
+            if(workoutSelected[0].type === "Reps") {
+                if(home_or_slash === "slash") {
+                    const modal = await calendarReps(payload, workoutSelected[0], "slash")
+                    web.views.push(modal);
+                    return
+
+                }
+                const modal = await calendarReps(payload, workoutSelected[0], "home")
+                web.views.push(modal);
+                return
+            } else if(workoutSelected[0].type === "Rounds + Reps") {
+                if(home_or_slash === "slash") {
+                    console.log("whatever");
+                    const modal = await calendarRoundsPlusReps(payload, workoutSelected[0], "slash")
+                    web.views.push(modal);
+                    return
+
+                }
+                web.views.push(modal);
+                const modal = await calendarRoundsPlusReps(payload, workoutSelected[0], "home")
+                return
+            } else if(workoutSelected[0].type === "Time") {
+                if(home_or_slash === "slash") {
+                    const modal = await calendarTime(payload, workoutSelected[0], "slash")
+                    web.views.push(modal)
+                    return
+                }
+                const modal = await calendarTime(payload, workoutSelected[0], "home")
+                web.views.push(modal);
+                return
+
+            } else if(workoutSelected[0].type === "Load") {
+
+                if(home_or_slash === "slash") {
+                    const modal = await calendarLoad(payload, workoutSelected[0], "slash")
+                    web.views.push(modal)
+                    return
+                }
+                const modal = await calendarLoad(payload, workoutSelected[0], "home")
+                web.views.push(modal);
+                return
+            } else if(workoutSelected[0].type === "Other / Text") {
+
+                if(home_or_slash === "slash") {
+                    const modal = await calendarOther(payload, workoutSelected[0], "slash")
+                    web.views.push(modal)
+                    return
+                }
+                const modal = await calendarOther(payload, workoutSelected[0], "home")
+                web.views.push(modal);
+                return
+
+            } else if(workoutSelected[0].type === "Distance") {
+                if(home_or_slash === "slash") {
+                    const modal = await calendarDistance(payload, workoutSelected[0], "slash")
+                    web.views.push(modal)
+                    return
+                }
+                const modal = await calendarDistance(payload, workoutSelected[0], "home")
+                web.views.push(modal);
+                return
+            } else if(workoutSelected[0].type === "Meters") {
+                if(home_or_slash === "slash") {
+                    const modal = await calendarMeters(payload, workoutSelected[0], "slash")
+                    web.views.push(modal)
+                    return
+                }
+                const modal = await calendarMeters(payload, workoutSelected[0], "home")
+                web.views.push(modal);
+                return
+            }
+
+        }
+
+        //EDIT COMPLETE WORKOUT inside of CALENDAR Workouts calendar/editCalendarWorkout.js
+        else if(value === "edit_calendar_workouts") {
+            viewId = payload.container.view_id;
+            buttonPressed = buttonPressed.replace("delete", "");
+            const metadata = JSON.parse(payload.view.private_metadata);
+            const { home_or_slash } = metadata;
+            console.log("home_or_slash: ", home_or_slash);
+            const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
+            if(home_or_slash === "slash") {
+                const edit = await editCalendarWorkout(payload, workoutSelected[0], "slash")
+                web.views.push(edit);
+                return
+            }
+
+            const edit = await editCalendarWorkout(payload, workoutSelected[0], "home")
+            web.views.push(edit);
+            return
+        }
+        //DELETE WORKOUT inside of Workouts Completed 
+        else if(value === "delete_calendar_workouts") {
+            buttonPressed = buttonPressed.replace("delete", "");
+            const metadata = JSON.parse(payload.view.private_metadata);
+            const { home_or_slash } = metadata;
+            const deleteWorkout = await FinishedWorkout.deleteOne({ _id: buttonPressed });
+            const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
+            if(home_or_slash === "slash") {
+                const workoutIndex = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "slash");
+                web.views.update(workoutIndex);
+                return
+            }
+            const workoutIndex = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "home");
+            web.views.update(workoutIndex);
+            return
+        }
+
+
+
+
+
+
+
 
         //AUTHORIZE STRAVA (at the very top of the page)
         else if(value === 'Authorize Strava') {

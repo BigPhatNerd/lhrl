@@ -28,18 +28,18 @@ const getEverything = (apiCall) => {
 }
 const cfFunction = async () => {
     try {
-        if(process.env.NODE_ENV === "production"){
-        var now = new Date();
-        console.log("RUNNING CRON JOB AT: ", now.toUTCString());
-        const getCFWod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-        const getObcfWod = await axios.get(`${urlString}/sugarwod/obcf-wod`, { headers: sugarWodConfig });
-        getEverything(getCFWod.data);
-        getEverything(getObcfWod.data);
-        console.log("ARRAY: ", array);
-        //Have run once a day and save all of these to database. 
-        const addCFWods = await CrossFit.collection.insertMany(array, { ordered: false });
-        console.log('addCFWod: ', addCFWods);
-    }
+        if(process.env.NODE_ENV === "production") {
+            var now = new Date();
+            console.log("RUNNING CRON JOB AT: ", now.toUTCString());
+            const getCFWod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+            const getObcfWod = await axios.get(`${urlString}/sugarwod/obcf-wod`, { headers: sugarWodConfig });
+            getEverything(getCFWod.data);
+            getEverything(getObcfWod.data);
+            console.log("ARRAY: ", array);
+            //Have run once a day and save all of these to database. 
+            const addCFWods = await CrossFit.collection.insertMany(array, { ordered: false });
+            console.log('addCFWod: ', addCFWods);
+        }
     } catch (err) {
 
         console.error(err.message);
@@ -48,11 +48,11 @@ const cfFunction = async () => {
 
 }
 
-cron.schedule('0 3 * * * *', ()=> console.log("running"), {
+cron.schedule('0 0 3 * * *', () => console.log("running"), {
     scheduled: true,
     timezone: 'America/Chicago'
 });
-cron.schedule('0 3 * * * *', async () => cfFunction(), {
+cron.schedule('0 0 3 * * *', async () => cfFunction(), {
     scheduled: true,
     timezone: 'America/Chicago'
 });

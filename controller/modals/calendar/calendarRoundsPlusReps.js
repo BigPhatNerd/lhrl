@@ -1,29 +1,26 @@
-const loadModal = (payload, workout, slashOrHome) => {
+const calendarRoundsPlusReps = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
-    const { type, name, description, weight, notes } = workout;
+    const { type, name, description, rounds, reps, notes } = workout;
     const metadata = JSON.parse(payload.view.private_metadata);
     const { paginate } = metadata;
-    const load = {
+    const roundsPlusReps = {
         "trigger_id": trigger_id,
         view: {
             "type": "modal",
-            "callback_id": "complete_workout",
+            "callback_id": "calendar_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Load",
+                "score_type": "Rounds + Reps",
                 "type": type,
                 "name": name,
                 "description": description,
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
-                "view_paginate": String(0),
-                "paginate": paginate
-
 
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Load Workout",
+                "text": "Complete Workout",
                 "emoji": true
             },
             "submit": {
@@ -84,8 +81,7 @@ const loadModal = (payload, workout, slashOrHome) => {
                         "text": "*Name:* " + name,
 
                     }
-                },
-                {
+                }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
@@ -93,16 +89,33 @@ const loadModal = (payload, workout, slashOrHome) => {
 
                     }
                 },
+
+
                 {
                     "type": "input",
-                    "block_id": "weight",
+                    "optional": true,
+                    "block_id": "rounds",
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "weight"
+                        "action_id": "rounds"
                     },
                     "label": {
                         "type": "plain_text",
-                        "text": "Weight in lbs",
+                        "text": "Rounds",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "input",
+                    "optional": true,
+                    "block_id": "reps",
+                    "element": {
+                        "type": "plain_text_input",
+                        "action_id": "reps"
+                    },
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Reps",
                         "emoji": true
                     }
                 },
@@ -126,7 +139,7 @@ const loadModal = (payload, workout, slashOrHome) => {
             ]
         }
     }
-    return load
+    return roundsPlusReps
 }
 
-module.exports = loadModal;
+module.exports = calendarRoundsPlusReps;

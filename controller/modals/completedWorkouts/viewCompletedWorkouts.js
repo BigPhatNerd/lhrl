@@ -1,4 +1,11 @@
 var dayjs = require("dayjs");
+const {
+    activityType,
+    getMiles,
+    getKilometers,
+    timeOfWorkout,
+    avgMile
+} = require('../../../utils/strava');
 
 const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
@@ -36,7 +43,42 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
             const date = dayjs(info[paginate].date).format('dddd MMMM D YYYY');
 
             ///Beginning to test different workout types below:
-            if(info[paginate].type === "Reps") {
+         if(info[paginate].type === "Run") {
+            array.push(
+            {
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: "*Date Completed:* " + workoutDate,
+                       
+                    },
+
+
+                },
+                 {
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: "*Strava Upload*",
+                        
+                    },
+
+
+                },{
+                "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Type of Exercise:* " + activityType(info[paginate].type) + "\n" +
+                            "*Distance:* " + getMiles(info[paginate].distance) + "miles / " + getKilometers(info[i].distance) + "km's\n" +
+                            "*Time:* " + timeOfWorkout(info[paginate].seconds) + "\n" +
+                            "*Average Speed:* " + avgMile(info[paginate].seconds, info[paginate].distance) + "\n"
+                    },
+            },
+            {
+                    "type": "divider"
+                })
+
+        }   else if(info[paginate].type === "Reps") {
                 array.push({
                     type: "section",
                     text: {

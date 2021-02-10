@@ -117,6 +117,7 @@ const { calendar_date } = metadata;
                     "score_type": "Rounds + Reps",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
 
                 }),
                 "title": {
@@ -231,6 +232,7 @@ const { calendar_date } = metadata;
                     "score_type": "Time",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
 
                 }),
                 "title": {
@@ -345,6 +347,7 @@ const { calendar_date } = metadata;
                     "score_type": "Load",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
 
                 }),
                 "title": {
@@ -443,6 +446,7 @@ const { calendar_date } = metadata;
                     "score_type": "Time",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
 
                 }),
                 "title": {
@@ -541,6 +545,7 @@ const { calendar_date } = metadata;
                     "score_type": "Load",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
 
                 }),
                 "title": {
@@ -639,6 +644,7 @@ const { calendar_date } = metadata;
                     "score_type": "Load",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
 
                 }),
                 "title": {

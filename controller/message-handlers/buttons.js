@@ -69,9 +69,9 @@ buttons.action({ type: 'datepicker' }, async (payload, respond) => {
         const { home_or_slash } = metadata;
         const user_id = payload.user.id;
         const workouts = await axios.get(`${urlString}/finishedWorkouts/${user}`)
-
+        
         if(home_or_slash === "slash") {
-
+           
             const updated = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "slash");
             web.views.update(updated)
             return

@@ -1,9 +1,17 @@
 const axios = require('axios');
 var dayjs = require("dayjs");
+const {
+    activityType,
+    getMiles,
+    getKilometers,
+    timeOfWorkout,
+    avgMile
+} = require('../../../utils/strava');
 const { url } = require('../../../lib/keys');
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 const updatedCompletedWorkouts = async (payload, viewId, workouts, slashOrHome) => {
+    console.log("workouts.data[0]: ", workouts.data[0]);
 const filteredWorkouts = workouts.data[0].finishedWorkouts.filter(workout => workout.type !== undefined);
 const metadata = JSON.parse(payload.view.private_metadata);
 console.log("metadat: ", metadata);
@@ -48,7 +56,42 @@ var maxRecords = paginateInteger + 6;
             const date = dayjs(info[i].date).format('dddd MMMM D YYYY');
 
             ///Beginning to test different workout types below:
-            if(info[i].type === "Reps") {
+              if(info[i].type === "Run") {
+            array.push(
+            {
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: "*Date Completed:* " + date,
+                       
+                    },
+
+
+                },
+                 {
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: "*Strava Upload*",
+                        
+                    },
+
+
+                },{
+                "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Type of Exercise:* " + activityType(info[i].type) + "\n" +
+                            "*Distance:* " + getMiles(info[i].distance) + "miles / " + getKilometers(info[i].distance) + "km's\n" +
+                            "*Time:* " + timeOfWorkout(info[i].seconds) + "\n" +
+                            "*Average Speed:* " + avgMile(info[i].seconds, info[i].distance) + "\n"
+                    },
+            },
+            {
+                    "type": "divider"
+                })
+
+        }  else if(info[i].type === "Reps") {
                 array.push({
                     type: "section",
                     text: {

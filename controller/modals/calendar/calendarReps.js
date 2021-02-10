@@ -3,7 +3,7 @@ const calendarReps = (payload, workout, slashOrHome) => {
     const { type, name, description, reps, notes } = workout;
     console.log("payload: ", payload);
     const metadata = JSON.parse(payload.view.private_metadata);
-    const { paginate } = metadata;
+    const { calendar_date} = metadata;
     const repsView = {
         "trigger_id": trigger_id,
         view: {
@@ -17,6 +17,7 @@ const calendarReps = (payload, workout, slashOrHome) => {
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.root_view_id,
                 "action": payload.actions[0].value,
+                 "calendar_date": calendar_date
 
 
             }),

@@ -586,7 +586,7 @@ module.exports = {
     "block_id": "calendar",
     "elements": [{
         "type": "datepicker",
-        "initial_date": today,
+        
         "placeholder": {
             "type": "plain_text",
             "text": "Select a date",

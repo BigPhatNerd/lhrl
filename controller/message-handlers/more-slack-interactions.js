@@ -6,6 +6,7 @@ const { createGoalsMessage } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
 const updateHomeModal = require('../homepage/updateHomeModal');
+const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar');
 const {
     goalCount,
     goalSummary,
@@ -329,6 +330,10 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
     }
 
 
+});
+
+moreSlackInteractions.viewSubmission("view_calendar_workouts", async (payload, respond) => {
+    console.log("Not sure what to do with view_calendar_workouts in more-slack-interactions")
 })
 
 

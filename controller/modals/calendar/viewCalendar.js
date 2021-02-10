@@ -20,23 +20,19 @@ const viewCalendarWorkouts = async (payload, workouts, slashOrHome) => {
         // const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(filteredWorkouts.length === 0) {
             array.push({
-                "type": "input",
-                "block_id": "calendar",
-                "element": {
+                "type": "actions",
+                "block_id": "modal_calendar",
+                "elements": [{
                     "type": "datepicker",
                     "initial_date": date,
                     "placeholder": {
                         "type": "plain_text",
-                        "text": "Choose another date:",
+                        "text": "Select a date",
                         "emoji": true
                     },
-                    "action_id": "calendar"
-                },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Start date:",
-                    "emoji": true
-                }
+                    "action_id": "modal_calendar",
+
+                }]
             }, {
 
                 "type": "section",
@@ -51,23 +47,19 @@ const viewCalendarWorkouts = async (payload, workouts, slashOrHome) => {
         };
 
         array.push({
-            "type": "input",
-            "block_id": "calendar",
-            "element": {
+            "type": "actions",
+            "block_id": "modal_calendar",
+            "elements": [{
                 "type": "datepicker",
                 "initial_date": date,
                 "placeholder": {
                     "type": "plain_text",
-                    "text": "Choose another date:",
+                    "text": "Select a date",
                     "emoji": true
                 },
-                "action_id": "calendar"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Start date:",
-                "emoji": true
-            }
+                "action_id": "modal_calendar",
+
+            }]
         })
         for(var i = 0;
             (i < filteredWorkouts.length && i < 6); i++) {

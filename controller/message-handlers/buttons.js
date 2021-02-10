@@ -16,6 +16,7 @@ const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedW
 const viewCalendarWorkouts = require('../modals/calendar/viewCalendar');
 const editCalendarWorkout = require('../modals/calendar/editCalendarWorkout');
 const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar');
+
 const calendarDistance = require('../modals/calendar/calendarDistance');
 const calendarLoad = require('../modals/calendar/calendarLoad');
 const calendarMeters = require('../modals/calendar/calendarMeters');
@@ -40,28 +41,50 @@ const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit }
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
 //buttons pressed from the homepage view
 buttons.action({ type: 'datepicker' }, async (payload, respond) => {
+    try {
 
-    const user = payload.user.id;
-    const userInfo = await web.users.info({ user: user });
-    const passUser = userInfo.user;
-
-    const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
 
 
-    if(payload.view.callback_id === "homepage_modal") {
+        const value = payload.actions[0].action_id;
 
-        const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
-        web.views.push(calendar);
-        return
+
+        if(value === "calendar") {
+            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+            if(payload.view.callback_id === "homepage_modal") {
+
+                const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
+                web.views.push(calendar);
+                return
+            }
+            const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
+            web.views.open(calendar);
+            return
+        }
+
+        console.log("hitting here");
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { home_or_slash } = metadata;
+        const user_id = payload.user.id;
+        const workouts = await axios.get(`${urlString}/finishedWorkouts/${user}`)
+
+        if(home_or_slash === "slash") {
+
+            const updated = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "slash");
+            web.views.update(updated)
+            return
+        }
+
+        const updated = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "home");
+        web.views.update(updated)
+
+
+    } catch (err) {
+
+        res.status(500).send('Server Error');
     }
-    const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
-    web.views.open(calendar);
-    return
-
-
-
-
 })
 buttons.action({ type: 'button' }, async (payload, respond) => {
 

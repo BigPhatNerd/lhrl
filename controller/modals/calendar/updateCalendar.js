@@ -2,12 +2,16 @@ var dayjs = require("dayjs");
 
 const updatedCalendarWorkouts = async (payload, viewId, workouts, slashOrHome) => {
     const { trigger_id } = payload;
-    console.log("trigger_id: ", trigger_id);
+    console.log("\n\n\n\n\nthis is firing: ");
+
     const metadata = JSON.parse(payload.view.private_metadata);
     const { calendar_date } = metadata;
-    var date = calendar_date
+    console.log("metadata: ", metadata);
+
+
+    var date = typeof payload.view.state.values?.modal_calendar?.modal_calendar?.selected_date === "undefined" || !payload.view.state.values.modal_calendar ? calendar_date : payload.view.state.values.modal_calendar.modal_calendar.selected_date;
     date = dayjs(date).format('YYYY-MM-D');
-    console.log("Find what the value of the date value is to bring up the correct date.");
+    console.log("date: ", date);
     const filteredWorkouts = await workouts.data[0].finishedWorkouts.filter(workouts => {
         const formatedDate = dayjs(workouts.date).format('YYYY-MM-D');
         return date === formatedDate
@@ -21,23 +25,19 @@ const updatedCalendarWorkouts = async (payload, viewId, workouts, slashOrHome) =
         // const date = dayjs(info.day).format('dddd MMMM D YYYY')
         if(filteredWorkouts.length === 0) {
             array.push({
-                "type": "input",
-                "block_id": "calendar",
-                "element": {
+                "type": "actions",
+                "block_id": "modal_calendar",
+                "elements": [{
                     "type": "datepicker",
                     "initial_date": date,
                     "placeholder": {
                         "type": "plain_text",
-                        "text": "Choose another date:",
+                        "text": "Select a date",
                         "emoji": true
                     },
-                    "action_id": "calendar"
-                },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Start date:",
-                    "emoji": true
-                }
+                    "action_id": "modal_calendar",
+
+                }]
             }, {
 
                 "type": "section",
@@ -51,23 +51,19 @@ const updatedCalendarWorkouts = async (payload, viewId, workouts, slashOrHome) =
             return array
         }
         array.push({
-            "type": "input",
-            "block_id": "calendar",
-            "element": {
+            "type": "actions",
+            "block_id": "modal_calendar",
+            "elements": [{
                 "type": "datepicker",
                 "initial_date": date,
                 "placeholder": {
                     "type": "plain_text",
-                    "text": "Choose another date:",
+                    "text": "Select a date",
                     "emoji": true
                 },
-                "action_id": "calendar"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Start date:",
-                "emoji": true
-            }
+                "action_id": "modal_calendar",
+
+            }]
         })
 
         for(var i = 0;
@@ -722,6 +718,7 @@ const updatedCalendarWorkouts = async (payload, viewId, workouts, slashOrHome) =
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
                 "homeModal_view_id": payload.view.id,
+                "calendar_date": date
 
 
 

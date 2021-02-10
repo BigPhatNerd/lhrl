@@ -2,7 +2,7 @@ const editCalendarWorkout = (payload, workoutSelected, slashOrHome) => {
     const { trigger_id } = payload;
     const { _id, type, name, weight, minutes, seconds, reps, rounds, description, meters, notes } = workoutSelected;
     const metadata = JSON.parse(payload.view.private_metadata);
-
+const { calendar_date } = metadata;
 
     console.log("metadata in editCalendarWorkouts: ", metadata);
     if(workoutSelected.type === "Reps") {
@@ -17,6 +17,8 @@ const editCalendarWorkout = (payload, workoutSelected, slashOrHome) => {
                     "score_type": "Reps",
                     "homeModal_view_id": payload.view.root_view_id,
                     "home_or_slash": slashOrHome,
+                    "calendar_date": calendar_date
+
 
                 }),
                 "title": {

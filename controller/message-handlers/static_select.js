@@ -23,9 +23,11 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
                 web.views.push(create);
                 return
             }
-
+console.log("why not working");
+console.log({value});
             const create = await createWorkoutModal(payload, value, "home")
             web.views.open(create);
+            return
 
         }
         //VIEW CREATED WORKOUTS to view or create a workout
@@ -42,6 +44,7 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
 
             const workoutIndex = await viewWorkouts(payload, workouts, "home");
             web.views.open(workoutIndex);
+            return
         }
 
         // VIEW COMPLETED WORKOUTS to view or complete a workout

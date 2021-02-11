@@ -149,7 +149,7 @@ let fiveK = (start, user) => {
             "startDate": dateHelper(start, 30),
             "week": 5,
             "day": 2,
-            "type": "Time",
+            "type": "Distance",
             "description": "RACE WEEK!!\nTempo run for 40 minutes.",
             "subscribed": true
         },

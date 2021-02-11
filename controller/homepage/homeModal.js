@@ -10,7 +10,8 @@ const {
     header,
     choosePlan,
     stravaWorkout,
-    calendar
+    calendar,
+    divider,
 
 
 } = require('./helpers');
@@ -56,49 +57,31 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
 
                 authorizePrograms(allWorkouts),
                 header("Workouts Section"),
-                {
-                    "type": "divider"
-                },
+                divider(),
 
                 createWorkout(),
                 viewOrComplete(),
                 header("Subscribe to Program"),
                 choosePlan(),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 header(user.real_name),
                 currentlySubscribed(allWorkouts),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 todaysWorkout(allWorkouts),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 removeFromProgram(allWorkouts),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 header("Here is your goal summary for this week"),
                 weeklyGoals(allWorkouts),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 enterGoalReps(allWorkouts),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 header("Workout of the Day"),
                 cfWOD(wod),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 header("Latest Strava Workout"),
                 stravaWorkout(allWorkouts),
-                {
-                    "type": "divider"
-                },
+                divider(),
                 header("Activity Calendar"),
                 calendar(allWorkouts)
 

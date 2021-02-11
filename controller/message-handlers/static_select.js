@@ -13,7 +13,7 @@ const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf
 static_select.action({ type: "static_select" }, async (payload, respond) => {
     try {
         var user_id = payload.user.id;
-        value = payload.actions[0].selected_option.value;
+       const value = payload.actions[0].selected_option.value;
 
         //SELECT WORKOUT TYPE  to create a workout
         if(value === "reps" || value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance" || value === "meters") {

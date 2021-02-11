@@ -32,6 +32,8 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
             return "Meters Workout"
         }
     };
+    console.log("type: ", type(value))
+    console.log("description: ", description(value));
     const modal = {
         "trigger_id": trigger_id,
         view: {

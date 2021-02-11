@@ -1,7 +1,7 @@
 const createWorkoutModal = (payload, value, slashOrHome) => {
     const { trigger_id } = payload;
      const metadata = JSON.parse(payload.view.private_metadata);
-   
+   console.log("\n\nI made it here!!\n\n")
     const type = (value) => {
         if(value === "reps") {
             return "Reps"
@@ -40,14 +40,14 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
             "type": "modal",
             "callback_id": "create_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Reps",
+                "score_type": type(value),
                 "homeModal_view_id": payload.view.root_view_id,
                 "home_or_slash": slashOrHome
 
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Reps Workout",
+                "text": description(value),
                 "emoji": true
             },
             "submit": {

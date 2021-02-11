@@ -19,13 +19,13 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
         if(value === "reps" || value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance" || value === "meters") {
             if(payload.view.callback_id === "homepage_modal") {
                 console.log("\n\n\ntrigger_id in static select: ", payload);
-                const create = await createWorkoutModal(payload, value, "slash")
+                const create = await createWorkoutModal(payload, value, "slash");
                 web.views.push(create);
                 return
             }
 console.log("why not working");
 console.log({value});
-            const create = await createWorkoutModal(payload, value, "home")
+            const create = await createWorkoutModal(payload, value, "home");
             web.views.open(create);
             return
 

@@ -89,7 +89,7 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
                         "text": "Description",
                         "emoji": true
                     }
-                },
+                }
 
 
 

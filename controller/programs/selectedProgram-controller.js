@@ -2,6 +2,8 @@ const { User, Program, FinishedWorkout } = require('../../models');
 const homepage = require('../homepage/homeview.js');
 const fiveK = require('../../programs/fiveK');
 const tenK = require('../../programs/tenK');
+const halfMarathon = require('../../programs/halfMarathon');
+const marathon = require('../../programs/marathon');
 var dayjs = require('dayjs');
 // var date = dayjs().format('YYYY-MM-D');
 
@@ -32,6 +34,13 @@ const selectedProgramController = {
                 break;
             case "10K":
                 program = tenK;
+                break;
+                 case "halfMarathon":
+                program = halfMarathon;
+                break;
+                 case "marathon":
+                program = marathon;
+                break;
         }
 
         res.json(program());
@@ -46,6 +55,13 @@ const selectedProgramController = {
                     break;
                 case "10K":
                     program = tenK;
+                    break;
+                      case "halfMarathon":
+                program = halfMarathon;
+                break;
+                 case "marathon":
+                program = marathon;
+                break;
             }
             const startDate = body.startDate;
             const user_id = params.user_id;

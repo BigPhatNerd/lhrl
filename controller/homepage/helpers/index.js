@@ -260,6 +260,22 @@ module.exports = {
                         },
                         "value": "10K"
                     },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "12-Weeks to Half-Marathon",
+                            "emoji": true
+                        },
+                        "value": "halfMarathon"
+                    },
+                    {
+                        "text": {
+                            "type": "plain_text",
+                            "text": "12-Weeks to Marathon",
+                            "emoji": true
+                        },
+                        "value": "marathon"
+                    },
 
                 ],
                 "action_id": "choose_plan"
@@ -313,7 +329,7 @@ module.exports = {
                 "type": "section",
                 "text": {
                     "type": "plain_text",
-                    "text": "You are not following a specific program.",
+                    "text": "You have no scheduled workouts.",
                     "emoji": true
                 },
             }

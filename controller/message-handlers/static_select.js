@@ -3,8 +3,11 @@ const static_select = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
 const view5KProgram = require('../modals/fiveK/viewProgram');
 const view10KProgram = require('../modals/tenK/viewProgram');
+const viewHalfMarathon = require('../modals/halfMarathon/viewProgram');
+const viewMarathon = require('../modals/marathon/viewProgram');
+
 const createWorkoutModal = require('../modals/createWorkout/createWorkoutModal');
-const viewWorkouts = require('../modals/createWorkouts/viewWorkouts.js');
+const viewWorkouts = require('../modals/createWorkout/viewWorkouts.js');
 const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedWorkouts');
 const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit } = require('../../models/');
 const { url } = require('../../lib/keys');
@@ -22,9 +25,8 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
                 const create = await createWorkoutModal(payload, value, "slash");
                 web.views.push(create);
                 return
-            }
-console.log("why not working");
-console.log({value});
+            };
+
             const create = await createWorkoutModal(payload, value, "home");
             web.views.open(create);
             return
@@ -84,6 +86,30 @@ console.log({value});
                 return
             }
             const tenKIndex = await view10KProgram(payload, workouts, "home");
+            web.views.open(tenKIndex);
+        }  
+        // Half-Marathon Choose a plan
+        else if(value === "halfMarathon") {
+            const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
+
+            if(payload.view.callback_id === "homepage_modal") {
+                const tenKIndex = await viewHalfMarathon(payload, workouts, "slash");
+                web.views.push(tenKIndex);
+                return
+            }
+            const tenKIndex = await viewHalfMarathon(payload, workouts, "home");
+            web.views.open(tenKIndex);
+        }
+         // Half-Marathon Choose a plan
+        else if(value === "marathon") {
+            const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
+
+            if(payload.view.callback_id === "homepage_modal") {
+                const tenKIndex = await viewMarathon(payload, workouts, "slash");
+                web.views.push(tenKIndex);
+                return
+            }
+            const tenKIndex = await viewMarathon(payload, workouts, "home");
             web.views.open(tenKIndex);
         }
     } catch (err) {

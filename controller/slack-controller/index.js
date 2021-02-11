@@ -1,5 +1,4 @@
 const { User, Workout, CrossFit } = require('../../models');
-const createWorkout = require('../modals/createWorkouts/createWorkout.js');
 const { slack, sugarwod, url } = require('../../lib/keys.js');
 const { botToken, verificationToken, } = slack;
 const web = require('../../config/slack-web-api.js');

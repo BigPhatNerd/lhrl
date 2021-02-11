@@ -1,10 +1,9 @@
 const slackInteractions = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
-const createWorkout = require('../modals/createWorkouts/createWorkout.js');
 const homepage = require('../homepage/homeview.js');
 const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit } = require('../../models/');
 const editWorkoutResponse = require('../responses/successful-edit');
-const updatedWorkouts = require('../modals/createWorkouts/updatedWorkouts.js');
+const updatedWorkouts = require('../modals/createWorkout/updatedWorkouts.js');
 const updatedCompletedWorkouts = require('../modals/completedWorkouts/updatedCompletedWorkouts');
 const updatedProgramWorkouts = require('../modals/selectedProgram/updatedProgramWorkouts.js')
 const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar')
@@ -657,6 +656,76 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         console.error(err.message);
     }
 });
+
+//Half-marathon modal submission
+slackInteractions.viewSubmission('subscribe_to_half_marathon', async (payload, respond) => {
+    try {
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { distance, home_or_slash, homeModal_view_id } = metadata;
+
+        const user_id = payload.user.id;
+        const date = payload.view.state.values.date.date.selected_date;
+        const username = payload.user.username;
+        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${distance}`, { startDate: date });
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        if(home_or_slash === "slash") {
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+
+            web.views.update(update);
+
+        } else {
+            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            web.views.publish(updateHome);
+        }
+        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+        if(radioButton === "public") {
+            const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the half-marathon program 🏃‍♂️` }, config)
+        }
+        return
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//Marathon modal submission
+slackInteractions.viewSubmission('subscribe_to_marathon', async (payload, respond) => {
+    try {
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { distance, home_or_slash, homeModal_view_id } = metadata;
+
+        const user_id = payload.user.id;
+        const date = payload.view.state.values.date.date.selected_date;
+        const username = payload.user.username;
+        const subscribe = await axios.post(`${urlString}/programs/selectedProgram/subscribe/${user_id}/${distance}`, { startDate: date });
+        const user = payload.user.id;
+        const userInfo = await web.users.info({ user: user });
+        const passUser = userInfo.user;
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        if(home_or_slash === "slash") {
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+
+            web.views.update(update);
+
+        } else {
+            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            web.views.publish(updateHome);
+        }
+        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+        if(radioButton === "public") {
+            const confirm = await axios.post(lhrlWebhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the marathon program 🏃‍♂️` }, config)
+        }
+        return
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
 
 
 

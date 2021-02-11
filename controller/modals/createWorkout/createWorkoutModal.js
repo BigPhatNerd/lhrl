@@ -40,14 +40,14 @@ const createWorkoutModal = (payload, value, slashOrHome) => {
             "type": "modal",
             "callback_id": "create_workout",
             "private_metadata": JSON.stringify({
-                "score_type": type(value),
+                "score_type": "Reps",
                 "homeModal_view_id": payload.view.root_view_id,
                 "home_or_slash": slashOrHome
 
             }),
             "title": {
                 "type": "plain_text",
-                "text": description(value),
+                "text": "Reps Workout",
                 "emoji": true
             },
             "submit": {

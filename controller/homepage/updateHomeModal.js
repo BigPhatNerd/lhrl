@@ -52,39 +52,36 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
                 "emoji": true
             },
             "blocks": [
-               
+               header("Welcome " + user.real_name),
                 authorizePrograms(allWorkouts),
-
-                header("Workouts Section"),
                 divider(),
-                createWorkout(),
-                viewOrComplete(),
+                header("Activity Calendar"),
+                calendar(allWorkouts),
+                divider(),
+                header("Here is your goal summary for this week"),
+                weeklyGoals(allWorkouts),
+                enterGoalReps(allWorkouts),
+                divider(),
+                header("Workout of the Day"),
+                cfWOD(wod),
+                divider(),
+                header("Latest Strava Workout"),
+                stravaWorkout(allWorkouts),
+                divider(),
                 header("Subscribe to Program"),
                 choosePlan(),
                 divider(),
-                header(user.real_name),
                 currentlySubscribed(allWorkouts),
                 divider(),
                 todaysWorkout(allWorkouts),
                 divider(),
                 removeFromProgram(allWorkouts),
                 divider(),
-                header("Here is your goal summary for this week"),
-                weeklyGoals(allWorkouts),
+                header("Workouts Section"),
                 divider(),
-
-                enterGoalReps(allWorkouts),
-               divider(),
-                header("Workout of the Day"),
-
-                cfWOD(wod),
+                createWorkout(),
+                viewOrComplete(),
                 divider(),
-                header("Latest Strava Workout"),
-                stravaWorkout(allWorkouts),
-               divider(),
-                header("Activity Calendar"),
-                calendar(allWorkouts)
-
             ]
         }
     }

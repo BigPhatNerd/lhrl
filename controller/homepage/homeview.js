@@ -48,28 +48,14 @@ const homepage = (user, allWorkouts, wod) => {
                     "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
                     "alt_text": "logo"
                 },
-
+header("Welcome " + user.real_name),
                 authorizePrograms(allWorkouts),
-
-                header("Workouts Section"),
                 divider(),
-                createWorkout(),
-                viewOrComplete(),
-                header("Subscribe to Program"),
-                choosePlan(),
-                divider(),
-                header(user.real_name),
-                currentlySubscribed(allWorkouts),
-                divider(),
-                todaysWorkout(allWorkouts),
-                divider(),
-                removeFromProgram(allWorkouts),
+                header("Activity Calendar"),
+                calendar(allWorkouts),
                 divider(),
                 header("Here is your goal summary for this week"),
                 weeklyGoals(allWorkouts),
-
-                divider(),
-
                 enterGoalReps(allWorkouts),
                 divider(),
                 header("Workout of the Day"),
@@ -78,8 +64,20 @@ const homepage = (user, allWorkouts, wod) => {
                 header("Latest Strava Workout"),
                 stravaWorkout(allWorkouts),
                 divider(),
-                header("Activity Calendar"),
-                calendar(allWorkouts)
+                header("Subscribe to Program"),
+                choosePlan(),
+                divider(),
+                currentlySubscribed(allWorkouts),
+                divider(),
+                todaysWorkout(allWorkouts),
+                divider(),
+                removeFromProgram(allWorkouts),
+                divider(),
+                header("Workouts Section"),
+                divider(),
+                createWorkout(),
+                viewOrComplete(),
+                divider(),
 
             ]
         }

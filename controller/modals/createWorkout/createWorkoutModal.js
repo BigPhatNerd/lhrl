@@ -1,6 +1,6 @@
 const createWorkoutModal = (payload, value, slashOrHome) => {
     const { trigger_id } = payload;
-     const metadata = JSON.parse(payload.view.private_metadata);
+     
    console.log("\n\nI made it here!!\n\n")
     const type = (value) => {
         if(value === "reps") {

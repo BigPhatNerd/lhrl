@@ -121,6 +121,16 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         console.log(" here?");
         if(score_type === "Reps") {
             reps = reps.reps.value || 0;
+            let isReps = /^\d+$/.test(reps);
+            if(!isReps) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        reps: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
@@ -131,7 +141,27 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
             }
         } else if(score_type === "Rounds + Reps") {
             rounds = rounds.rounds.value || 0;
+            let isRounds = /^\d+$/.test(rounds);
+            if(!isRounds) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        rounds: "Must enter an integer"
+                    }
+                })
+            }
             reps = reps.reps.value || 0;
+            let isReps = /^\d+$/.test(reps);
+            if(!isReps) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        reps: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
@@ -144,6 +174,26 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         } else if(score_type === "Time") {
             minutes = minutes.minutes.value || 0;
             seconds = seconds.seconds.value || 0;
+            let isMin = /^\d+$/.test(minutes);
+            if(!isMin) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        minutes: "Must enter an integer"
+                    }
+                })
+            }
+            let isSec = /^\d+$/.test(seconds);
+            if(!isSec) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        seconds: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
@@ -156,6 +206,16 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
 
         } else if(score_type === "Load") {
             weight = weight.weight.value || 0;
+            let isWeight = /^\d+$/.test(weight);
+            if(!isWeight) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        weight: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
@@ -176,6 +236,16 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
             }
         } else if(score_type === "Meters") {
             meters = meters.meters.value || 0;
+            let isMeters = /^\d+$/.test(meters);
+            if(!isMeters) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        meters: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,

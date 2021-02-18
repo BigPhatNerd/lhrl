@@ -69,9 +69,9 @@ buttons.action({ type: 'datepicker' }, async (payload, respond) => {
         const { home_or_slash } = metadata;
         const user_id = payload.user.id;
         const workouts = await axios.get(`${urlString}/finishedWorkouts/${user}`)
-        
+
         if(home_or_slash === "slash") {
-           
+
             const updated = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "slash");
             web.views.update(updated)
             return
@@ -223,7 +223,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         else if(value === 'cf_wod_score') {
 
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-            console.log("wod: ", wod);
+
             if(payload.view.callback_id === "homepage_modal") {
 
                 const score = await submitScore(payload, wod[0], "slash");
@@ -241,7 +241,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
         //COMPLETE WORKOUT viewWorkouts inside of createWorkouts
         else if(value === "complete_created_workouts") {
-            console.log("line 39 button REDO : ", payload)
+
             viewId = payload.container.view_id;
             buttonPressed = buttonPressed.replace("complete", "");
             const workoutSelected = await Workout.find({ _id: buttonPressed });

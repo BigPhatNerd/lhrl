@@ -2,7 +2,7 @@ const moreSlackInteractions = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
 const { User, Workout, Program, FinishedWorkout, CrossFit } = require('../../models/');
-const { createGoalsMessage } = require('./helpers');
+const { createGoalsMessage, intValidation } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
 const updateHomeModal = require('../homepage/updateHomeModal');
@@ -53,15 +53,55 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
 
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
+        let isPushups = /^\d+$/.test(pushups);
+        if(!isPushups) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    pushups: "Must enter an integer"
+                }
+            })
+        }
         situps = situps.situps.value;
+        let isSitups = /^\d+$/.test(situps);
+        if(!isSitups) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    situps: "Must enter an integer"
+                }
+            })
+        }
         squats = squats.squats.value;
+        let isSquats = /^\d+$/.test(squats);
+        if(!isSquats) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    squats: "Must enter an integer"
+                }
+            })
+        }
         miles = miles.miles.value;
+        let isMiles = /^[1-9]\d*(\.\d+)?$/.test(miles);
+        if(!isMiles) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    miles: "Must enter a number"
+                }
+            })
+        }
         const data = {
             user_id: username,
             pushups: parseInt(pushups),
             situps: parseInt(situps),
             squats: parseInt(squats),
-            miles: parseInt(miles)
+            miles: parseFloat(miles)
         }
         const sendWorkout = axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
 
@@ -129,15 +169,55 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
+        let isPushups = /^\d+$/.test(pushups);
+        if(!isPushups) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    pushups: "Must enter an integer"
+                }
+            })
+        }
         situps = situps.situps.value;
+        let isSitups = /^\d+$/.test(situps);
+        if(!isSitups) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    situps: "Must enter an integer"
+                }
+            })
+        }
         squats = squats.squats.value;
+        let isSquats = /^\d+$/.test(squats);
+        if(!isSquats) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    squats: "Must enter an integer"
+                }
+            })
+        }
         miles = miles.miles.value;
+        let isMiles = /^[1-9]\d*(\.\d+)?$/.test(miles);
+        if(!isMiles) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    miles: "Must enter a number"
+                }
+            })
+        }
         const data = {
             userId: user_id,
             pushups: parseInt(pushups),
             situps: parseInt(situps),
             squats: parseInt(squats),
-            miles: parseInt(miles)
+            miles: parseFloat(miles)
         }
 
         const sendGoals = await axios.post(`${urlString}/weeklyGoals/${user_id}`, data);
@@ -180,15 +260,55 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
 
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
+        let isPushups = /^\d+$/.test(pushups);
+        if(!isPushups) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    pushups: "Must enter an integer"
+                }
+            })
+        }
         situps = situps.situps.value;
+        let isSitups = /^\d+$/.test(situps);
+        if(!isSitups) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    situps: "Must enter an integer"
+                }
+            })
+        }
         squats = squats.squats.value;
+        let isSquats = /^\d+$/.test(squats);
+        if(!isSquats) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    squats: "Must enter an integer"
+                }
+            })
+        }
         miles = miles.miles.value;
+        let isMiles = /^[1-9]\d*(\.\d+)?$/.test(miles);
+        if(!isMiles) {
+
+            return Promise.resolve({
+                response_action: "errors",
+                errors: {
+                    miles: "Must enter a number"
+                }
+            })
+        }
         const data = {
             userId: user_id,
             pushups: parseInt(pushups),
             situps: parseInt(situps),
             squats: parseInt(squats),
-            miles: parseInt(miles)
+            miles: parseFloat(miles)
         }
         const sendGoals = await axios.put(`${urlString}/weeklyGoals/${id}`, data);
 
@@ -232,9 +352,23 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         var { minutes, seconds, rounds, reps, weight, meters, notes } = payload.view.state.values;
 
-        if(score_type === "Reps") {
 
+        //REGEX for DECIMAL
+        // let includeDecimal = /^[1-9]\d*(\.\d+)?$/.test(minutes.minutes.value)
+
+
+        if(score_type === "Reps") {
             reps = reps.reps.value;
+            let isReps = /^\d+$/.test(reps);
+            if(!isReps) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        reps: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
@@ -245,7 +379,27 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
             }
         } else if(score_type === "Rounds + Reps") {
             rounds = rounds.rounds.value;
+            let isRounds = /^\d+$/.test(rounds);
+            if(!isRounds) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        rounds: "Must enter an integer"
+                    }
+                })
+            }
             reps = reps.reps.value;
+            let isReps = /^\d+$/.test(reps);
+            if(!isReps) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        reps: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided.";
             data = {
                 type: score_type,
@@ -258,6 +412,27 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         } else if(score_type === "Time") {
             minutes = minutes.minutes.value;
             seconds = seconds.seconds.value;
+            let isMin = /^\d+$/.test(minutes);
+            if(!isMin) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        minutes: "Must enter an integer"
+                    }
+                })
+            }
+            let isSec = /^\d+$/.test(seconds);
+            if(!isSec) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        seconds: "Must enter an integer"
+                    }
+                })
+            }
+
             notes = notes.notes.value || "No notes provided";
             data = {
                 type: score_type,
@@ -271,6 +446,16 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         } else if(score_type === "Load") {
 
             weight = weight.weight.value;
+            let isWeight = /^\d+$/.test(weight);
+            if(!isWeight) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        weight: "Must enter an integer"
+                    }
+                })
+            }
             notes = notes.notes.value || "No notes provided";
             data = {
                 type: score_type,
@@ -290,8 +475,18 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
                 notes: notes
             }
         } else if(score_type === "Meters") {
-
             meters = meters.meters.value;
+            let isMeters = /^\d+$/.test(meters);
+            if(!isMeters) {
+
+                return Promise.resolve({
+                    response_action: "errors",
+                    errors: {
+                        meters: "Must enter an integer"
+                    }
+                })
+            }
+
             notes = notes.notes.value || "No notes provided";
             data = {
                 type: score_type,
@@ -308,7 +503,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const view_id = payload.view.root_view_id;
 
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
-        console.log("passUser: ", passUser);
+
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
             const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);

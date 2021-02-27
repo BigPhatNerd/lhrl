@@ -37,7 +37,7 @@ module.exports = {
         if(goalCount >= variable && variable !== null) {
             return `\n👏  Weekly goal of ${variable} ${string} is complete. 👏\n`
         } else if(variable !== null) {
-            return `${goalCount} of ${variable} ${string}`
+            return `\n${goalCount} of ${variable} ${string}`
         } else {
             return ""
         }

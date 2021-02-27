@@ -99,7 +99,7 @@ router.post('/webhook', async (req, res) => {
             max_speed: max_speed,
             stravaMap: map.summary_polyline
         };
-
+        console.log({ stravaData });
         Strava.create(body)
             .then(({ _id }) => {
                 return User.findOneAndUpdate({ stravaId: owner_id }, { $addToSet: { stravaWorkouts: _id } }, { new: true })

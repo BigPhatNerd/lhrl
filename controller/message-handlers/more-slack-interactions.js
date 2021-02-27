@@ -134,7 +134,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `${passUser.real_name} just completed reps of: \n${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}\n *Goal summary for this week:* ${goalSummaryMessage("pushups", weeklyGoals.pushups, pushupSummary)} ${goalSummaryMessage("situps", weeklyGoals.situps, situpSummary, username)} ${goalSummaryMessage("squats", weeklyGoals.squats, squatSummary, username)} ${goalSummaryMessage("miles", weeklyGoals.miles, mileSummary, username)}`
+                        "text": `${passUser.real_name} just completed reps of: \n${createGoalsMessage("Pushups", pushups)}${createGoalsMessage("Situps", situps)}${createGoalsMessage("Squats", squats)}${createGoalsMessage("Miles", miles)}\n *Goal summary for this week:*${goalSummaryMessage("pushups", weeklyGoals.pushups, pushupSummary)}${goalSummaryMessage("situps", weeklyGoals.situps, situpSummary, username)}${goalSummaryMessage("squats", weeklyGoals.squats, squatSummary, username)}${goalSummaryMessage("miles", weeklyGoals.miles, mileSummary, username)}`
                     },
                     "accessory": {
                         "type": "image",

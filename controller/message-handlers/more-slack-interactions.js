@@ -53,8 +53,9 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
 
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
+        console.log({ pushups });
         let isPushups = /^\d+$/.test(pushups);
-        if(!isPushups) {
+        if(!isPushups && pushups !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -65,7 +66,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         }
         situps = situps.situps.value;
         let isSitups = /^\d+$/.test(situps);
-        if(!isSitups) {
+        if(!isSitups && situps !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -76,7 +77,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         }
         squats = squats.squats.value;
         let isSquats = /^\d+$/.test(squats);
-        if(!isSquats) {
+        if(!isSquats && squats !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -87,7 +88,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         }
         miles = miles.miles.value;
         let isMiles = /^[1-9]\d*(\.\d+)?$/.test(miles);
-        if(!isMiles) {
+        if(!isMiles && miles !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -170,7 +171,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         var { pushups, situps, squats, miles } = payload.view.state.values;
         pushups = pushups.pushups.value;
         let isPushups = /^\d+$/.test(pushups);
-        if(!isPushups) {
+        if(!isPushups && pushups !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -181,7 +182,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         }
         situps = situps.situps.value;
         let isSitups = /^\d+$/.test(situps);
-        if(!isSitups) {
+        if(!isSitups && situps !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -192,7 +193,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         }
         squats = squats.squats.value;
         let isSquats = /^\d+$/.test(squats);
-        if(!isSquats) {
+        if(!isSquats && squats !== null) {
 
             return Promise.resolve({
                 response_action: "errors",

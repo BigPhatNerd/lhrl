@@ -16,7 +16,7 @@ const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedW
 const viewCalendarWorkouts = require('../modals/calendar/viewCalendar');
 const editCalendarWorkout = require('../modals/calendar/editCalendarWorkout');
 const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar');
-
+const confirmRemove = require('../modals/confirm');
 const calendarDistance = require('../modals/calendar/calendarDistance');
 const calendarLoad = require('../modals/calendar/calendarLoad');
 const calendarMeters = require('../modals/calendar/calendarMeters');
@@ -162,21 +162,17 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         }
         //REMOVE PLAN remove me from program
         else if(value === "remove_workouts") {
-            const user = payload.user.id;
-            const removePlan = await axios.delete(`${urlString}/programs/selectedProgram/delete-program/${user_id}`);
-            const userInfo = await web.users.info({ user: user });
-            const passUser = userInfo.user;
-            const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-            const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+            console.log({ payload })
             if(payload.view.callback_id === "homepage_modal") {
-
-                const update = await updateHomeModal(payload.view.id, passUser, allWorkouts, wod[0])
-                web.views.update(update);
+                const sendConfirm = await confirmRemove(payload, 'slash');
+                web.views.push(sendConfirm);
                 return
+
             }
-            // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
-            web.views.publish(homepage(passUser, allWorkouts, wod[0]))
+            const sendConfirm = await confirmRemove(payload, 'slash');
+            web.views.open(sendConfirm);
             return
+
         }
         //WEEKLY GOALS add weekly goals
         else if(value === "weekly_goal") {

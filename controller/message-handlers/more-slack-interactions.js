@@ -25,6 +25,24 @@ const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook :
 var viewId;
 var value;
 
+moreSlackInteractions.viewSubmission('confirm_remove', async (payload, respond) => {
+    console.log({ payload })
+    const metadata = JSON.parse(payload.view.private_metadata);
+    const { home_or_slash } = metadata;
+    const user = payload.user.id;
+    const removePlan = await axios.delete(`${urlString}/programs/selectedProgram/delete-program/${user}`);
+    const userInfo = await web.users.info({ user: user });
+    const passUser = userInfo.user;
+    const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+    const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+    if(home_or_slash === 'slash') {
+        const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
+        web.views.update(update);
+        return
+    }
+    web.views.publish(homepage(passUser, allWorkouts, wod[0]))
+    return
+})
 moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) => {
     const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;

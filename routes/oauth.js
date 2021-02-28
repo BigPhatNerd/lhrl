@@ -15,9 +15,7 @@ router.route("/")
             res.send({ "Error": "Looks like we're not getting code." });
             console.log("Looks like we are not getting code.");
         } else {
-            console.log({ clientId });
-            console.log({ clientSecret });
-            console.log({ urlString })
+
             request({
                 url: 'https://slack.com/api/oauth.v2.access',
                 qs: { code: req.query.code, client_id: clientId, client_secret: clientSecret, redirect_uri: `${urlString}/oauth/` },
@@ -28,7 +26,7 @@ router.route("/")
                     console.log(error);
                 } else {
                     console.log(body);
-                    res.json(body);
+                    res.json({ msg: "Successfully installed LHRL® App" });
                 }
             })
         }

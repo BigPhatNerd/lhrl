@@ -25,7 +25,7 @@ const slackController = {
         User.find({ user_id })
             .populate({
                 path: 'workouts',
-                 options: { sort: { 'date': -1 } },
+                options: { sort: { 'date': -1 } },
                 select: '-__v'
             })
             .select('-__v')
@@ -79,14 +79,17 @@ const slackController = {
             const passUser = userInfo.user;
 
 
-            const team_id = userInfo.user.team_id
+            const team_id = userInfo.user.team_id;
+            const createUser = await User.create({ user_id: passUser.id });
+
             const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
             //Add axios call to get user's finished workouts and add the call to the homepage() function
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-          
+
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-            
+
             web.views.publish(homepage(passUser, allWorkouts, wod[0]));
+            return
         } catch (err) {
 
             console.error(err.message);

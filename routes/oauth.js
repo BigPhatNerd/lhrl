@@ -17,7 +17,7 @@ router.route("/")
         } else {
             console.log({ clientId });
             console.log({ clientSecret });
-            console.log({ url })
+            console.log({ urlString })
             request({
                 url: 'https://slack.com/api/oauth.v2.access',
                 qs: { code: req.query.code, client_id: clientId, client_secret: clientSecret, redirect_uri: `${urlString}/oauth/` },

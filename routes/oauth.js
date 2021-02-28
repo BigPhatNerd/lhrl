@@ -15,6 +15,9 @@ router.route("/")
             res.send({ "Error": "Looks like we're not getting code." });
             console.log("Looks like we are not getting code.");
         } else {
+            console.log({ clientId });
+            console.log({ clientSecret });
+            console.log({ url })
             request({
                 url: 'https://slack.com/api/oauth.v2.access',
                 qs: { code: req.query.code, client_id: clientId, client_secret: clientSecret, redirect_uri: `${urlString}/oauth/` },

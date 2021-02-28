@@ -70,7 +70,8 @@ const slackController = {
     async publishHomepage(req, res) {
         try {
 
-            res.send(req.body);
+            //I think I just comment this out since the url has already been registered?
+            // res.send(req.body)
 
             const { user } = req.body.event;
             console.log("user (in slack controller): ", user);
@@ -80,9 +81,11 @@ const slackController = {
 
 
             const team_id = userInfo.user.team_id;
-            const createUser = await User.create({ user_id: passUser.id });
 
-            const updateUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
+
+            const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
+            console.log("req.body: ", req.body)
+            console.log({ userInfo })
             console.log({ createUser });
             console.log({ passUser })
             //Add axios call to get user's finished workouts and add the call to the homepage() function

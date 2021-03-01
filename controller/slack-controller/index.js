@@ -73,7 +73,7 @@ const slackController = {
             //I think I just comment this out since the url has already been registered?
             // res.send(req.body)
             console.log("req.body...: ", req.body);
-            const { user } = req.body.event;
+            var { user } = req.body.event;
             console.log("user (in slack controller): ", user);
             const api_app_id = req.body.api_app_id;
             user = user.trim();

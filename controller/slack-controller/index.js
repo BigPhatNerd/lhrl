@@ -72,11 +72,12 @@ const slackController = {
 
             //I think I just comment this out since the url has already been registered?
             // res.send(req.body)
-
+            console.log("req.body...: ", req.body);
             const { user } = req.body.event;
             console.log("user (in slack controller): ", user);
             const api_app_id = req.body.api_app_id;
             const userInfo = await web.users.info({ user: user });
+            console.log({ userInfo });
             const passUser = userInfo.user;
 
 
@@ -92,8 +93,10 @@ const slackController = {
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+            const showHomepage = await homepage(passUser, allWorkouts, wod[0])
 
-            web.views.publish(homepage(passUser, allWorkouts, wod[0]));
+            // web.views.publish(homepage(passUser, allWorkouts, wod[0]));
+            web.views.publish(showHomepage)
             return
         } catch (err) {
 

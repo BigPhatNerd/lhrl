@@ -16,6 +16,7 @@
   "license": "ISC",
   "homepage": "https://github.com/BigPhatNerd/slack_ngrok",
   "dependencies": {
+    "@slack/events-api": "^3.0.0",
     "@slack/interactive-messages": "^1.6.0",
     "@slack/web-api": "^5.10.0",
     "axios": ">=0.21.1",

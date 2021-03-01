@@ -85,17 +85,14 @@ const slackController = {
 
 
             const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
-            console.log("req.body: ", req.body)
-            console.log({ userInfo })
-            console.log({ createUser });
-            console.log({ passUser })
+         
             //Add axios call to get user's finished workouts and add the call to the homepage() function
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
             const showHomepage = await homepage(passUser, allWorkouts, wod[0])
 
-            // web.views.publish(homepage(passUser, allWorkouts, wod[0]));
+           
             web.views.publish(showHomepage)
             return
         } catch (err) {

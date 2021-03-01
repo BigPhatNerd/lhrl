@@ -92,14 +92,8 @@ router.post('/cf-wod', async (req, res) => {
 router.post('/lhrl', async (req, res) => {
     try {
 
-        console.log("whatever")
-        console.log("req.body: ", req.body);
-
         const { user_id, api_app_id, trigger_id, response_url } = req.body;
-
         res.send(200, "Opening LHRL Modal");
-        console.log("Maybe it is a scope thing?");
-
         const userInfo = await web.users.info({ user: user_id });
         const passUser = userInfo.user;
         const team_id = userInfo.user.team_id;
@@ -107,9 +101,9 @@ router.post('/lhrl', async (req, res) => {
         const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
-        // const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
+
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-        console.log("\n\n\nwod: ", wod);
+
         web.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
 
 

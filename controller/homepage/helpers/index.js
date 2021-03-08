@@ -534,7 +534,7 @@ module.exports = {
                         "type": "button",
                         "text": {
                             "type": "plain_text",
-                            "text": "Update Weekly Goals",
+                            "text": "⬆️ Update Weekly Goals ⬆️",
                             "emoji": true
                         },
                         "value": "update_weekly_goal",

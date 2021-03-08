@@ -24,7 +24,10 @@ router.post('/slash-commands/send-me-buttons', (req, res) => {
 
 router.post('/external-data', (req, res) => {
     res.send("I think someone is typing on my app.")
-})
+});
+
+
+
 
 module.exports = router;
 

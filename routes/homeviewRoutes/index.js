@@ -4,7 +4,7 @@ const web = require('../../config/slack-web-api.js');
 const slashCreateWorkout = require('../../controller/slashMessageBlocks/createWorkout');
 const slashViewCreatedWorkouts = require('../../controller/slashMessageBlocks/viewCreatedWorkouts');
 const homeModal = require('../../controller/homepage/homeModal.js');
-const { User, CrossFit } = require('../../models');
+const { User, CrossFit, OAuth } = require('../../models');
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
 const {
     divider,
@@ -94,7 +94,9 @@ router.post('/lhrl', async (req, res) => {
 
         const { user_id, api_app_id, trigger_id, response_url } = req.body;
         res.send(200, "Opening LHRL Modal");
-        const userInfo = await web.users.info({ user: user_id });
+        const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+        const webAPI = web(findToken.access_token)
+        const userInfo = await webAPI.users.info({ user: user_id });
         const passUser = userInfo.user;
         const team_id = userInfo.user.team_id;
 
@@ -104,7 +106,7 @@ router.post('/lhrl', async (req, res) => {
 
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
 
-        web.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
+        webAPI.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
 
 
 

@@ -22,8 +22,8 @@ var UserSchema = new Schema({
         default: false
     },
     private: {
-type: Boolean,
-default: true
+        type: Boolean,
+        default: true
     },
 
     displayName: {
@@ -38,7 +38,7 @@ default: true
     },
     username: {
         type: String,
-        
+
 
     },
     team_id: {
@@ -68,7 +68,7 @@ default: true
         type: Schema.Types.ObjectId,
         ref: "GoalReps"
     }],
-     cfWods: [{
+    cfWods: [{
         type: Schema.Types.ObjectId,
         ref: "CrossFit"
     }],
@@ -80,6 +80,7 @@ default: true
         type: Schema.Types.ObjectId,
         ref: "Strava"
     }],
+
 
     selectedProgram: [{
         type: Schema.Types.ObjectId,
@@ -96,6 +97,10 @@ default: true
     session: [{
         type: Schema.Types.ObjectId,
         ref: "Session"
+    }],
+    oauth: [{
+        type: Schema.Types.ObjectId,
+        ref: "OAuth"
     }],
     photos: {},
     created: {

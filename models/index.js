@@ -7,4 +7,5 @@ const WeeklyGoal = require('./WeeklyGoals');
 const Session = require('./Session');
 const GoalReps = require('./GoalReps');
 const CrossFit = require('./CrossFit');
-module.exports = { User, Workout, Strava, Program, FinishedWorkout, WeeklyGoal, Session, GoalReps, CrossFit };
+const OAuth = require('./OAuth');
+module.exports = { User, Workout, Strava, Program, FinishedWorkout, WeeklyGoal, Session, GoalReps, CrossFit, OAuth };

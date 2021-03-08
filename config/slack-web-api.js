@@ -1,12 +1,25 @@
-const { slack } = require('./../lib/keys.js');
-const botToken = process.env.NODE_ENV === "production" ? slack.botToken : slack.dev_botToken;
-const { WebClient } = require('@slack/web-api');
-const web = new WebClient(botToken, { retries: 0 });
-// (async () => {
-//     console.log("\n\n\n\n\nWHATTTTTTT")
-//     await web.auth.test();
+// const { slack } = require('./../lib/keys.js');
+// const botToken = process.env.NODE_ENV === "production" ? slack.botToken : slack.dev_botToken;
+const { WebClient, LogLevel } = require('@slack/web-api');
 
-//     console.log('\n\n\nDone!\n\n\n');
-// })();
 
-module.exports = web;
+
+const web = (token) => {
+    const getToken =
+        new WebClient(token, {
+            logLevel: LogLevel.DEBUG,
+            retries: 0
+        });
+    return getToken
+}
+
+module.exports = web
+
+// const web = new WebClient(botToken, {
+//     logLevel: LogLevel.DEBUG,
+//     retries: 0
+// });
+
+
+
+// module.exports = web;

@@ -18,6 +18,7 @@
   "dependencies": {
     "@slack/events-api": "^3.0.0",
     "@slack/interactive-messages": "^1.6.0",
+    "@slack/oauth": "^2.0.1",
     "@slack/web-api": "^5.10.0",
     "axios": ">=0.21.1",
     "bcrypt": "^5.0.0",

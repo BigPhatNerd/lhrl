@@ -3,8 +3,8 @@ const axios = require('axios');
 module.exports = {
     cfWOD: (wod) => {
         try {
-           
-                var { title, description, type, _id } = wod;
+
+            var { title, description, type, _id } = wod;
             const workoutOfTheDay = {
                 "type": "section",
                 "text": {
@@ -17,7 +17,7 @@ module.exports = {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Enter Score",
+                        "text": "🏋️‍ Enter Score 🏋",
                         "emoji": true
                     },
                     "value": "cf_wod_score",

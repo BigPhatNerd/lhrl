@@ -1,7 +1,7 @@
 const moreSlackInteractions = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
-const { User, Workout, Program, FinishedWorkout, CrossFit } = require('../../models/');
+const { User, Workout, Program, FinishedWorkout, CrossFit, OAuth } = require('../../models/');
 const { createGoalsMessage, intValidation } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
@@ -26,37 +26,41 @@ var viewId;
 var value;
 
 moreSlackInteractions.viewSubmission('confirm_remove', async (payload, respond) => {
+    const findToken = await OAuth.findOne({ team_id: payload.team.id });
+    const webAPI = web(findToken.access_token);
     console.log({ payload })
     const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash } = metadata;
     const user = payload.user.id;
     const removePlan = await axios.delete(`${urlString}/programs/selectedProgram/delete-program/${user}`);
-    const userInfo = await web.users.info({ user: user });
+    const userInfo = await webAPI.users.info({ user: user });
     const passUser = userInfo.user;
     const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
     const wod = await CrossFit.find().limit(1).sort({ date: -1 });
     if(home_or_slash === 'slash') {
         const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
-        web.views.update(update);
+        webAPI.views.update(update);
         return
     }
-    web.views.publish(homepage(passUser, allWorkouts, wod[0]))
+    webAPI.views.publish(homepage(passUser, allWorkouts, wod[0]))
     return
 })
 moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) => {
+    const findToken = await OAuth.findOne({ team_id: payload.team.id });
+    const webAPI = web(findToken.access_token);
     const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;
     const user = payload.user.id;
-    const userInfo = await web.users.info({ user: user });
+    const userInfo = await webAPI.users.info({ user: user });
     const passUser = userInfo.user;
     const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
     const wod = await CrossFit.find().limit(1).sort({ date: -1 });
     if(home_or_slash === "slash") {
-        web.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
+        webAPI.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
         return
     }
 
-    web.views.publish(homepage(passUser, allWorkouts, wod[0]))
+    webAPI.views.publish(homepage(passUser, allWorkouts, wod[0]))
 
 })
 
@@ -66,6 +70,8 @@ moreSlackInteractions.viewSubmission('homepage_modal', async (payload, respond) 
 
 moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respond) => {
     try {
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const webAPI = web(findToken.access_token);
         const username = payload.user.username;
         const user_id = payload.user.id
 
@@ -125,7 +131,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const sendWorkout = axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
 
         const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
+        const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const weeklyGoals = allWorkouts.data[0].weeklyGoals[0];
@@ -166,11 +172,11 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         if(home_or_slash === "slash") {
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]);
-            web.views.update(update)
+            webAPI.views.update(update)
             return
         }
         const updateHomepage = await homepage(passUser, allWorkouts, wod[0]);
-        await web.views.publish(updateHomepage);
+        await webAPI.views.publish(updateHomepage);
 
 
     } catch (err) {
@@ -182,7 +188,8 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
 })
 moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) => {
     try {
-
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const webAPI = web(findToken.access_token);
         const username = payload.user.username;
         const user_id = payload.user.id;
 
@@ -242,7 +249,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const sendGoals = await axios.post(`${urlString}/weeklyGoals/${user_id}`, data);
 
         const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
+        const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
@@ -257,11 +264,11 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
-            web.views.update(update)
+            webAPI.views.update(update)
             return
         }
         const updateHome = await homepage(passUser, allWorkouts, wod[0]);
-        await web.views.publish(updateHome);
+        await webAPI.views.publish(updateHome);
 
     } catch (err) {
 
@@ -271,6 +278,8 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
 });
 moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) => {
     try {
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash, homeModal_view_id, id } = metadata;
 
@@ -332,7 +341,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const sendGoals = await axios.put(`${urlString}/weeklyGoals/${id}`, data);
 
         const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
+        const userInfo = await webAPI.users.info({ user: user });
 
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
@@ -345,11 +354,11 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         if(home_or_slash === "slash") {
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
-            web.views.update(update)
+            webAPI.views.update(update)
             return
         }
         const updateHome = await homepage(passUser, allWorkouts, wod[0]);
-        await web.views.publish(updateHome)
+        await webAPI.views.publish(updateHome)
     } catch (err) {
 
         console.error(err.message);
@@ -359,7 +368,8 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
 
 moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
     try {
-
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const webAPI = web(findToken.access_token);
 
         const metadata = JSON.parse(payload.view.private_metadata);
 
@@ -516,7 +526,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
             }
         }
         const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
+        const userInfo = await webAPI.users.info({ user: user });
 
         const passUser = userInfo.user;
         const view_id = payload.view.root_view_id;
@@ -533,11 +543,11 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
         if(home_or_slash === "slash") {
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
-            web.views.update(update)
+            webAPI.views.update(update)
             return
         }
         const homePage = await homepage(passUser, allWorkouts, wod[0]);
-        await web.views.publish(homePage);
+        await webAPI.views.publish(homePage);
     } catch (err) {
         console.error(err.message);
 

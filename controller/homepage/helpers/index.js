@@ -49,7 +49,7 @@ module.exports = {
                 "type": "button",
                 "text": {
                     "type": "plain_text",
-                    "text": "Authorize Strava",
+                    "text": "🏃 Authorize Strava 🏃‍",
                     "emoji": true
                 },
                 "value": "Authorize Strava",
@@ -310,7 +310,7 @@ module.exports = {
                 "type": "button",
                 "text": {
                     "type": "plain_text",
-                    "text": "Remove Plan",
+                    "text": "🚮 Remove Plan 🚮",
                     "emoji": true
                 },
                 "value": "remove_workouts",
@@ -415,7 +415,7 @@ module.exports = {
                 "type": "button",
                 "text": {
                     "type": "plain_text",
-                    "text": "Set Weekly Goals",
+                    "text": "🎯 Set Weekly Goals 🎯",
                     "emoji": true
                 },
                 "value": "weekly_goal",
@@ -522,7 +522,7 @@ module.exports = {
                         "type": "button",
                         "text": {
                             "type": "plain_text",
-                            "text": "Add Completed Reps",
+                            "text": "📈 Add Completed Reps 📈",
                             "emoji": true
 
                         },
@@ -598,20 +598,20 @@ module.exports = {
         const today = dayjs().format('YYYY-MM-D');
         console.log("today", today);
         const datePicker = {
-    "type": "actions",
-    "block_id": "calendar",
-    "elements": [{
-        "type": "datepicker",
-        
-        "placeholder": {
-            "type": "plain_text",
-            "text": "Select a date",
-            "emoji": true
-        },
-        "action_id": "calendar",
+            "type": "actions",
+            "block_id": "calendar",
+            "elements": [{
+                "type": "datepicker",
 
-    }]
-}
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select a date",
+                    "emoji": true
+                },
+                "action_id": "calendar",
+
+            }]
+        }
         return datePicker
     }
 

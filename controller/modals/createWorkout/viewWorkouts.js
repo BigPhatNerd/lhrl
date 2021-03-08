@@ -3,7 +3,7 @@ var dayjs = require("dayjs");
 const viewWorkouts = async (payload, workouts, slashOrHome) => {
     const { trigger_id } = payload;
 
-var paginate = 0;
+    var paginate = 0;
     var maxRecords = paginate + 6;
     var shortData;
     if(workouts.data.length === 0) {
@@ -13,7 +13,7 @@ var paginate = 0;
     }
     // const shortData = workouts.data[0].workouts;
     const array = [];
-    
+
     const blockData = (info) => {
 
         // const date = dayjs(info.day).format('dddd MMMM D YYYY')
@@ -40,7 +40,7 @@ var paginate = 0;
                 text: {
                     type: "mrkdwn",
                     text: "*Date Created:* " + date,
-                    
+
                 },
 
 
@@ -49,7 +49,7 @@ var paginate = 0;
                 text: {
                     type: "mrkdwn",
                     text: "*Type:* " + info[paginate].type,
-                   
+
                 },
 
 
@@ -58,14 +58,14 @@ var paginate = 0;
                 text: {
                     type: "mrkdwn",
                     text: "*Name:* " + info[paginate].name,
-                   
+
                 },
             }, {
                 type: "section",
                 text: {
                     type: "mrkdwn",
                     text: "*Description:* " + info[paginate].description,
-                 
+
                 },
 
             }, {
@@ -108,22 +108,24 @@ var paginate = 0;
             ///^^^ Testing workout type
 
         }
-          array.push({
-            "type": "actions",
-            "elements": [
-               
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
-                        "emoji": true
-                    },
-                    "value": "created_next",
-                    "action_id": "created_next"
-                }
-            ]
-        });
+        if(shortData.length > 6) {
+            array.push({
+                "type": "actions",
+                "elements": [
+
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
+                            "emoji": true
+                        },
+                        "value": "created_next",
+                        "action_id": "created_next"
+                    }
+                ]
+            });
+        }
         return array;
     }
 
@@ -136,13 +138,13 @@ var paginate = 0;
         view: {
             "type": "modal",
             "callback_id": "view_workouts",
-             "private_metadata": JSON.stringify({
+            "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
-                  "homeModal_view_id": payload.view.id,
-                  "view_paginate": String(0)
+                "homeModal_view_id": payload.view.id,
+                "view_paginate": String(0)
 
-              }),
-                   
+            }),
+
             "title": {
                 "type": "plain_text",
                 "text": "Workouts Created: ",

@@ -37,14 +37,17 @@ const updateGoals = require('../modals/weeklyGoals/updateGoals');
 const addRepsToGoals = require('../modals/addRepsToGoals');
 const submitScore = require('../modals/cfWOD/submitScore');
 const { url } = require('../../lib/keys');
-const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit } = require('../../models/');
+const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit, OAuth } = require('../../models/');
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
 //buttons pressed from the homepage view
 buttons.action({ type: 'datepicker' }, async (payload, respond) => {
     try {
 
+
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const webAPI = web(findToken.access_token);
         const user = payload.user.id;
-        const userInfo = await web.users.info({ user: user });
+        const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
 
 
@@ -56,15 +59,15 @@ buttons.action({ type: 'datepicker' }, async (payload, respond) => {
             if(payload.view.callback_id === "homepage_modal") {
 
                 const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
-                web.views.push(calendar);
+                webAPI.views.push(calendar);
                 return
             }
             const calendar = await viewCalendarWorkouts(payload, allWorkouts, "slash");
-            web.views.open(calendar);
+            webAPI.views.open(calendar);
             return
         }
 
-        console.log("hitting here");
+
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash } = metadata;
         const user_id = payload.user.id;
@@ -73,12 +76,12 @@ buttons.action({ type: 'datepicker' }, async (payload, respond) => {
         if(home_or_slash === "slash") {
 
             const updated = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "slash");
-            web.views.update(updated)
+            webAPI.views.update(updated)
             return
         }
 
         const updated = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "home");
-        web.views.update(updated)
+        webAPI.views.update(updated)
 
 
     } catch (err) {
@@ -89,6 +92,10 @@ buttons.action({ type: 'datepicker' }, async (payload, respond) => {
 buttons.action({ type: 'button' }, async (payload, respond) => {
 
     try {
+
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const webAPI = web(findToken.access_token);
+
         var buttonPressed = payload.actions[0].action_id.replace("updated", "");
 
         value = payload.actions[0].value;
@@ -107,11 +114,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(payload.view.callback_id === "homepage_modal") {
 
                 const listWorkouts = await selectedProgramWorkouts(payload, workouts, "slash");
-                web.views.push(listWorkouts);
+                webAPI.views.push(listWorkouts);
                 return
             }
             const listWorkouts = await selectedProgramWorkouts(payload, workouts, "home");
-            web.views.open(listWorkouts);
+            webAPI.views.open(listWorkouts);
             return
         }
         //pagination for selected program workouts
@@ -126,11 +133,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
                 console.log("Am I here");
                 const selectedProgramIndex = await (updatedProgramWorkouts(payload, payload.view.id, workouts, "slash"))
 
-                web.views.update(selectedProgramIndex);
+                webAPI.views.update(selectedProgramIndex);
                 return
             }
             const selectedProgramIndex = await (updatedProgramWorkouts(payload, payload.view.id, workouts, "home"))
-            web.views.update(selectedProgramIndex);
+            webAPI.views.update(selectedProgramIndex);
             return
         }
         // ENTER SCORE on today's scheduled workout
@@ -146,17 +153,17 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
                 if(payload.view.callback_id === "homepage_modal") {
 
                     const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "yes");
-                    web.views.push(submitTimeView);
+                    webAPI.views.push(submitTimeView);
                     return
                 }
                 const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "no");
-                web.views.push(submitTimeView);
+                webAPI.views.push(submitTimeView);
                 return
 
             }
 
             const submitTimeView = await submitTime(payload, workoutSelected[0], "home", "no");
-            web.views.open(submitTimeView);
+            webAPI.views.open(submitTimeView);
             return
 
         }
@@ -165,12 +172,12 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             console.log({ payload })
             if(payload.view.callback_id === "homepage_modal") {
                 const sendConfirm = await confirmRemove(payload, 'slash');
-                web.views.push(sendConfirm);
+                webAPI.views.push(sendConfirm);
                 return
 
             }
             const sendConfirm = await confirmRemove(payload, 'slash');
-            web.views.open(sendConfirm);
+            webAPI.views.open(sendConfirm);
             return
 
         }
@@ -180,10 +187,10 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(payload.view.callback_id === "homepage_modal") {
 
                 const goals = await setGoals(payload, "slash");
-                web.views.push(goals)
+                webAPI.views.push(goals)
                 return
             }
-            web.views.open(setGoals(payload, "home"));
+            webAPI.views.open(setGoals(payload, "home"));
             return
         }
         //ADD COMPLETED REPS add reps to weekly goals
@@ -191,12 +198,12 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(payload.view.callback_id === "homepage_modal") {
                 const addReps = addRepsToGoals(payload, "slash");
 
-                web.views.push(addReps);
+                webAPI.views.push(addReps);
                 return
             }
 
             const addReps = addRepsToGoals(payload, "home");
-            web.views.open(addReps);
+            webAPI.views.open(addReps);
             return
         }
         // UPDATE WEEKLY GOALS 
@@ -207,27 +214,27 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const goalsSelected = await WeeklyGoal.find({ _id: buttonPressed });
             if(payload.view.callback_id === "homepage_modal") {
                 const update = await updateGoals(payload, goalsSelected[0], "slash");
-                web.views.push(update);
+                webAPI.views.push(update);
                 return
             }
             const update = await updateGoals(payload, goalsSelected[0], "home")
-            web.views.open(update);
+            webAPI.views.open(update);
             return
         }
 
         // ENTER SCORE cf workout of the day
         else if(value === 'cf_wod_score') {
-
+            console.log("\n\n\n\nword\n\n\n\n");
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
 
             if(payload.view.callback_id === "homepage_modal") {
 
                 const score = await submitScore(payload, wod[0], "slash");
-                web.views.push(score);
+                webAPI.views.push(score);
                 return
             }
             const score = await submitScore(payload, wod[0], "home");
-            web.views.open(score);
+            webAPI.views.open(score);
             return
         }
         //-------------------------------------------------------//
@@ -247,71 +254,71 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(workoutSelected[0].type === "Reps") {
                 if(home_or_slash === "slash") {
                     const modal = await repsModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal);
+                    webAPI.views.push(modal);
                     return
 
                 }
                 const modal = await repsModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
                     const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal);
+                    webAPI.views.push(modal);
                     return
 
                 }
                 const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Time") {
                 if(home_or_slash === "slash") {
                     const modal = await timeModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await timeModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Load") {
 
                 if(home_or_slash === "slash") {
                     const modal = await loadModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await loadModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
                     const modal = await otherModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await otherModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Distance") {
                 if(home_or_slash === "slash") {
                     const modal = await distanceModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await distanceModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Meters") {
                 if(home_or_slash === "slash") {
                     const modal = await metersModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await metersModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             }
 
@@ -330,11 +337,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
             if(home_or_slash === "slash") {
                 const awaitWorkouts = await editWorkout(payload, workoutSelected[0], "slash")
-                web.views.push(awaitWorkouts);
+                webAPI.views.push(awaitWorkouts);
                 return
             }
             const awaitWorkouts = await editWorkout(payload, workoutSelected[0], "home")
-            web.views.push(awaitWorkouts);
+            webAPI.views.push(awaitWorkouts);
             return
         }
         // DELETE WORKOUT inside of Workouts Created 
@@ -348,11 +355,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workouts = await axios.get(`${urlString}/slack/get-workouts/${user_id}`);
             if(home_or_slash === "slash") {
                 const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "slash"))
-                web.views.update(updatedIndex);
+                webAPI.views.update(updatedIndex);
                 return
             }
             const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "home"))
-            web.views.update(updatedIndex);
+            webAPI.views.update(updatedIndex);
             return
         }
 
@@ -368,11 +375,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
                 console.log("Am I here");
                 const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "slash"))
 
-                web.views.update(updatedIndex);
+                webAPI.views.update(updatedIndex);
                 return
             }
             const updatedIndex = await (updatedWorkouts(payload, payload.view.id, workouts, "home"))
-            web.views.update(updatedIndex);
+            webAPI.views.update(updatedIndex);
             return
         }
 
@@ -394,72 +401,72 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(workoutSelected[0].type === "Reps") {
                 if(home_or_slash === "slash") {
                     const modal = await repsModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal);
+                    webAPI.views.push(modal);
                     return
 
                 }
                 const modal = await repsModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
                     console.log("whatever");
                     const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal);
+                    webAPI.views.push(modal);
                     return
 
                 }
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "home")
                 return
             } else if(workoutSelected[0].type === "Time") {
                 if(home_or_slash === "slash") {
                     const modal = await timeModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await timeModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Load") {
 
                 if(home_or_slash === "slash") {
                     const modal = await loadModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await loadModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
                     const modal = await otherModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await otherModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Distance") {
                 if(home_or_slash === "slash") {
                     const modal = await distanceModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await distanceModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Meters") {
                 if(home_or_slash === "slash") {
                     const modal = await metersModal(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await metersModal(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             }
 
@@ -475,12 +482,12 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
             if(home_or_slash === "slash") {
                 const edit = await editCompletedWorkout(payload, workoutSelected[0], "slash")
-                web.views.push(edit);
+                webAPI.views.push(edit);
                 return
             }
 
             const edit = await editCompletedWorkout(payload, workoutSelected[0], "home")
-            web.views.push(edit);
+            webAPI.views.push(edit);
             return
         }
         //DELETE WORKOUUT inside of Workouts Completed 
@@ -492,11 +499,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
             if(home_or_slash === "slash") {
                 const workoutIndex = await updatedCompletedWorkouts(payload, payload.view.id, workouts, "slash");
-                web.views.update(workoutIndex);
+                webAPI.views.update(workoutIndex);
                 return
             }
             const workoutIndex = await updatedCompletedWorkouts(payload, payload.view.id, workouts, "home");
-            web.views.update(workoutIndex);
+            webAPI.views.update(workoutIndex);
             return
         }
 
@@ -511,11 +518,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(home_or_slash === "slash") {
 
                 const updatedIndex = await (updatedCompletedWorkouts(payload, payload.view.id, workouts, "slash"))
-                web.views.update(updatedIndex);
+                webAPI.views.update(updatedIndex);
                 return
             }
             const updatedIndex = await (updatedCompletedWorkouts(payload, payload.view.id, workouts, "home"))
-            web.views.update(updatedIndex);
+            webAPI.views.update(updatedIndex);
             return
         }
 
@@ -530,12 +537,12 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workoutSelected = await Program.find({ _id: buttonPressed });
             if(home_or_slash === "slash") {
                 const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "no");
-                web.views.push(submitTimeView);
+                webAPI.views.push(submitTimeView);
                 return
             } else {
 
                 const submitTimeView = await submitTime(payload, workoutSelected[0], "home", "no");
-                web.views.push(submitTimeView);
+                webAPI.views.push(submitTimeView);
                 return
             }
 
@@ -558,72 +565,72 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(workoutSelected[0].type === "Reps") {
                 if(home_or_slash === "slash") {
                     const modal = await calendarReps(payload, workoutSelected[0], "slash")
-                    web.views.push(modal);
+                    webAPI.views.push(modal);
                     return
 
                 }
                 const modal = await calendarReps(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
                     console.log("whatever");
                     const modal = await calendarRoundsPlusReps(payload, workoutSelected[0], "slash")
-                    web.views.push(modal);
+                    webAPI.views.push(modal);
                     return
 
                 }
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 const modal = await calendarRoundsPlusReps(payload, workoutSelected[0], "home")
                 return
             } else if(workoutSelected[0].type === "Time") {
                 if(home_or_slash === "slash") {
                     const modal = await calendarTime(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await calendarTime(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Load") {
 
                 if(home_or_slash === "slash") {
                     const modal = await calendarLoad(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await calendarLoad(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
                     const modal = await calendarOther(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await calendarOther(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Distance") {
                 if(home_or_slash === "slash") {
                     const modal = await calendarDistance(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await calendarDistance(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Meters") {
                 if(home_or_slash === "slash") {
                     const modal = await calendarMeters(payload, workoutSelected[0], "slash")
-                    web.views.push(modal)
+                    webAPI.views.push(modal)
                     return
                 }
                 const modal = await calendarMeters(payload, workoutSelected[0], "home")
-                web.views.push(modal);
+                webAPI.views.push(modal);
                 return
             }
 
@@ -639,12 +646,12 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workoutSelected = await FinishedWorkout.find({ _id: buttonPressed });
             if(home_or_slash === "slash") {
                 const edit = await editCalendarWorkout(payload, workoutSelected[0], "slash")
-                web.views.push(edit);
+                webAPI.views.push(edit);
                 return
             }
 
             const edit = await editCalendarWorkout(payload, workoutSelected[0], "home")
-            web.views.push(edit);
+            webAPI.views.push(edit);
             return
         }
         //DELETE WORKOUT inside of Workouts Completed 
@@ -656,11 +663,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             const workouts = await axios.get(`${urlString}/finishedWorkouts/${user_id}`)
             if(home_or_slash === "slash") {
                 const workoutIndex = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "slash");
-                web.views.update(workoutIndex);
+                webAPI.views.update(workoutIndex);
                 return
             }
             const workoutIndex = await updatedCalendarWorkouts(payload, payload.view.id, workouts, "home");
-            web.views.update(workoutIndex);
+            webAPI.views.update(workoutIndex);
             return
         }
 
@@ -674,7 +681,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         //AUTHORIZE STRAVA (at the very top of the page)
         else if(value === 'Authorize Strava') {
             const user = payload.user.id;
-            const userInfo = await web.users.info({ user: user });
+            const userInfo = await webAPI.users.info({ user: user });
             const passUser = userInfo.user;
             const { id, team_id, name, real_name } = userInfo.user;
             const api_app_id = payload.api_app_id;
@@ -693,7 +700,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         //DEAUTHORIZE STRAVA (at the very top of the page)
         else if(value === 'Deauthorize Strava') {
             const user = payload.user.id;
-            const userInfo = await web.users.info({ user: user });
+            const userInfo = await webAPI.users.info({ user: user });
 
             const passUser = userInfo.user;
             axios.put(`${urlString}/strava/deauth/${passUser.id}`);
@@ -702,10 +709,10 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
                 // const wod = await CrossFit.find().limit(1).sort({ $natural: -1 });
                 const update = updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]);
-                web.views.update(update)
+                webAPI.views.update(update)
                 return
             }
-            web.views.publish(homepage(passUser, allWorkouts))
+            webAPI.views.publish(homepage(passUser, allWorkouts))
             return
         }
     } catch (err) {

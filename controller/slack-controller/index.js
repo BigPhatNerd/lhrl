@@ -75,9 +75,9 @@ const slackController = {
             console.log("req.body...: ", req.body);
             var { user } = req.body.event;
             console.log("user (in slack controller): ", user);
-            const findToken = await OAuth.findOne({ team_id: req.body.team_id })
-            console.log({ findToken })
-            const webAPI = web(findToken.access_token)
+            const findToken = await OAuth.findOne({ team_id: req.body.team_id });
+            console.log({ findToken });
+            const webAPI = web(findToken.access_token);
             const api_app_id = req.body.api_app_id;
             user = user.trim();
             const userInfo = await webAPI.users.info({ user: user });

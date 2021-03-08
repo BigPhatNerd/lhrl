@@ -43,29 +43,27 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
             const date = dayjs(info[paginate].date).format('dddd MMMM D YYYY');
 
             ///Beginning to test different workout types below:
-         if(info[paginate].type === "Run") {
-            array.push(
-            {
+            if(info[paginate].type === "Run") {
+                array.push({
                     type: "section",
                     text: {
                         type: "mrkdwn",
                         text: "*Date Completed:* " + workoutDate,
-                       
+
                     },
 
 
-                },
-                 {
+                }, {
                     type: "section",
                     text: {
                         type: "mrkdwn",
                         text: "*Strava Upload*",
-                        
+
                     },
 
 
-                },{
-                "type": "section",
+                }, {
+                    "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Type of Exercise:* " + activityType(info[paginate].type) + "\n" +
@@ -73,12 +71,11 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                             "*Time:* " + timeOfWorkout(info[paginate].seconds) + "\n" +
                             "*Average Speed:* " + avgMile(info[paginate].seconds, info[paginate].distance) + "\n"
                     },
-            },
-            {
+                }, {
                     "type": "divider"
                 })
 
-        }   else if(info[paginate].type === "Reps") {
+            } else if(info[paginate].type === "Reps") {
                 array.push({
                     type: "section",
                     text: {
@@ -710,22 +707,24 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                 })
             }
         }
-        array.push({
-            "type": "actions",
-            "elements": [
+        if(shortData.length > 6) {
+            array.push({
+                "type": "actions",
+                "elements": [
 
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
-                        "emoji": true
-                    },
-                    "value": "completed_next",
-                    "action_id": "completed_next"
-                }
-            ]
-        });
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "More :black_right_pointing_double_triangle_with_vertical_bar:",
+                            "emoji": true
+                        },
+                        "value": "completed_next",
+                        "action_id": "completed_next"
+                    }
+                ]
+            });
+        }
         return array
     }
 

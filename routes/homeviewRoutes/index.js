@@ -118,6 +118,39 @@ router.post('/lhrl', async (req, res) => {
 
 });
 
+router.post('/dev_lhrl', async (req, res) => {
+    try {
+
+        const { user_id, api_app_id, trigger_id, response_url } = req.body;
+        res.send(200, "Opening DEV_LHRL Modal");
+        const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+        console.log({ trigger_id });
+        console.log({ findToken });
+        const webAPI = web(findToken.access_token)
+        const userInfo = await webAPI.users.info({ user: user_id });
+        console.log({ userInfo })
+        const passUser = userInfo.user;
+        const team_id = userInfo.user.team_id;
+
+        const createUser = await User.findOneAndUpdate({ user_id: passUser.id }, { $set: { team_id: team_id, user_name: passUser.name, api_app_id: api_app_id } }, { upsert: true, new: true });
+
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+
+        webAPI.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
+
+
+
+    } catch (err) {
+
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+});
+
+
 
 
 

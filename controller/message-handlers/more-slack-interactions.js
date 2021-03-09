@@ -21,7 +21,7 @@ const axios = require('axios');
 const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
-const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook : slack.dev_lhrl_Webhook;
+
 var viewId;
 var value;
 
@@ -152,7 +152,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const { home_or_slash } = metadata;
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(lhrlWebhook, {
+            const confirm = await axios.post(findToken.webhook, {
                 "text": `${passUser.real_name} just did some work! 💪`,
                 "blocks": [{
                     "type": "section",
@@ -229,7 +229,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         }
         miles = miles.miles.value;
         let isMiles = /^[1-9]\d*(\.\d+)?$/.test(miles);
-        if(!isMiles) {
+        if(!isMiles && miles !== null) {
 
             return Promise.resolve({
                 response_action: "errors",
@@ -253,7 +253,7 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(lhrlWebhook, { "text": `${passUser.real_name} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+            const confirm = await axios.post(findToken.webhook, { "text": `${passUser.real_name} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         }
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
@@ -347,7 +347,7 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(lhrlWebhook, { "text": `${passUser.real_name} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+            const confirm = await axios.post(findToken.webhook, { "text": `${passUser.real_name} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         }
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
@@ -535,7 +535,7 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(lhrlWebhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
+            const confirm = await axios.post(findToken.webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
         }
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 

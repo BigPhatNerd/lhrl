@@ -36,7 +36,10 @@ router.route("/")
                                 authed_user_access_token: body.authed_user.access_token,
                                 bot_user_id: body.bot_user_id,
                                 access_token: body.access_token,
-                                team_id: body.team.id
+                                team_id: body.team.id,
+                                webhook_channel: body.incoming_webhook.channel,
+                                webhook_channel_id: body.incoming_webhook.channel_id,
+                                webhook: body.incoming_webhook.url
                             }
                         }, { upsert: true, new: true });
                         console.log({ createToken })
@@ -54,7 +57,10 @@ router.route("/")
                                 bot_user_id: body.bot_user_id,
                                 access_token: body.access_token,
                                 team_id: body.team.id,
-                                enterprise_id: body.enterprise.id
+                                enterprise_id: body.enterprise.id,
+                                webhook_channel: body.incoming_webhook.channel,
+                                webhook_channel_id: body.incoming_webhook.channel_id,
+                                webhook: body.incoming_webhook.url
                             }
                         }, { upsert: true, new: true });
                         console.log({ createToken })

@@ -23,6 +23,15 @@ const oauthSchema = new Schema({
     access_token: {
         type: String
     },
+    webhook_channel: {
+        type: String
+    },
+    webhook_channel_id: {
+        type: String
+    },
+    webhook: {
+        type: String
+    },
 
 })
 

@@ -18,7 +18,7 @@ const {
     testSlackBlock
 } = require('../slack-templates/strava-templates');
 const post = { "text": "booga booga" }
-const lhrlWebhook = process.env.NODE_ENV === "production" ? slack.lhrl_Webhook : slack.dev_lhrl_Webhook;
+
 
 router.get('/find', async (req, res) => {
     const findUser = await User.findOne({ "email": req.query.email });
@@ -47,7 +47,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
 //Create route for STRAVA webhook to go to Slack
 router.post('/webhook', async (req, res) => {
     try {
-
+        console.log("req in strava webhook: ", req);
         const {
             aspect_type,
             object_id,
@@ -84,10 +84,12 @@ router.post('/webhook', async (req, res) => {
 
 
         }
+        console.log("stravaData: ", stravaData);
         const finishedWorkouts = await FinishedWorkout.create(stravaBody);
         const addFinishedWorkout = await User.findOneAndUpdate({ stravaId: owner_id }, { $push: { finishedWorkouts: finishedWorkouts } }, { new: true })
         //Save the information to mongoose by searching for stravaId
-
+        console.log("addFinished workout: ", addFinishedWorkout);
+        console.log("Take the user and search OAuth based on addFinishedWorkout.team_id...or whatever");
         const body = {
             type: type,
             owner_id: athlete.id,
@@ -111,8 +113,14 @@ router.post('/webhook', async (req, res) => {
                 }
 
                 const { name, stravaAvatar } = activityData;
+                //Trying to find the webhook from the users team_id but not sure If I am calling it right
+                OAuth.findOne({ team_id: addFinishedWorkout.team_id })
+                    .then(response => {
+                        console.log({ response })
+                        axios.post(response.webhook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
 
-                axios.post(slack.lhrl_Webhook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
+                    })
+
 
             })
 

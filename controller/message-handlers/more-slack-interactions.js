@@ -152,6 +152,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const { home_or_slash } = metadata;
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
+            console.log({ findToken });
             const confirm = await axios.post(findToken.webhook, {
                 "text": `${passUser.real_name} just did some work! 💪`,
                 "blocks": [{

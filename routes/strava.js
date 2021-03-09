@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Strava, Session, FinishedWorkout } = require('../models');
+const { User, Strava, Session, FinishedWorkout, OAuth } = require('../models');
 const passport = require('../config/authentication');
 const { slack, strava, url } = require('../lib/keys');
 const axios = require('axios');
@@ -45,9 +45,10 @@ router.put('/deauth/:stravaId', async (req, res) => {
 })
 
 //Create route for STRAVA webhook to go to Slack
+
 router.post('/webhook', async (req, res) => {
     try {
-        console.log("req in strava webhook: ", req);
+        console.log("req in strava webhook: ", req.data);
         const {
             aspect_type,
             object_id,
@@ -117,6 +118,7 @@ router.post('/webhook', async (req, res) => {
                 OAuth.findOne({ team_id: addFinishedWorkout.team_id })
                     .then(response => {
                         console.log({ response })
+                        //I think that stravaHook would be where I could map through however many workouts were added.
                         axios.post(response.webhook, stravaHook(stravaData.data[0], name, stravaAvatar), config);
 
                     })

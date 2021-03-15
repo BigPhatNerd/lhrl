@@ -72,7 +72,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                                 "*Distance:* " +
                                 getMiles(info[paginate].distance) +
                                 "miles / " +
-                                getKilometers(info[i].distance) +
+                                getKilometers(info[paginate].distance) +
                                 "km's\n" +
                                 "*Time:* " +
                                 timeOfWorkout(info[paginate].seconds) +

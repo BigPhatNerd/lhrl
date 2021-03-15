@@ -1,7 +1,7 @@
-const { User, FinishedWorkout, WeeklyGoal } = require('../../models');
+const { User, FinishedWorkout, WeeklyGoal } = require("../../models");
 
-const dayjs = require('dayjs');
-var weekOfYear = require('dayjs/plugin/weekOfYear')
+const dayjs = require("dayjs");
+var weekOfYear = require("dayjs/plugin/weekOfYear");
 dayjs.extend(weekOfYear);
 
 const finishedWorkouts = {
@@ -11,12 +11,15 @@ const finishedWorkouts = {
             console.log("\n\n\nbody: ", body);
             const finishedWorkout = await FinishedWorkout.create(body);
 
-            const addFinishedWorkout = await User.findOneAndUpdate({ user_id: user_id }, { $push: { finishedWorkouts: finishedWorkout } }, { new: true })
+            const addFinishedWorkout = await User.findOneAndUpdate(
+                { user_id: user_id },
+                { $push: { finishedWorkouts: finishedWorkout } },
+                { new: true }
+            );
             res.json(addFinishedWorkout);
         } catch (err) {
-
             console.error(err.message);
-            res.status(500).send('Server Error');
+            res.status(500).send("Server Error");
         }
     },
 
@@ -24,24 +27,25 @@ const finishedWorkouts = {
         const user_id = params.user_id;
         const userWorkouts = await User.find({ user_id })
             .populate({
-                path: 'finishedWorkouts',
-                options: { sort: { 'date': -1 } },
-                select: '-__v'
-
+                path: "finishedWorkouts",
+                options: { sort: { date: -1 } },
+                select: "-__v",
             })
-            .select('-__v');
-        res.json(userWorkouts)
-
+            .select("-__v");
+        res.json(userWorkouts);
     },
     async editFinishedWorkouts({ params, body }, res) {
         try {
             const workoutId = params.workoutId;
-            const workout = await FinishedWorkout.findByIdAndUpdate(workoutId, body, { new: true, runValidators: true });
-            res.json(workout)
+            const workout = await FinishedWorkout.findByIdAndUpdate(
+                workoutId,
+                body,
+                { new: true, runValidators: true }
+            );
+            res.json(workout);
         } catch (err) {
-
             console.error(err.message);
-            res.status(500).send('Server Error');
+            res.status(500).send("Server Error");
         }
     },
     async deleteFinishedWorkouts({ params, body }, res) {
@@ -51,12 +55,10 @@ const finishedWorkouts = {
             const deletedWorkout = await FinishedWorkout.findByIdAndUpdate(id);
             res.json("Workout deleted");
         } catch (err) {
-
             console.error(err.message);
-            res.status(500).send('Server Error');
+            res.status(500).send("Server Error");
         }
-    }
-
-}
+    },
+};
 
 module.exports = finishedWorkouts;

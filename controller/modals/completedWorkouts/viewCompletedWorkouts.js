@@ -51,7 +51,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                         type: "section",
                         text: {
                             type: "mrkdwn",
-                            text: "*Date Completed:* " + workoutDate,
+                            text: "*Date Completed:* " + date,
                         },
                     },
                     {

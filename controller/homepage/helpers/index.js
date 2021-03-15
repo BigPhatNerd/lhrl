@@ -107,7 +107,7 @@ module.exports = {
                 type: "button",
                 text: {
                     type: "plain_text",
-                    text: "View Program Workouts",
+                    text: "❇️ View Program Workouts ❇️",
                     emoji: true,
                 },
                 value: "program_workouts",

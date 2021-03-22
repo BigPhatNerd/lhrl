@@ -402,7 +402,7 @@ module.exports = {
                 type: "button",
                 text: {
                     type: "plain_text",
-                    text: "Enter Score",
+                    text: "🎯 Enter Score 🎯",
                     emoji: true,
                 },
                 value: "daily_program_score",

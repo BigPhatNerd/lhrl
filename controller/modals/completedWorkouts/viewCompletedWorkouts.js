@@ -215,7 +215,7 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "mrkdwn",,
+                            type: "mrkdwn",
                             text: "*Rounds:* " + info[paginate].rounds,
                             
                         },

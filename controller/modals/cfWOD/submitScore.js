@@ -41,22 +41,25 @@ const submitScore = (payload, wod, slashOrHome) => {
                             "type": "radio_buttons",
                             "initial_option": {
                                 "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Keep this private.* :shushing_face:"
+                                    "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                 },
                                 "value": "private"
                             },
                             "options": [{
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Keep this private.* :shushing_face:"
+                                        "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                     },
                                     "value": "private"
                                 },
                                 {
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Share with channel* :loud_sound:"
+                                        "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                                     },
                                     "value": "public"
                                 }
@@ -186,22 +189,25 @@ const submitScore = (payload, wod, slashOrHome) => {
                             "type": "radio_buttons",
                             "initial_option": {
                                 "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Keep this private.* :shushing_face:"
+                                     "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                 },
                                 "value": "private"
                             },
                             "options": [{
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Keep this private.* :shushing_face:"
+                                          "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                     },
                                     "value": "private"
                                 },
                                 {
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Share with channel* :loud_sound:"
+                                       "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                                     },
                                     "value": "public"
                                 }
@@ -325,22 +331,25 @@ const submitScore = (payload, wod, slashOrHome) => {
                             "type": "radio_buttons",
                             "initial_option": {
                                 "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Keep this private.* :shushing_face:"
+                                   "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                 },
                                 "value": "private"
                             },
                             "options": [{
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Keep this private.* :shushing_face:"
+                                         "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                     },
                                     "value": "private"
                                 },
                                 {
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Share with channel* :loud_sound:"
+                                       "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                                     },
                                     "value": "public"
                                 }
@@ -470,22 +479,25 @@ const submitScore = (payload, wod, slashOrHome) => {
                             "type": "radio_buttons",
                             "initial_option": {
                                 "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Keep this private.* :shushing_face:"
+                                     "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                 },
                                 "value": "private"
                             },
                             "options": [{
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Keep this private.* :shushing_face:"
+                                         "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                     },
                                     "value": "private"
                                 },
                                 {
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Share with channel* :loud_sound:"
+                                       "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                                     },
                                     "value": "public"
                                 }
@@ -598,22 +610,25 @@ const submitScore = (payload, wod, slashOrHome) => {
                             "type": "radio_buttons",
                             "initial_option": {
                                 "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Keep this private.* :shushing_face:"
+                                     "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                 },
                                 "value": "private"
                             },
                             "options": [{
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Keep this private.* :shushing_face:"
+                                         "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                     },
                                     "value": "private"
                                 },
                                 {
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Share with channel* :loud_sound:"
+                                       "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                                     },
                                     "value": "public"
                                 }
@@ -713,22 +728,25 @@ const submitScore = (payload, wod, slashOrHome) => {
                             "type": "radio_buttons",
                             "initial_option": {
                                 "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Keep this private.* :shushing_face:"
+                                      "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                 },
                                 "value": "private"
                             },
                             "options": [{
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Keep this private.* :shushing_face:"
+                                         "type": "plain_text",
+                            "text": "Keep this private. 🤫",
+                            "emoji": true
                                     },
                                     "value": "private"
                                 },
                                 {
                                     "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*Share with channel* :loud_sound:"
+                                       "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                                     },
                                     "value": "public"
                                 }

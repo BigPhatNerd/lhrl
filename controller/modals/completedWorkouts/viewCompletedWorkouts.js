@@ -94,49 +94,49 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                           
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                           type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                           type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Reps: " + info[paginate].reps,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Reps:* " + info[paginate].reps,
+                           
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {
@@ -183,57 +183,57 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Rounds: " + info[paginate].rounds,
-                            emoji: true,
+                            type: "mrkdwn",,
+                            text: "*Rounds:* " + info[paginate].rounds,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Reps: " + info[paginate].reps,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Reps:* " + info[paginate].reps,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {
@@ -280,57 +280,57 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Minutes: " + info[paginate].minutes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Minutes:* " + info[paginate].minutes,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Seconds: " + info[paginate].seconds,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Seconds:* " + info[paginate].seconds,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {
@@ -377,49 +377,49 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Weight: " + info[paginate].weight,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Weight:* " + info[paginate].weight,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {
@@ -469,49 +469,49 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Miles: " + info[paginate].miles,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Miles:* " + info[paginate].miles,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {
@@ -558,49 +558,49 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Meters: " + info[paginate].meters,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Meters:* " + info[paginate].meters,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {
@@ -647,41 +647,41 @@ const viewFinishedWorkouts = async (payload, workouts, slashOrHome) => {
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Date Completed: " + date,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Date Completed:* " + date,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Type: " + info[paginate].type,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Type:* " + info[paginate].type,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Name: " + info[paginate].name,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Name:* " + info[paginate].name,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Description: " + info[paginate].description,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Description:* " + info[paginate].description,
+                            
                         },
                     },
                     {
                         type: "section",
                         text: {
-                            type: "plain_text",
-                            text: "Notes: " + info[paginate].notes,
-                            emoji: true,
+                            type: "mrkdwn",
+                            text: "*Notes:* " + info[paginate].notes,
+                            
                         },
                     },
                     {

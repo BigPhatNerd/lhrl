@@ -7,9 +7,9 @@ const urlString = process.env.NODE_ENV === "production" ? url.production : url.d
 const clientId = process.env.NODE_ENV === "production" ? slack.clientID : slack.dev_clientID;
 const clientSecret = process.env.NODE_ENV === "production" ? slack.clientSecret : slack.dev_clientSecret;
 const { OAuth, User } = require('../models');
-router.route('/install').get((req, res) =>{
-res.redirect(301, '/');
-});
+
+
+
 
 router.route("/")
     .get((req, res) => {

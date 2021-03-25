@@ -22,10 +22,33 @@ body {
     color: white;
 }
 
+#nav {
+    display: flex;
+    height: 5rem;
+    margin: 1rem;
+    justify-content: flex-end;
+}
+
+#nav a {
+    font-size: 1rem;
+    color: white;
+}
+
+#nav li {
+    margin-left: 1rem;
+}
+
 a {
     color: grey;
     text-decoration: underline;
     font-size: 1.5rem;
+}
+
+.privacy {
+    margin-top: 2rem;
+    margin-left: 4rem;
+    margin-right: 4rem;
+    line-height: 1.8rem;
 }
 
 ul {
@@ -35,8 +58,13 @@ ul {
 
 .round-img {
     border-radius: 50%;
-    margin-top: 6rem;
+
     max-width: 10rem;
+    height: auto;
+}
+
+.photo {
+    max-width: 50%;
     height: auto;
 }
 

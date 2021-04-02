@@ -5,8 +5,8 @@ const Header = ({ logo }) => {
     return ( 
 
     	
-    	<Row className= 'justify-content-center mb-3'>
-        <img  src={logo} alt="lhrl-logo" className='round-img' style={{textAlign: "center"}} /> 
+    	<Row className= 'justify-content-center'>
+        <img  src={logo} alt="lhrl-logo" className='round-img' /> 
         </Row>
       
 

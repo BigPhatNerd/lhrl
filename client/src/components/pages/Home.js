@@ -18,7 +18,7 @@ const Home = () => {
         <Container >
 <Header logo={logo} />
        
-             <Row className="justify-content-center">
+             <Row className="justify-content-center mt-2">
              <p>Install LHRL® App to your Slack workspace</p>
              </Row>
              <Row className="justify-content-center">

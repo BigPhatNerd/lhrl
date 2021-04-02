@@ -11,7 +11,8 @@ const {
     choosePlan,
     stravaWorkout,
     calendar,
-    divider
+    divider,
+    requiredHelpers
 
 
 
@@ -82,6 +83,7 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
                 createWorkout(),
                 viewOrComplete(),
                 divider(),
+                requiredHelpers()
             ]
         }
     }

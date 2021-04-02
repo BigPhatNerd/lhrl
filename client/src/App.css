@@ -1,4 +1,5 @@
 /* Global Styles */
+
 :root {
     --primary-color: #8C0000;
     --dark-color: #343a40;
@@ -30,11 +31,7 @@ body {
     justify-content: flex-end;
 }
 
-video {
-    width: 80%;
-    margin: auto;
-    margin-top: 2rem;
-}
+
 
 #nav a {
     font-size: 1rem;
@@ -157,6 +154,7 @@ ul {
     font-size: 3rem;
     line-height: 1.2;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .lead {

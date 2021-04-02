@@ -63,6 +63,61 @@ module.exports = {
         };
         return stravaButton;
     },
+    requiredHelpers: () =>{
+const allButtons = {
+            type: "actions",
+            elements: [
+                {
+                    type: "button",
+                    text: {
+                        type: "plain_text",
+                        text: "❓ FAQs ❓",
+                        emoji: true,
+                    },
+                    value: "faqs",
+                    url: `http://www.lhrlapp.com/support`,
+                    action_id: "faqs",
+                },
+                
+                {
+                    type: "button",
+                    text: {
+                        type: "plain_text",
+                        text: "📣 Contact Us 📣",
+                        emoji: true,
+                    },
+                    value: "Authorize Strava",
+                    url: `http://www.lhrlapp.com/contact`,
+                    action_id: "contact",
+                },
+                {
+                    type: "button",
+                    text: {
+                        type: "plain_text",
+                        text: "🎧 Follow Podcast 🎧",
+                        emoji: true,
+                    },
+                    value: "podcast",
+                    url: `https://podcasts.apple.com/us/podcast/lift-heavy-run-long-podcast-inspire-be-inspired/id785714991`,
+                    action_id: "podcast",
+                },
+                {
+                    type: "button",
+                    text: {
+                        type: "plain_text",
+                        text: "🔗 Join Community 🔗",
+                        emoji: true,
+                    },
+                    value: "commnity",
+                    url: `https://www.facebook.com/groups/LiftHeavyRunLong`,
+                    action_id: "commnity",
+                }
+
+
+            ],
+        };
+        return allButtons;
+    },
 
     divider: () => {
         const divider = {

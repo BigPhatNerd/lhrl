@@ -1,5 +1,6 @@
 import React from 'react';
 import demoObject from './demoObject';
+import { Container, Row, Col } from 'react-bootstrap';
 const test = [
 {
 	one: "hello", 
@@ -14,24 +15,27 @@ const isEven = (i) =>{
 
 const Demo = ({order}) =>{
 	
-	return(<div style={{marginTop: "2rem"}}>
-		<hr style={{height:"2px", borderWidth:0, color:"gray",backgroundColor:"gray", width:"80%", margin:"auto", marginBottom:"2rem"}} />
+	return(<Container>
+		<Row>
+		<hr style={{height:"2px", borderWidth:0, color:"gray",backgroundColor:"gray", width:"80%"}} />
+		</Row>
 		{demoObject.map((obj,i) =>{
 
 return(
-		<div style={{display: "flex", justifyContent: "space-around",  width: "80%", margin: "auto", marginBottom: "2rem"}}>
-
-		<img style={{order: isEven(i)}} src={obj.img} alt={obj.alt} className="photo"  /> 
-		<div class="text-box" >
-		<div style={{ textDecoration: "underline", fontSize: "1.2em", marginTop: "1rem", marginBottom: "4rem"}}>{obj.title}</div>
+		<Row className="mb-3 align-items-center">
+		<Col xs={12} md={6} md={{order: isEven(i)}} className="mb-3">
+		<img  style={{maxWidth:"100%"}} src={obj.img} alt={obj.alt}   /> 
+		</Col >
+		<Col xs={12} md={6}className="text-center mb-3">
+		<div style={{ textDecoration: "underline", fontSize: "1.2em"}}>{obj.title}</div>
 		{obj.text.map(point =>(
 		<div style={{textAlign: "left", marginLeft: "1rem", marginRight: "1rem", marginTop: "1.5rem"}}>{point}</div>
 	))}
-		</div>
+		</Col>
 
-		</div>
+		</Row>
 		)})}
-		</div>)
+		</Container>)
 }
 
 export default Demo;

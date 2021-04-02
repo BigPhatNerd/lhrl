@@ -12,6 +12,7 @@ const {
     stravaWorkout,
     calendar,
     divider,
+    requiredHelpers
 
 
 } = require('./helpers');
@@ -84,6 +85,7 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                 createWorkout(),
                 viewOrComplete(),
                 divider(),
+                requiredHelpers()
                
                 
                

@@ -1,6 +1,7 @@
 import React from 'react';
 
 
+
 const Privacy = () =>{
 	return(
 		<div class="privacy">

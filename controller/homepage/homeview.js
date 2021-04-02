@@ -11,7 +11,8 @@ const {
     choosePlan,
     stravaWorkout,
     calendar,
-    divider
+    divider,
+    requiredHelpers
 
 
 
@@ -78,6 +79,7 @@ header("Welcome " + user.real_name),
                 createWorkout(),
                 viewOrComplete(),
                 divider(),
+                requiredHelpers()
 
             ]
         }

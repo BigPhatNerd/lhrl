@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FAQ from '../FAQ';
 import allFaqs from '../faqs';
+import Contact from '../Contact';
 
 const Support = () =>{
 	const [faqs, setFaqs] = useState(allFaqs);
@@ -15,11 +16,15 @@ const Support = () =>{
 		}))
 	}
 	return(
+<>
 		<div className="faqs">
+		<div style={{fontSize: "2rem", textAlign: "center"}}>FAQ's</div>
         {faqs.map((faq, i) => (
           <FAQ faq={faq} index={i} toggleFAQ={toggleFAQ} />
         ))}
       </div>
+      <Contact />
+      </>
 		)
 }
 

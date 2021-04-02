@@ -5,9 +5,9 @@ const Header = ({ logo }) => {
     return ( 
 
     	
-    	<Container className= 'text-center mt-3'>
+    	<Row className= 'justify-content-center mb-3'>
         <img  src={logo} alt="lhrl-logo" className='round-img' style={{textAlign: "center"}} /> 
-        </Container>
+        </Row>
       
 
         

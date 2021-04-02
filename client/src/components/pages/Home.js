@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import logo from '../../img/lhrl.png';
 import Demo from '../Demo';
 import Video from '../Video';
-import Contact from '../Contact';
+
 import {Container, Col, Row } from 'react-bootstrap';
+import Header from '../Header';
+
 
 const Home = () => {
 
@@ -13,7 +15,7 @@ const Home = () => {
     return (
         <>
         <Container >
-
+<Header logo={logo} />
        
              <Row className="justify-content-center">
              <p>Install LHRL® App to your Slack workspace</p>
@@ -30,10 +32,11 @@ const Home = () => {
         <Row className="justify-content-center">
         <Video  />
         </Row>
-         </Container>
+        
         <Demo />
 
-        <Contact />
+       
+         </Container>
     
        </>
     );

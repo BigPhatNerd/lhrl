@@ -15,8 +15,8 @@ const isEven = (i) =>{
 
 const Demo = ({order}) =>{
 	
-	return(<Container>
-		<Row>
+	return(<>
+		<Row className='justify-content-center'>
 		<hr style={{height:"2px", borderWidth:0, color:"gray",backgroundColor:"gray", width:"80%"}} />
 		</Row>
 		{demoObject.map((obj,i) =>{
@@ -35,7 +35,7 @@ return(
 
 		</Row>
 		)})}
-		</Container>)
+		</>)
 }
 
 export default Demo;

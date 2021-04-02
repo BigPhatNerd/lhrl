@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FAQ from '../FAQ';
 import allFaqs from '../faqs';
-import Contact from '../Contact';
+
 
 const Support = () =>{
 	const [faqs, setFaqs] = useState(allFaqs);
@@ -23,7 +23,7 @@ const Support = () =>{
           <FAQ faq={faq} index={i} toggleFAQ={toggleFAQ} />
         ))}
       </div>
-      <Contact />
+     
       </>
 		)
 }

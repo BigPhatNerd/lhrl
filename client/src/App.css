@@ -100,12 +100,12 @@ ul {
 .faqs .faq .faq-question {
     position: relative;
     font-size: 20px;
-    padding-right: 80px;
+
     color: black;
     transition: all 0.4s ease;
 }
 
-.faqs .faq .faq-question::after {
+/*.faqs .faq .faq-question::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -120,7 +120,7 @@ ul {
     background-repeat: no-repeat;
 
     transition: all 0.4s ease-out;
-}
+}*/
 
 .faqs .faq .faq-answer {
     opacity: 0;

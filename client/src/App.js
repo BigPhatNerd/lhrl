@@ -10,14 +10,15 @@ import Authed from './components/pages/Authed';
 import Navbar from './components/Navbar';
 import Privacy from './components/pages/Privacy';
 import Support from './components/pages/Support';
-import EmailUs from './components/pages/EmailUs'
+import EmailUs from './components/pages/EmailUs';
+import Contact from './components/Contact';
 import './App.css'
 
 function App() {
     return (
         <Router>
             <Navbar />
-            <Header logo={logo} />
+          
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/privacy" component={Privacy} />
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/auth" component={Authed} />
                 <Route path="/contact" component={EmailUs} />
             </Switch>
+            <Contact />
         </Router>
     )
 }

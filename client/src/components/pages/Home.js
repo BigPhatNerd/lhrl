@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../img/lhrl.png';
+
 import Demo from '../Demo';
 import Video from '../Video';
  import Contact from '../Contact';
@@ -15,8 +15,8 @@ const Home = () => {
 
     return (
         <>
-        <Container >
-<Header logo={logo} />
+        <Container className="mt-2">
+<Header />
        
              <Row className="justify-content-center mt-2">
              <p>Install LHRL® App to your Slack workspace</p>

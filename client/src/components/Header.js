@@ -1,12 +1,12 @@
 import React from 'react';
-import {Container, Row, Col} from 'react-bootstrap';
-
-const Header = ({ logo }) => {
+import { Row, Image } from 'react-bootstrap';
+import logo from '../img/lhrl.png';
+const Header = () => {
     return ( 
 
     	
     	<Row className= 'justify-content-center'>
-        <img  src={logo} alt="lhrl-logo" className='round-img' /> 
+        <Image  src={logo} width={171} height={180}alt="lhrl-logo" roundedCircle /> 
         </Row>
       
 

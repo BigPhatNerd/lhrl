@@ -11,7 +11,7 @@ import Navbar from './components/Navbar';
 import Privacy from './components/pages/Privacy';
 import Support from './components/pages/Support';
 import EmailUs from './components/pages/EmailUs';
-import Contact from './components/Contact';
+
 import './App.css'
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
                 <Route path="/auth" component={Authed} />
                 <Route path="/contact" component={EmailUs} />
             </Switch>
-            <Contact />
+           
         </Router>
     )
 }

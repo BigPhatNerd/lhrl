@@ -39,6 +39,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.9.15",
     "node-cron": "^2.0.3",
+    "nodemailer": "^6.5.0",
     "open": "^7.3.0",
     "opn": "^6.0.0",
     "passport": "^0.4.1",

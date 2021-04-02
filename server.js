@@ -73,6 +73,7 @@ app.use(function(req, res, next) {
     next();
 });
 require("./routes/api-routes.js")(app);
+require('./routes/nodemailer.js')(app);
 app.use('/', routes);
 app.use('/programs', programRoutes);
 app.use('/weeklyGoals', weeklyGoals);

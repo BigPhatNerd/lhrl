@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
 
 import Demo from '../Demo';
 import Video from '../Video';
  import Contact from '../Contact';
 
-import {Container, Col, Row } from 'react-bootstrap';
+import {Container, Row } from 'react-bootstrap';
 import Header from '../Header';
 
 

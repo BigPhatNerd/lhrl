@@ -1,11 +1,7 @@
 import React from 'react';
 import demoObject from './demoObject';
-import { Container, Row, Col } from 'react-bootstrap';
-const test = [
-{
-	one: "hello", 
-	two: "world"
-}]
+import { Row, Col } from 'react-bootstrap';
+
 const isEven = (i) =>{
 	if(i % 2 === 0){
 		return 0

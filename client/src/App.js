@@ -1,8 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Header from './components/Header';
-import logo from './img/lhrl.png';
+
 
 import Home from './components/pages/Home';
 import Deauthed from './components/pages/Deauthed';

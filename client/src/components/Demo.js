@@ -13,7 +13,7 @@ const Demo = ({order}) =>{
 	
 	return(<>
 		<Row className='justify-content-center'>
-		<hr style={{height:"2px", borderWidth:0, color:"gray",backgroundColor:"gray", width:"80%"}} />
+		<hr style={{height:"2px", borderWidth:0, color:"gray",backgroundColor:"gray", width:"60%"}} />
 		</Row>
 		{demoObject.map((obj,i) =>{
 

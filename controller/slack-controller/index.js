@@ -4,10 +4,11 @@ const { botToken, verificationToken, } = slack;
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
 const axios = require('axios');
-const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey }
+const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
+const welcome = require('../modals/welcome');
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-console.log("urlString: ", urlString);
+
 const slackController = {
     async editWorkout({ body, params }, res) {
         try {
@@ -75,7 +76,23 @@ const slackController = {
             console.log("req.body...: ", req.body);
             var { user } = req.body.event;
             console.log("user (in slack controller): ", user);
-            const findToken = await OAuth.findOne({ team_id: req.body.team_id });
+            
+             const findToken = await OAuth.findOne({ team_id: req.body.team_id });
+             //WHEN GETTING invalid_auth do the script below
+            // const findToken = await OAuth.findOneAndUpdate({ team_id: 'T012RRU3P3R' }, {
+            //                 $set: {
+            //                     app_id: 'A015X5NC2QY',
+            //                     authed_user_id: 'U012ZRTR2P8',
+            //                     authed_user_access_token: "xoxp-1093878125127-1101877852790-1911252230103-2eab996de395843d3ec81f973bc4af1a",
+            //                     bot_user_id: 'U0157GYHGBD',
+            //                     access_token: "xoxb-1093878125127-1177576594387-69cYUGMoh5x7bqWRMpV7xaad",
+            //                     team_id: "T012RRU3P3R",
+            //                     webhook_channel: "#lhrl",
+            //                     webhook_channel_id: "Set channel id",
+            //                     webhook: "https://hooks.slack.com/services/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"
+            //                 }
+            //             }, { upsert: true, new: true });
+            //^^ RUN THE SCRIPT ABOVE FOR INVALID AUTHS WHEN REINSTALLING IN DEV SPACE
             console.log({ findToken });
             const webAPI = web(findToken.access_token);
             const api_app_id = req.body.api_app_id;
@@ -96,7 +113,16 @@ const slackController = {
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
             const showHomepage = await homepage(passUser, allWorkouts, wod[0])
 
-
+const secondWebAPI = web(findToken.authed_user_access_token);
+if(!req.body.view){
+const confirm = await secondWebAPI.chat.postMessage({
+    channel: findToken.webhook_channel_id,
+    user: req.body.event.user,
+    attachments: [{
+        pretext: "🎉 Welcome to the LHRL® App 🎉 ",
+        text: "Here is a brief walkthrough of what to expect: \n Anytime you want to use the app, either visit the homepage or enter the */lhrl* command"}]
+})
+}
             webAPI.views.publish(showHomepage)
             return
         } catch (err) {

@@ -13,13 +13,13 @@ var transporter = nodemailer.createTransport({
 });
 
 // verify connection configuration
-transporter.verify(function(error, success) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log("Server is ready to take our messages");
-  }
-});
+// transporter.verify(function(error, success) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log("Server is ready to take our messages");
+//   }
+// });
 
     app.post("/nodemailer/send", (req, res) => {
         console.log("I am in the backend");

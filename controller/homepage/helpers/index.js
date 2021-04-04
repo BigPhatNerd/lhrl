@@ -86,8 +86,7 @@ const allButtons = {
                         text: "📣 Contact Us 📣",
                         emoji: true,
                     },
-                    value: "Authorize Strava",
-                    url: `http://www.lhrlapp.com/contact`,
+                    value: "contact",
                     action_id: "contact",
                 },
                 {

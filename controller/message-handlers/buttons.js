@@ -33,6 +33,7 @@ const updateHomeModal = require('../homepage/updateHomeModal');
 const homepage = require('../homepage/homeview.js');
 const submitTime = require('../modals/selectedProgram/submitTime.js');
 const setGoals = require('../modals/weeklyGoals/createGoals');
+const sendEmail = require('../modals/sendEmail');
 const updateGoals = require('../modals/weeklyGoals/updateGoals');
 const addRepsToGoals = require('../modals/addRepsToGoals');
 const submitScore = require('../modals/cfWOD/submitScore');
@@ -235,6 +236,16 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             }
             const score = await submitScore(payload, wod[0], "home");
             webAPI.views.open(score);
+            return
+        }  else if(value === "contact") {
+
+            if(payload.view.callback_id === "homepage_modal") {
+
+                const goals = await sendEmail(payload, "slash");
+                webAPI.views.push(goals)
+                return
+            }
+            webAPI.views.open(sendEmail(payload, "home"));
             return
         }
         //-------------------------------------------------------//

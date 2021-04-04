@@ -559,7 +559,84 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
 moreSlackInteractions.viewSubmission("view_calendar_workouts", async (payload, respond) => {
     console.log("Not sure what to do with view_calendar_workouts in more-slack-interactions")
+});
+
+moreSlackInteractions.viewSubmission("send_email", async (payload, respond) => {
+    try {
+console.log({payload})
+        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        console.log({findToken})
+        const webAPI = web(findToken.access_token);
+        const username = payload.user.username;
+        const user_id = payload.user.id;
+
+
+        var { email, subject, message, name } = payload.view.state.values;
+        subject = subject.subject.value;
+        
+        
+        email = email.email.value;
+        
+        message = message.message.value;
+        
+        name = name.name.value;
+        
+        const data = {
+            
+            subject,
+            email,
+            message,
+            name
+        }
+
+        const sendGoals = await axios.post(`${urlString}/nodemailer/send`, data);
+
+        const user = payload.user.id;
+        const userInfo = await webAPI.users.info({ user: user });
+        const passUser = userInfo.user;
+        console.log({userInfo})
+        
+            // const confirm = await axios.post(findToken.webhook, { "text": "Thank you for your input! Your feedback has been submitted and will be reviewed.",
+            // "response_type": "ephemeral" }, config);
+// const confirm = await axios.post('https://slack.com/api/chat.postEphemeral',
+// { "text": "Thank you for your input! Your feedback has been submitted and will be reviewed.",
+//             "response_type": "ephemeral",
+//             "channel": 
+//             "user": user },
+//              {params: {token: findUser.access_token},
+//              config})
+const secondWebAPI = web(findToken.authed_user_access_token);
+//it was originally secondWebAPI.chat.postEphemeral
+const confirm = await secondWebAPI.chat.postMessage({
+    channel: findToken.webhook_channel_id,
+    user: user_id,
+    attachments: [{
+        pretext: "LHRL® App Response:",
+        text: "Thank you for your input! Your feedback has been submitted and will be reviewed."}]
 })
+        
+        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+        // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
+        const metadata = JSON.parse(payload.view.private_metadata);
+        const { home_or_slash } = metadata;
+        const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+        if(home_or_slash === "slash") {
+
+
+            const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0])
+            webAPI.views.update(update)
+
+            return
+        }
+        const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+        await webAPI.views.publish(updateHome);
+
+    } catch (err) {
+
+        console.error(err.message);
+
+    }
+});
 
 
 module.exports = {

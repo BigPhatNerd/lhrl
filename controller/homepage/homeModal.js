@@ -85,7 +85,8 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
                 createWorkout(),
                 viewOrComplete(),
                 divider(),
-                requiredHelpers()
+                requiredHelpers(),
+                divider(),
                
                 
                

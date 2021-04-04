@@ -83,13 +83,13 @@ const slackController = {
             //                 $set: {
             //                     app_id: 'A015X5NC2QY',
             //                     authed_user_id: 'U012ZRTR2P8',
-            //                     authed_user_access_token: "xoxp-1093878125127-1101877852790-1911252230103-2eab996de395843d3ec81f973bc4af1a",
+            //                     authed_user_access_token: "xoxp-Look up my other token ",
             //                     bot_user_id: 'U0157GYHGBD',
-            //                     access_token: "xoxb-1093878125127-1177576594387-69cYUGMoh5x7bqWRMpV7xaad",
+            //                     access_token: "xoxb-loop up my token!!",
             //                     team_id: "T012RRU3P3R",
             //                     webhook_channel: "#lhrl",
             //                     webhook_channel_id: "Set channel id",
-            //                     webhook: "https://hooks.slack.com/services/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"
+            //                     webhook: "lookup my dev webhook"
             //                 }
             //             }, { upsert: true, new: true });
             //^^ RUN THE SCRIPT ABOVE FOR INVALID AUTHS WHEN REINSTALLING IN DEV SPACE

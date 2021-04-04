@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FAQ from '../FAQ';
 import allFaqs from '../faqs';
 import Contact from '../Contact';
+import Header from '../Header';
 
 
 const Support = () =>{
@@ -17,7 +18,8 @@ const Support = () =>{
 		}))
 	}
 	return(
-<>
+<div style={{marginTop: "3rem"}}>
+<Header />
 		<div className="faqs">
 		<div style={{fontSize: "2rem", textAlign: "center"}}>FAQ's</div>
         {faqs.map((faq, i) => (
@@ -25,7 +27,7 @@ const Support = () =>{
         ))}
       </div>
      <Contact />
-      </>
+      </div>
 		)
 }
 

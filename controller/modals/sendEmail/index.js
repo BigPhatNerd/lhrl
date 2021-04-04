@@ -1,5 +1,6 @@
 const sendEmail = (payload, slashOrHome) => {
     const { trigger_id } = payload;
+    const viewId = payload.view ? payload.view.id : "no_id"
     const emailModal = {
         "trigger_id": trigger_id,
         "view": {
@@ -7,7 +8,7 @@ const sendEmail = (payload, slashOrHome) => {
             "callback_id": "send_email",
             "private_metadata": JSON.stringify({
                 "home_or_slash": slashOrHome,
-                  "homeModal_view_id": payload.view.id,
+                  "homeModal_view_id": viewId,
 
               }),
             "title": {

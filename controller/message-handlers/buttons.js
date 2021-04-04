@@ -41,6 +41,8 @@ const { url } = require('../../lib/keys');
 const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit, OAuth } = require('../../models/');
 const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
 //buttons pressed from the homepage view
+
+
 buttons.action({ type: 'datepicker' }, async (payload, respond) => {
     try {
 
@@ -239,7 +241,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             return
         }  else if(value === "contact") {
 
-            if(payload.view.callback_id === "homepage_modal") {
+            if(payload.view?.callback_id === "homepage_modal") {
 
                 const goals = await sendEmail(payload, "slash");
                 webAPI.views.push(goals)

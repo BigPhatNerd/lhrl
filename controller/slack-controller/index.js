@@ -114,15 +114,67 @@ const slackController = {
             const showHomepage = await homepage(passUser, allWorkouts, wod[0])
 
 const secondWebAPI = web(findToken.authed_user_access_token);
-if(!req.body.view){
+// if(!req.body.view){
 const confirm = await secondWebAPI.chat.postMessage({
     channel: findToken.webhook_channel_id,
     user: req.body.event.user,
-    attachments: [{
-        pretext: "🎉 Welcome to the LHRL® App 🎉 ",
-        text: "Here is a brief walkthrough of what to expect: \n Anytime you want to use the app, either visit the homepage or enter the */lhrl* command"}]
+   
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": ":tada: Welcome to the LHRL® App! :tada:\n Make your self at :house_with_garden:\n\nFeel free to use the app either from the homepage or open the app by using the `/lhrl` command.\nWe hope that this app serves as fun way to stay motivated inside your Slack workspace and hopefully build community. Be sure to invite everyone to the channel you chose for the LHRL® App to post. \n If you are a public person, you can share your workouts with the group by selecting the :loud_sound: option. If you like to keep things private, be sure and keep the selection set to :shushing_face:",
+                
+            }
+        },
+            {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "If you would like to make a suggestion, report a bug or just say 👋, feel free to shoot us an email"
+            },
+           
+        },
+{
+    "type": "actions",
+         "elements": [{
+                "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "📣 Contact Us 📣",
+                        "emoji": true,
+                    },
+                    "value": "contact",
+                    "action_id": "contact",
+            }
+            ]
+        },
+         {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "If you have any questions about the functionality of the app, checkout our `FAQ` section on our site (We plan to continuously keep this updated)."
+            },
+            "accessory": {
+                type: "button",
+                    text: {
+                        type: "plain_text",
+                        text: "❓ FAQs ❓",
+                        emoji: true,
+                    },
+                     value: "faqs",
+                    url: `http://www.lhrlapp.com/support`,
+                    action_id: "faqs",
+            }
+        },
+        
+    
+        
+    ]
+
 })
-}
+// }
             webAPI.views.publish(showHomepage)
             return
         } catch (err) {

@@ -1,9 +1,13 @@
 import React from 'react';
+import Header from '../Header';
 
 
 
 const Privacy = () =>{
 	return(
+		<div style={{marginTop: "3rem"}}>
+
+		<Header/>
 		<div class="privacy">
 
 
@@ -40,6 +44,7 @@ If we make any material changes to this Privacy Policy, we will notify you eithe
 <div class="large">Contact Us</div>
 
 If you have any questions about this Privacy Policy, please contact us at <a style={{fontSize:"1rem"}}href = "mailto: app@liftheavyrunlong.com">app@liftheavyrunlong.com</a>
+		</div>
 		</div>)
 }
 

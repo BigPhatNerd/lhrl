@@ -1,11 +1,13 @@
 import React from 'react';
 import Header from '../Header';
+import { Container } from 'react-bootstrap';
 
 
 
 const Privacy = () =>{
 	return(
-		<div style={{marginTop: "3rem"}}>
+		<Container>
+		
 
 		<Header/>
 		<div class="privacy">
@@ -21,7 +23,7 @@ We use your Personal Information only for providing and improving the app. By us
 
 <div class="large">Information Collection And Use</div>
 
-We have no desire to use your information for anything other than delivering you a fun experience through the app. We won't be selling, donating or or using your information for anything other than what you will see within the app.
+We have no desire to use your information for anything other than delivering you a fun experience through the app. We won't be selling, donating or or using your information for anything other than what you will see within the app. Lift Heavy Run Long® will gladly delete any and all records associated with the user at any time. We have zero interest in creating or maintaining any information that is not directly related to the user's enjoyment of the LHRL® App.
 
 
 <div class="large">Communications</div>
@@ -45,7 +47,8 @@ If we make any material changes to this Privacy Policy, we will notify you eithe
 
 If you have any questions about this Privacy Policy, please contact us at <a style={{fontSize:"1rem"}}href = "mailto: app@liftheavyrunlong.com">app@liftheavyrunlong.com</a>
 		</div>
-		</div>)
+		
+		</Container>)
 }
 
 

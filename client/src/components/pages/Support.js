@@ -3,6 +3,7 @@ import FAQ from '../FAQ';
 import allFaqs from '../faqs';
 import Contact from '../Contact';
 import Header from '../Header';
+import { Container } from 'react-bootstrap';
 
 
 const Support = () =>{
@@ -18,7 +19,8 @@ const Support = () =>{
 		}))
 	}
 	return(
-<div style={{marginTop: "3rem"}}>
+		<Container>
+
 <Header />
 		<div className="faqs">
 		<div style={{fontSize: "2rem", textAlign: "center"}}>FAQ's</div>
@@ -27,7 +29,8 @@ const Support = () =>{
         ))}
       </div>
      <Contact />
-      </div>
+    
+      </Container>
 		)
 }
 

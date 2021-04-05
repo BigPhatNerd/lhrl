@@ -73,9 +73,9 @@ const slackController = {
 
             //I think I just comment this out since the url has already been registered?
             // res.send(req.body)
-            console.log("req.body...: ", req.body);
+          
             var { user } = req.body.event;
-            console.log("user (in slack controller): ", user);
+          
             
              const findToken = await OAuth.findOne({ team_id: req.body.team_id });
              //WHEN GETTING invalid_auth do the script below
@@ -93,12 +93,12 @@ const slackController = {
             //                 }
             //             }, { upsert: true, new: true });
             //^^ RUN THE SCRIPT ABOVE FOR INVALID AUTHS WHEN REINSTALLING IN DEV SPACE
-            console.log({ findToken });
+           
             const webAPI = web(findToken.access_token);
             const api_app_id = req.body.api_app_id;
             user = user.trim();
             const userInfo = await webAPI.users.info({ user: user });
-            console.log({ userInfo });
+            
             const passUser = userInfo.user;
 
 

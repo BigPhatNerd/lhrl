@@ -114,7 +114,8 @@ const slackController = {
             const showHomepage = await homepage(passUser, allWorkouts, wod[0])
 
 const secondWebAPI = web(findToken.authed_user_access_token);
-// if(!req.body.view){
+
+if(!req.body.event.view){
 const confirm = await secondWebAPI.chat.postMessage({
     channel: findToken.webhook_channel_id,
     user: req.body.event.user,
@@ -124,7 +125,7 @@ const confirm = await secondWebAPI.chat.postMessage({
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": ":tada: Welcome to the LHRL® App! :tada:\n Make your self at :house_with_garden:\n\nFeel free to use the app either from the homepage or open the app by using the `/lhrl` command.\nWe hope that this app serves as fun way to stay motivated inside your Slack workspace and hopefully build community. Be sure to invite everyone to the channel you chose for the LHRL® App to post. \n If you are a public person, you can share your workouts with the group by selecting the :loud_sound: option. If you like to keep things private, be sure and keep the selection set to :shushing_face:",
+                "text": ":tada: Welcome to the LHRL® App! :tada:\n Make yourself at :house_with_garden:\n\nFeel free to use the app either from the homepage or open the app by using the `/lhrl` command.\nWe hope that this app serves as fun way to stay motivated inside your Slack workspace. Be sure to invite everyone to the channel you chose for the LHRL® App to post. \n If you are a public person, you can share your workouts with the group by selecting the :loud_sound: option. If you like to keep things private, be sure and keep the selection set to :shushing_face: each time that you submit or create a workout.",
                 
             }
         },
@@ -132,7 +133,7 @@ const confirm = await secondWebAPI.chat.postMessage({
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "If you would like to make a suggestion, report a bug or just say 👋, feel free to shoot us an email"
+                "text": "If you would like to suggestion an 💡, report a 🐞 or just say 👋, feel free to shoot us an email."
             },
            
         },
@@ -153,28 +154,59 @@ const confirm = await secondWebAPI.chat.postMessage({
          {
             "type": "section",
             "text": {
-                "type": "mrkdwn",
-                "text": "If you have any questions about the functionality of the app, checkout our `FAQ` section on our site (We plan to continuously keep this updated)."
-            },
-            "accessory": {
-                type: "button",
-                    text: {
-                        type: "plain_text",
+                 "type": "plain_text",
+                "text": "If you have any questions about the functionality of the app, checkout our ❓FAQ❓ section on our site (We plan to continuously keep this updated).",
+                "emoji": true,
+            }
+           
+        },
+        {
+    "type": "actions",
+         "elements": [{
+                "type": "button",
+                    "text": {
+                        "type": "plain_text",
                         text: "❓ FAQs ❓",
-                        emoji: true,
+                        "emoji": true,
                     },
-                     value: "faqs",
+                    value: "faqs",
                     url: `http://www.lhrlapp.com/support`,
                     action_id: "faqs",
             }
+            ]
         },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "One more 💡, please come be a part of the most supportive and encouraging fitness community in the 🌎. Join the LHRL® Community FB Page.",
+                "emoji": true,
+            }
+           
+        },
+          {
+    "type": "actions",
+         "elements": [{
+                "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                       text: "🔗 Join Community 🔗",
+                        "emoji": true,
+                    },
+                   value: "community",
+                    url: `https://www.facebook.com/groups/LiftHeavyRunLong`,
+                    action_id: "community",
+            }
+            ]
+        },
+
         
     
         
     ]
 
 })
-// }
+}
             webAPI.views.publish(showHomepage)
             return
         } catch (err) {

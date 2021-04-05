@@ -4,6 +4,7 @@ const web = require('../../config/slack-web-api.js');
 const slashCreateWorkout = require('../../controller/slashMessageBlocks/createWorkout');
 const slashViewCreatedWorkouts = require('../../controller/slashMessageBlocks/viewCreatedWorkouts');
 const homeModal = require('../../controller/homepage/homeModal.js');
+const helpModal = require('../../controller/modals/help');
 const { User, CrossFit, OAuth } = require('../../models');
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
 const {
@@ -93,7 +94,19 @@ router.post('/lhrl', async (req, res) => {
     try {
 
         const { user_id, api_app_id, trigger_id, response_url } = req.body;
-        res.send(200, "Opening LHRL Modal");
+        if(req.body.text === 'help'){
+    res.send(200, "Opening LHRL® Help Modal");
+     const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+        const webAPI = web(findToken.access_token)
+        const userInfo = await webAPI.users.info({ user: user_id });
+        const passUser = userInfo.user;
+        const team_id = userInfo.user.team_id;
+        const openHelpModal = await helpModal(trigger_id, passUser);
+ webAPI.views.open(openHelpModal);
+
+    return
+}
+        res.send(200, "Opening LHRL® Modal");
         const findToken = await OAuth.findOne({ team_id: req.body.team_id })
         const webAPI = web(findToken.access_token)
         const userInfo = await webAPI.users.info({ user: user_id });
@@ -121,8 +134,22 @@ router.post('/lhrl', async (req, res) => {
 router.post('/dev_lhrl', async (req, res) => {
     try {
 
-        const { user_id, api_app_id, trigger_id, response_url } = req.body;
-        res.send(200, "Opening DEV_LHRL Modal");
+const { user_id, api_app_id, trigger_id, response_url } = req.body;
+
+if(req.body.text === 'help'){
+    res.send(200, "Opening LHRL® Help Modal");
+     const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+        const webAPI = web(findToken.access_token)
+        const userInfo = await webAPI.users.info({ user: user_id });
+        const passUser = userInfo.user;
+        const team_id = userInfo.user.team_id;
+        const openHelpModal = await helpModal(trigger_id, passUser);
+ webAPI.views.open(openHelpModal);
+
+    return
+}
+       
+        res.send(200, "Opening DEV_LHRL® Modal");
         const findToken = await OAuth.findOne({ team_id: req.body.team_id })
        
         const webAPI = web(findToken.access_token)

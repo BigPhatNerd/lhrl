@@ -107,9 +107,9 @@ const allButtons = {
                         text: "🔗 Join Community 🔗",
                         emoji: true,
                     },
-                    value: "commnity",
+                    value: "community",
                     url: `https://www.facebook.com/groups/LiftHeavyRunLong`,
-                    action_id: "commnity",
+                    action_id: "community",
                 }
 
 

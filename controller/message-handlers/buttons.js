@@ -240,14 +240,17 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             webAPI.views.open(score);
             return
         }  else if(value === "contact") {
-
-            if(payload.view?.callback_id === "homepage_modal") {
+            console.log("I was hit");
+console.log({payload})
+            if(payload.view?.callback_id === "homepage_modal" || payload.view?.callback_id === 'help') {
 
                 const goals = await sendEmail(payload, "slash");
                 webAPI.views.push(goals)
                 return
             }
-            webAPI.views.open(sendEmail(payload, "home"));
+
+            const email = await sendEmail(payload, "home");
+            webAPI.views.open(email);
             return
         }
         //-------------------------------------------------------//

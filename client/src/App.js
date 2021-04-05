@@ -12,12 +12,13 @@ import Support from './components/pages/Support';
 import EmailUs from './components/pages/EmailUs';
 import TermsOfService from './components/pages/TermsOfService';
 
+
 import './App.css'
 
 function App() {
     return (
         <Router>
-            <Navbar />
+                  <Navbar />
           
             <Switch>
                 <Route exact path="/" component={Home} />

@@ -39,7 +39,7 @@ const addRepsToGoals = require('../modals/addRepsToGoals');
 const submitScore = require('../modals/cfWOD/submitScore');
 const { url } = require('../../lib/keys');
 const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit, OAuth } = require('../../models/');
-const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
+const urlString = process.env.NODE_ENV === "production" ? "https://www.lhrlapp.com" : url.development;
 //buttons pressed from the homepage view
 
 

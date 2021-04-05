@@ -11,7 +11,7 @@ const viewWorkouts = require('../modals/createWorkout/viewWorkouts.js');
 const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedWorkouts');
 const { User, Workout, Program, WeeklyGoal, FinishedWorkout, Session, CrossFit, OAuth } = require('../../models/');
 const { url } = require('../../lib/keys');
-const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
+const urlString = process.env.NODE_ENV === "production" ? "https://www.lhrlapp.com" : url.development;
 
 static_select.action({ type: "static_select" }, async (payload, respond) => {
     try {

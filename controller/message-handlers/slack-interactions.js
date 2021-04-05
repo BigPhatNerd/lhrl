@@ -13,7 +13,7 @@ const updateHomeModal = require('../homepage/updateHomeModal');
 const axios = require('axios');
 const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
-const urlString = process.env.NODE_ENV === "production" ? "https://immense-shelf-69979.herokuapp.com" : url.development;
+const urlString = process.env.NODE_ENV === "production" ? "https://www.lhrlapp.com" : url.development;
 
 
 var viewId;

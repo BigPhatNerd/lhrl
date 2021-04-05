@@ -3,7 +3,7 @@ var dayjs = require("dayjs");
 const { url } = require("../../../lib/keys");
 const urlString =
     process.env.NODE_ENV === "production"
-        ? "https://immense-shelf-69979.herokuapp.com"
+        ? "https://www.lhrlapp.com"
         : url.development;
 const updatedWorkouts = async (payload, viewId, workouts, slashOrHome) => {
     const metadata = JSON.parse(payload.view.private_metadata);

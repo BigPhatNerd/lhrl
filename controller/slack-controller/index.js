@@ -72,7 +72,7 @@ const slackController = {
         try {
 
             //I think I just comment this out since the url has already been registered?
-            // res.send(req.body)
+            res.send(req.body)
             console.log("req.body...: ", req.body);
             var { user } = req.body.event;
             console.log("user (in slack controller): ", user);

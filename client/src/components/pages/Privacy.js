@@ -10,10 +10,10 @@ const Privacy = () =>{
 		
 
 		<Header/>
-		<div class="privacy">
+		<div style={{marginTop: "2rem"}}>
 
 
-<div class="large">Privacy Policy</div>
+<div class="large" >Privacy Policy</div>
 
 <div class="med"><strong>Last updated: 3/23/21</strong></div>
 

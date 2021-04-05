@@ -13,11 +13,13 @@ import EmailUs from './components/pages/EmailUs';
 import TermsOfService from './components/pages/TermsOfService';
 
 
+
 import './App.css'
 
 function App() {
     return (
         <Router>
+       
                   <Navbar />
           
             <Switch>

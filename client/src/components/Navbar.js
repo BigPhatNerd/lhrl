@@ -6,11 +6,11 @@ const Navbar = () =>{
 	return(
 		<nav style={{fontSize: "1rem", textAlign: "center", margin: "auto", backgroundColor: "black", position: "sticky", top: "0"}}>
 			
-			<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", marginLeft: "1em"}} exact activeClassName="active" to='/'>Home</NavLink>
-		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", marginLeft: "1em"}} activeClassName="active" to='/privacy'>Privacy</NavLink>
-		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", marginLeft: "1em"}} activeClassName="active" to='/support'>Support</NavLink>
-		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", marginLeft: "1em"}} activeClassName="active" to='/contact'>Contact</NavLink>
-		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", marginLeft: "1em"}} activeClassName="active" to='/terms_of_service'>Terms</NavLink>
+			<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", }} exact activeClassName="active" to='/'>Home</NavLink>
+		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", }} activeClassName="active" to='/privacy'>Privacy</NavLink>
+		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", }} activeClassName="active" to='/support'>Support</NavLink>
+		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", }} activeClassName="active" to='/contact'>Contact</NavLink>
+		<NavLink style={{ color: "white", textDecoration: "underline", fontSize: "1em", marginRight: "1em", }} activeClassName="active" to='/terms_of_service'>Terms</NavLink>
 			
 		</nav>
 		)

@@ -20,8 +20,8 @@ dayjs.extend(weekOfYear)
 const axios = require('axios');
 const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
-const urlString = process.env.NODE_ENV === "production" ? "https://www.lhrlapp.com/" : url.development;
-
+const urlString = process.env.NODE_ENV === "production" ? "https://www.lhrlapp.com" : url.development;
+console.log({urlString})
 var viewId;
 var value;
 

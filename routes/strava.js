@@ -46,7 +46,7 @@ router.put("/deauth/:stravaId", async (req, res) => {
 
 router.post("/webhook", async (req, res) => {
     try {
-        console.log("req in strava webhook: ", req.data);
+        console.log("req in strava webhook: ", req.body);
         const { aspect_type, object_id, owner_id, object_type } = req.body;
         if (aspect_type === "delete") {
             console.log(`${owner_id} deleted an activity`);
@@ -61,26 +61,48 @@ router.post("/webhook", async (req, res) => {
                 headers: { Authorization: `Bearer ${accessToken}` },
             }
         );
+        console.log("About to map through the Strava data")
+        const stravaArray = [];
+        const stravaBody = {};
+     
+     const insertData =  () =>{
+
+        stravaData.data.map(data =>{
+        stravaBody = {
+            type: data.type,
+            distance: data.distance,
+            seconds: data.elapsed_time,
+            stravaId: data.owner_id,
+}
+        stravaArray.push(stravaBody)   
+        })
+      return stravaArray
+  }
+
+  console.log({insertData})
+
         //Destructure informationreturned from stravaData:
-        const {
-            type,
-            athlete,
-            distance,
-            elapsed_time,
-            start_date,
-            average_temp,
-            average_speed,
-            max_speed,
-            map,
-        } = stravaData.data[0];
-        const stravaBody = {
-            type: type,
-            distance: distance,
-            seconds: elapsed_time,
-            stravaId: owner_id,
-        };
-        console.log("stravaData: ", stravaData);
-        const finishedWorkouts = await FinishedWorkout.create(stravaBody);
+        // const {
+        //     type,
+        //     athlete,
+        //     distance,
+        //     elapsed_time,
+        //     start_date,
+        //     average_temp,
+        //     average_speed,
+        //     max_speed,
+        //     map,
+        // } = stravaData.data[0];
+        // const stravaBody = {
+        //     type: type,
+        //     distance: distance,
+        //     seconds: elapsed_time,
+        //     stravaId: owner_id,
+        // };
+        console.log("stravaData: ", stravaData.data[0]);
+        // const finishedWorkouts = await FinishedWorkout.create(stravaBody);
+        const finishedWorkouts = await FinishedWorkout.collection.insertMany(insertData);
+        console.log({finishedWorkouts})
         const addFinishedWorkout = await User.findOneAndUpdate(
             { stravaId: owner_id },
             { $push: { finishedWorkouts: finishedWorkouts } },
@@ -91,48 +113,95 @@ router.post("/webhook", async (req, res) => {
         console.log(
             "Take the user and search OAuth based on addFinishedWorkout.team_id...or whatever"
         );
-        const body = {
-            type: type,
-            owner_id: athlete.id,
-            distance: distance,
-            elapsed_time: elapsed_time,
-            start_date: start_date,
-            average_temp: average_temp,
-            average_speed: average_speed,
-            max_speed: max_speed,
-            stravaMap: map.summary_polyline,
-        };
-        console.log({ stravaData });
-        Strava.create(body)
-            .then(({ _id }) => {
-                return User.findOneAndUpdate(
-                    { stravaId: owner_id },
-                    { $addToSet: { stravaWorkouts: _id } },
-                    { new: true }
-                );
-            })
-            .then((activityData) => {
-                if (!stravaData) {
-                    res.status(404).json({
-                        message: "No user found with that id!",
-                    });
-                    return;
-                }
 
-                const { name, stravaAvatar } = activityData;
-                //Trying to find the webhook from the users team_id but not sure If I am calling it right
-                OAuth.findOne({ team_id: addFinishedWorkout.team_id }).then(
-                    (response) => {
-                        console.log({ response });
-                        //I think that stravaHook would be where I could map through however many workouts were added.
-                        axios.post(
-                            response.webhook,
-                            stravaHook(stravaData.data[0], name, stravaAvatar),
-                            config
-                        );
-                    }
-                );
-            });
+        const differentArray = [];
+        const differentBody = {};
+
+        const insertDifferentData = () =>{
+              stravaData.data.map(data =>{
+        differentBody = {
+            type: data.type,
+            owner_id: data.athlete.id,
+            distance: data.distance,
+            elapsed_time: data.elapsed_time,
+            start_date: data.start_date,
+            average_temp: data.average_temp,
+            average_speed: data.average_speed,
+            max_speed: data.max_speed,
+            stravaMap: data.map.summary_polyline,
+}
+        differentArray.push(body)   
+        })
+      return differentArray
+        }
+
+        console.log({insertDifferentData})
+        console.log({ stravaData });
+     const testData = () =>{
+            stravaData.map(data =>{
+                console.log("Console.logging stravaData")
+                console.log({data})
+            })
+        }
+        testData();
+
+const createStrava = await Strava.collection.insertMany(insertDifferentData);
+console.log({createStrava});
+const returnArray = () =>{
+    const array = [];
+    createStrava.map(data =>{
+        array.push(data._id);
+    })
+    return array;
+}
+
+console.log({returnArray})
+
+const addToUser = await User.findOneAndUpdate(
+    {stravaId: stravaData.data[0].owner_id},
+    {$push: {stravaWorkouts: returnArray() }},
+    { new: true });
+
+console.log({ addToUser });
+//Find the webhook for the particular team
+const oauth = await OAuth.findOne({
+    team_id: addFinishedWorkout.team_id
+});
+console.log({oauth})
+const postToChannel = await axios.post( oauth.webhook, stravaHook(stravaData, addToUser.name, addToUser.stravaAvatar), config)
+
+
+
+        // Strava.create(body)
+        //     .then(({ _id }) => {
+        //         return User.findOneAndUpdate(
+        //             { stravaId: owner_id },
+        //             { $addToSet: { stravaWorkouts: _id } },
+        //             { new: true }
+        //         );
+        //     })
+        //     .then((activityData) => {
+        //         if (!stravaData) {
+        //             res.status(404).json({
+        //                 message: "No user found with that id!",
+        //             });
+        //             return;
+        //         }
+
+        //         const { name, stravaAvatar } = activityData;
+        //         //Trying to find the webhook from the users team_id but not sure If I am calling it right
+        //         OAuth.findOne({ team_id: addFinishedWorkout.team_id }).then(
+        //             (response) => {
+        //                 console.log({ response });
+        //                 //I think that stravaHook would be where I could map through however many workouts were added.
+        //                 axios.post(
+        //                     response.webhook,
+        //                     stravaHook(stravaData.data[0], name, stravaAvatar),
+        //                     config
+        //                 );
+        //             }
+        //         );
+        //     });
 
         res.status(200).send("EVENT_RECEIVED");
     } catch (err) {

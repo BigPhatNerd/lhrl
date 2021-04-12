@@ -19,6 +19,7 @@ const {
     testSlackBlock,
 } = require("../slack-templates/strava-templates");
 const post = { text: "booga booga" };
+const { getMiles } = require('../utils/strava')
 
 router.get("/find", async (req, res) => {
     const findUser = await User.findOne({ email: req.query.email });
@@ -56,16 +57,13 @@ router.post("/webhook", async (req, res) => {
         const accessToken = await refreshToken(owner_id);
         //GET the data of the activity from Strava
         const stravaData = await axios.get(
-            `https://www.strava.com/api/v3/athlete/activities?per_page=1`,
+            `https://www.strava.com/api/v3/athlete/activities/${object_id}`,
             {
                 headers: { Authorization: `Bearer ${accessToken}` },
             }
         );
         console.log("About to map through the Strava data")
-       stravaData.data.map(data =>{
-
-            console.log({data})
-        })
+     
         //Destructure informationreturned from stravaData:
         const {
             type,
@@ -79,12 +77,13 @@ router.post("/webhook", async (req, res) => {
             map,
         } = stravaData.data[0];
         //This is where I calculate the mileage.
-        
+
         const stravaBody = {
             type: type,
             distance: distance,
             seconds: elapsed_time,
             stravaId: owner_id,
+            miles: getMiles(distance)
         };
         console.log("stravaData: ", stravaData.data[0]);
         const finishedWorkouts = await FinishedWorkout.create(stravaBody);

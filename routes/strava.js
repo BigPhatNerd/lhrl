@@ -57,7 +57,7 @@ router.post("/webhook", async (req, res) => {
         const accessToken = await refreshToken(owner_id);
         //GET the data of the activity from Strava
         const stravaData = await axios.get(
-            `https://www.strava.com/api/v3/athlete/activities/${object_id}`,
+            `https://www.strava.com/api/v3/activities/${object_id}`,
             {
                 headers: { Authorization: `Bearer ${accessToken}` },
             }

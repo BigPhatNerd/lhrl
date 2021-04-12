@@ -9,7 +9,7 @@ const { clientId, clientSecret } = strava;
 const stravaController = {
     async refreshToken(response) {
         try {
-            console.log("RESPONSE IN STRAVA CONTROLLER: ", response)
+            
             const user = await User.findOne({ stravaId: response });
             const stravaRefresh = await axios.post("https://www.strava.com/api/v3/oauth/token", {
                 "client_id": clientId,

@@ -46,7 +46,7 @@ router.put("/deauth/:stravaId", async (req, res) => {
 
 router.post("/webhook", async (req, res) => {
     try {
-        console.log("req in strava webhook: ", req.body);
+        
         const { aspect_type, object_id, owner_id, object_type } = req.body;
         if (aspect_type === "delete") {
             console.log(`${owner_id} deleted an activity`);
@@ -79,7 +79,9 @@ router.post("/webhook", async (req, res) => {
       return stravaArray
   }
 
-  console.log({insertData})
+ const addData = insertData();
+
+ console.log({addData})
 
         //Destructure informationreturned from stravaData:
         // const {
@@ -101,7 +103,7 @@ router.post("/webhook", async (req, res) => {
         // };
         console.log("stravaData: ", stravaData.data[0]);
         // const finishedWorkouts = await FinishedWorkout.create(stravaBody);
-        const finishedWorkouts = await FinishedWorkout.collection.insertMany(insertData);
+        const finishedWorkouts = await FinishedWorkout.collection.insertMany(addData);
         console.log({finishedWorkouts})
         const addFinishedWorkout = await User.findOneAndUpdate(
             { stravaId: owner_id },

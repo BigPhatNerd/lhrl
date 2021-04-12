@@ -75,7 +75,7 @@ router.post("/webhook", async (req, res) => {
             average_speed,
             max_speed,
             map,
-        } = stravaData.data[0];
+        } = stravaData;
         //This is where I calculate the mileage.
 
         const stravaBody = {
@@ -85,7 +85,7 @@ router.post("/webhook", async (req, res) => {
             stravaId: owner_id,
             miles: getMiles(distance)
         };
-        console.log("stravaData: ", stravaData.data[0]);
+        console.log("stravaData: ", stravaData);
         const finishedWorkouts = await FinishedWorkout.create(stravaBody);
         const addFinishedWorkout = await User.findOneAndUpdate(
             { stravaId: owner_id },
@@ -133,7 +133,7 @@ router.post("/webhook", async (req, res) => {
                         //I think that stravaHook would be where I could map through however many workouts were added.
                         axios.post(
                             response.webhook,
-                            stravaHook(stravaData.data[0], name, stravaAvatar),
+                            stravaHook(stravaData, name, stravaAvatar),
                             config
                         );
                     }

@@ -62,8 +62,8 @@ router.post("/webhook", async (req, res) => {
             }
         );
         console.log("About to map through the Strava data")
-        const stravaArray = [];
-        const stravaBody = {};
+        var stravaArray = [];
+        var stravaBody = {};
      
      const insertData =  () =>{
 
@@ -116,8 +116,8 @@ router.post("/webhook", async (req, res) => {
             "Take the user and search OAuth based on addFinishedWorkout.team_id...or whatever"
         );
 
-        const differentArray = [];
-        const differentBody = {};
+        var differentArray = [];
+        var differentBody = {};
 
         const insertDifferentData = () =>{
               stravaData.data.map(data =>{
@@ -150,7 +150,7 @@ router.post("/webhook", async (req, res) => {
 const createStrava = await Strava.collection.insertMany(insertDifferentData);
 console.log({createStrava});
 const returnArray = () =>{
-    const array = [];
+    var array = [];
     createStrava.map(data =>{
         array.push(data._id);
     })

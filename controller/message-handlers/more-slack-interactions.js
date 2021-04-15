@@ -20,7 +20,7 @@ dayjs.extend(weekOfYear)
 const axios = require('axios');
 const config = { 'Content-Type': 'application/json' };
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
-const urlString = process.env.NODE_ENV === "production" ? "https://www.lhrlapp.com" : url.development;
+const urlString = process.env.NODE_ENV === "production" ? url.production : url.development;
 console.log({urlString})
 var viewId;
 var value;
@@ -128,7 +128,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
             squats: parseInt(squats),
             miles: parseFloat(miles)
         }
-        const sendWorkout = axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
+        const sendWorkout =  await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
 
         const user = payload.user.id;
         const userInfo = await webAPI.users.info({ user: user });
@@ -153,7 +153,9 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
             console.log({ findToken });
-            const confirm = await axios.post(findToken.webhook, {
+            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
+            console.log({webhook})
+            const confirm = await axios.post(webhook, {
                 "text": `${passUser.real_name} just did some work! 💪`,
                 "blocks": [{
                     "type": "section",
@@ -254,7 +256,8 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(findToken.webhook, { "text": `${passUser.real_name} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
+            const confirm = await axios.post(webhook, { "text": `${passUser.real_name} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         }
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
@@ -348,7 +351,8 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(findToken.webhook, { "text": `${passUser.real_name} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
+            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
+            const confirm = await axios.post(webhook, { "text": `${passUser.real_name} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
         }
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
@@ -536,7 +540,8 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
 
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public") {
-            const confirm = await axios.post(findToken.webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
+            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
+            const confirm = await axios.post(webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
         }
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 

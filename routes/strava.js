@@ -62,7 +62,7 @@ router.post("/webhook", async (req, res) => {
                 headers: { Authorization: `Bearer ${accessToken}` },
             }
         );
-        console.log("About to map through the Strava data")
+       
      
         //Destructure informationreturned from stravaData:
         const {
@@ -76,6 +76,7 @@ router.post("/webhook", async (req, res) => {
             max_speed,
             map,
         } = stravaData.data;
+        if (type !== "Run") return;
         //This is where I calculate the mileage.
 const int = parseInt(distance)
         const stravaBody = {
@@ -85,7 +86,7 @@ const int = parseInt(distance)
             stravaId: owner_id,
             miles: getMiles(int)
         };
-        console.log("stravaData: ", stravaData.data);
+        
         const finishedWorkouts = await FinishedWorkout.create(stravaBody);
         const addFinishedWorkout = await User.findOneAndUpdate(
             { stravaId: owner_id },
@@ -93,10 +94,7 @@ const int = parseInt(distance)
             { new: true }
         );
         //Save the information to mongoose by searching for stravaId
-        console.log("addFinished workout: ", addFinishedWorkout);
-        console.log(
-            "Take the user and search OAuth based on addFinishedWorkout.team_id...or whatever"
-        );
+       
         const body = {
             type: type,
             owner_id: athlete.id,

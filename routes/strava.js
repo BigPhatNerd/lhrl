@@ -47,7 +47,7 @@ router.put("/deauth/:stravaId", async (req, res) => {
 
 router.post("/webhook", async (req, res) => {
     try {
-        console.log("req in strava webhook: ", req.body);
+        
         const { aspect_type, object_id, owner_id, object_type } = req.body;
         if (aspect_type === "delete") {
             console.log(`${owner_id} deleted an activity`);
@@ -127,7 +127,7 @@ const int = parseInt(distance)
                 //Trying to find the webhook from the users team_id but not sure If I am calling it right
                 OAuth.findOne({ team_id: addFinishedWorkout.team_id }).then(
                     (response) => {
-                        console.log({ response });
+                       
                         //I think that stravaHook would be where I could map through however many workouts were added.
                         axios.post(
                             response.webhook,
@@ -155,7 +155,7 @@ router.get("/webhook", (req, res) => {
     if (mode && token) {
         if (mode === "subscribe" && token === VERIFY_TOKEN) {
             //Responds with the challenge token from the request
-            console.log("WEBHOOK RECEIVED");
+          
             res.json({ "hub.challenge": challenge });
         } else {
             res.sendStatus(403);

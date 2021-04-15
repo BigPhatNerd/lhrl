@@ -636,7 +636,6 @@ const allButtons = {
                     return workout.type === "Run";
                 }
             );
-            console.log({ strava });
             if (strava[0] !== undefined) {
                 const index = strava.length - 1;
                 const { type, distance, seconds } = strava[index];

@@ -21,7 +21,7 @@ const distanceModal = (payload, workout, slashOrHome) => {
             }),
             "title": {
                 "type": "plain_text",
-                "text": "Complete Distance Workout",
+                "text": "Distance Workout",
                 "emoji": true
             },
             "submit": {
@@ -78,21 +78,21 @@ const distanceModal = (payload, workout, slashOrHome) => {
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Type:* " + type,
-                        "emoji": true
+                        
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Name:* " + name,
-                        "emoji": true
+                        
                     }
                 }, {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
                         "text": "*Description:* " + description,
-                        "emoji": true
+                       
                     }
                 },
                 {

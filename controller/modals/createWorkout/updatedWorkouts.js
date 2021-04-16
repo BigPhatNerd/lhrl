@@ -152,7 +152,9 @@ const updatedWorkouts = async (payload, viewId, workouts, slashOrHome) => {
                     },
                 ],
             });
-        } else {
+        } else if(paginateInteger >= 6 && shortData.length - paginateInteger >= 7){
+            console.log({paginateInteger});
+            console.log("shortData.length: ", shortData.length);
             array.push({
                 type: "actions",
                 elements: [

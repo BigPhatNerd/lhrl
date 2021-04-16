@@ -1,6 +1,7 @@
 const distanceModal = (payload, workout, slashOrHome) => {
     const { trigger_id } = payload;
     const { type, name, description, minutes, seconds, notes } = workout;
+
     const metadata = JSON.parse(payload.view.private_metadata);
     const { paginate } = metadata;
     const distance = {
@@ -9,7 +10,7 @@ const distanceModal = (payload, workout, slashOrHome) => {
             "type": "modal",
             "callback_id": "complete_workout",
             "private_metadata": JSON.stringify({
-                "score_type": "Time",
+                "score_type": "Distance",
                 "type": type,
                 "name": name,
                 "description": description,

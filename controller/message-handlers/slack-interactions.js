@@ -126,6 +126,8 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         if(score_type === "Reps") {
             reps = reps.reps.value || 0;
             let isReps = /^\d+$/.test(reps);
+            console.log({isReps});
+            console.log({reps});
             if(!isReps && reps !== 0) {
 
                 return Promise.resolve({

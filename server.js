@@ -1,4 +1,5 @@
 require('dotenv').config();
+require ('newrelic');
 const express = require("express");
 var mongoose = require('mongoose');
 var passport = require('./config/authentication.js');

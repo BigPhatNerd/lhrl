@@ -118,8 +118,9 @@ router.post('/lhrl', async (req, res) => {
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-
-        webAPI.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
+const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0])
+        webAPI.views.open(homepage);
+        return
 
 
 
@@ -163,9 +164,9 @@ if(req.body.text === 'help'){
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-
-        webAPI.views.open(homeModal(trigger_id, passUser, allWorkouts, wod[0]))
-
+const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0])
+        webAPI.views.open(homepage)
+return
 
 
     } catch (err) {

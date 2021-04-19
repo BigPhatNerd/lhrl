@@ -75,7 +75,7 @@ const slackController = {
             // res.send(req.body)
           
             var { user } = req.body.event;
-          
+          res.send(200);
             
              const findToken = await OAuth.findOne({ team_id: req.body.team_id });
              //WHEN GETTING invalid_auth do the script below

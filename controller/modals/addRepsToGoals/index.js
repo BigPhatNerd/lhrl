@@ -1,4 +1,5 @@
 const addRepsToGoals = (payload, slashOrHome) => {
+    console.log({payload})
     const { trigger_id } = payload;
     const repsModal = {
         "trigger_id": trigger_id,

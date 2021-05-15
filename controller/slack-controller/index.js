@@ -6,6 +6,7 @@ const homepage = require('../homepage/homeview.js');
 const axios = require('axios');
 const sugarWodConfig = { 'Authorization': sugarwod.sugarwodKey };
 const welcome = require('../modals/welcome');
+const config = { 'Content-Type': 'application/json' };
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 
@@ -113,10 +114,12 @@ const slackController = {
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
             const showHomepage = await homepage(passUser, allWorkouts, wod[0])
 
-const secondWebAPI = web(findToken.authed_user_access_token);
+
+const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
+
 
 if(!req.body.event.view){
-const confirm = await secondWebAPI.chat.postMessage({
+const confirm = await axios.post(webhook,{
     channel: findToken.webhook_channel_id,
     user: req.body.event.user,
    
@@ -205,7 +208,7 @@ const confirm = await secondWebAPI.chat.postMessage({
         
     ]
 
-})
+}, config)
 }
             webAPI.views.publish(showHomepage)
             return

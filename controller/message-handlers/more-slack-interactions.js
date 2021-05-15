@@ -599,26 +599,20 @@ console.log({payload})
         const user = payload.user.id;
         const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
-        console.log({userInfo})
-        
-            // const confirm = await axios.post(findToken.webhook, { "text": "Thank you for your input! Your feedback has been submitted and will be reviewed.",
-            // "response_type": "ephemeral" }, config);
-// const confirm = await axios.post('https://slack.com/api/chat.postEphemeral',
-// { "text": "Thank you for your input! Your feedback has been submitted and will be reviewed.",
-//             "response_type": "ephemeral",
-//             "channel": 
-//             "user": user },
-//              {params: {token: findUser.access_token},
-//              config})
-const secondWebAPI = web(findToken.authed_user_access_token);
-//it was originally secondWebAPI.chat.postEphemeral
-const confirm = await secondWebAPI.chat.postMessage({
+      
+
+const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
+
+// const confirm = await axios.post(webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
+//Starting trying to use webhook and get rid of `chat.postMessage`
+const confirm = await axios.post(webhook,{
     channel: findToken.webhook_channel_id,
     user: user_id,
     attachments: [{
         pretext: "LHRL® App Response:",
         text: "Thank you for your input! Your feedback has been submitted and will be reviewed."}]
-})
+}, config)
+
         
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });

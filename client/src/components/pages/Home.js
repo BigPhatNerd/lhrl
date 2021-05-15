@@ -27,7 +27,7 @@ const Home = () => {
              <p>Before installing, we encourage your to create a channel named <strong>#lhrl</strong> in your Slack workspace for the app to post.</p>
              </Row>
              <Row className="justify-content-center">
-       <a href="https://slack.com/oauth/v2/authorize?client_id=1093878125127.1152997432560&scope=commands,incoming-webhook,users.profile:read,users:read,chat:write&user_scope=chat:write,users.profile:read,users:read,users:read.email"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+       <a href="https://slack.com/oauth/v2/authorize?client_id=1093878125127.1152997432560&scope=chat:write,commands,incoming-webhook,users:read&user_scope=users:read"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
        </Row>
         <Row>
         <hr className="d-none d-sm-block" style={{height:"2px", borderWidth:0, color:"gray",backgroundColor:"gray", width:"60%", margin:"auto", marginBottom:"2rem", marginTop: "2rem"}} />

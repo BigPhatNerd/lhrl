@@ -30,13 +30,15 @@ var transporter = nodemailer.createTransport({
   var content = `name: ${name} \n email: ${email} \n subject: ${subject} \n message: ${message} `
   var mail = {
     from: name,
-    to: "app@liftheavyrunlong.com",
+    to: ["app@liftheavyrunlong.com", "wilsonhorrell@gmail.com"],
     subject: subject,
     text: content
   }
   console.log({mail})
   transporter.sendMail(mail, (err, data) => {
     if (err) {
+      console.log({err});
+      console.log({data})
       res.json({
         status: 'fail'
       })

@@ -24,7 +24,9 @@ var value;
 
 slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
     try {
+
         const findToken = await OAuth.findOne({ team_id: payload.team.id });
+              console.log({findToken})
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { score_type, homeModal_view_id, home_or_slash } = metadata;

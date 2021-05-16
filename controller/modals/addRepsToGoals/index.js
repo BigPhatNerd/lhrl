@@ -1,5 +1,42 @@
-const addRepsToGoals = (payload, slashOrHome) => {
+const addRepsToGoals = (payload, slashOrHome, publicChannels) => {
     console.log({payload})
+    //
+    const channelOptions = publicChannels.map(channel =>{
+        return {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": channel,
+                                    "emoji": true
+                                },
+                                "value": channel,
+                            }
+    })
+
+const staticSelect = {
+                    "type": "section",
+                    "block_id": "type",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Keep private 🤫 or post to channel 🔊",
+                        "emoji": true
+                    },
+                    "accessory": {
+                        "type": "static_select",
+
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Keep private 🤫" ,
+
+                            "emoji": true
+                        },
+                        "options": channelOptions,
+                        "action_id": "public_private"
+                    }
+                }
+
+console.log({staticSelect})
+
+    //
     const { trigger_id } = payload;
     const repsModal = {
         "trigger_id": trigger_id,
@@ -26,45 +63,9 @@ const addRepsToGoals = (payload, slashOrHome) => {
                 "text": "Cancel",
                 "emoji": true
             },
-            "blocks": [{
-            "type": "input",
-            "block_id": "radio",
-            "element": {
-                "type": "radio_buttons",
-                "initial_option": {
-                    "text": {
-                            "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                        },
-                        "value": "private"
-                },
-                "options": [
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                        },
-                        "value": "private"
-                    },
-                    {
-                       "text": {
-                            "type": "plain_text",
-                            "text": "Share with channel 🔊",
-                            "emoji":true
-                        },
-                        "value": "public"
-                    }
-                ],
-                "action_id": "radio_buttons-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Privacy Settings:",
-                "emoji": true
-            }
-        },{
+            "blocks": [
+            staticSelect,
+         {
                     "type": "input",
                     "optional": true,
                     "block_id": "pushups",

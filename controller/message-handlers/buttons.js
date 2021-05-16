@@ -199,13 +199,23 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
         //ADD COMPLETED REPS add reps to weekly goals
         else if(value === 'add_reps_to_goal') {
             if(payload.view.callback_id === "homepage_modal") {
-                const addReps = addRepsToGoals(payload, "slash");
+                //Add this to all public posts
+                const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private 🤫")
+           
+                //
+                const addReps = await addRepsToGoals(payload, "slash", publicChannels);
 
                 webAPI.views.push(addReps);
                 return
             }
 
-            const addReps = addRepsToGoals(payload, "home");
+            const addReps = await addRepsToGoals(payload, "home");
             webAPI.views.open(addReps);
             return
         }

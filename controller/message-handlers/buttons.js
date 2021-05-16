@@ -98,14 +98,23 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
         const findToken = await OAuth.findOne({ team_id: payload.team.id });
         const webAPI = web(findToken.access_token);
-
         var buttonPressed = payload.actions[0].action_id.replace("updated", "");
-
         value = payload.actions[0].value;
         var text = payload.actions[0].text.text;
         var deleteBlockIdPressed = payload.actions[0].block_id;
         var username = payload.user.username;
         var user_id = payload.user.id;
+
+        //Add this to all public posts
+                const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private 🤫")
+           
+                //
 
 
 
@@ -155,17 +164,17 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             if(home_or_slash === "slash") {
                 if(payload.view.callback_id === "homepage_modal") {
 
-                    const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "yes");
+                    const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "yes", publicChannels);
                     webAPI.views.push(submitTimeView);
                     return
                 }
-                const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "no");
+                const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "no", publicChannels);
                 webAPI.views.push(submitTimeView);
                 return
 
             }
 
-            const submitTimeView = await submitTime(payload, workoutSelected[0], "home", "no");
+            const submitTimeView = await submitTime(payload, workoutSelected[0], "home", "no", publicChannels);
             webAPI.views.open(submitTimeView);
             return
 
@@ -189,33 +198,24 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
             if(payload.view.callback_id === "homepage_modal") {
 
-                const goals = await setGoals(payload, "slash");
+                const goals = await setGoals(payload, "slash", publicChannels);
                 webAPI.views.push(goals)
                 return
             }
-            webAPI.views.open(setGoals(payload, "home"));
+            webAPI.views.open(setGoals(payload, "home", publicChannels));
             return
         }
         //ADD COMPLETED REPS add reps to weekly goals
         else if(value === 'add_reps_to_goal') {
             if(payload.view.callback_id === "homepage_modal") {
-                //Add this to all public posts
-                const findChannels =  await webAPI.conversations.list();
-                const publicChannels = findChannels.channels.map(channel =>{
-                    if(!channel.is_private){
-                        return channel.name
-                    }
-                })
-                publicChannels.unshift("Keep Private 🤫")
-           
-                //
+                
                 const addReps = await addRepsToGoals(payload, "slash", publicChannels);
 
                 webAPI.views.push(addReps);
                 return
             }
 
-            const addReps = await addRepsToGoals(payload, "home");
+            const addReps = await addRepsToGoals(payload, "home", publicChannels);
             webAPI.views.open(addReps);
             return
         }
@@ -226,11 +226,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
             buttonPressed = buttonPressed.replace("update_weekly_goal", "");
             const goalsSelected = await WeeklyGoal.find({ _id: buttonPressed });
             if(payload.view.callback_id === "homepage_modal") {
-                const update = await updateGoals(payload, goalsSelected[0], "slash");
+                const update = await updateGoals(payload, goalsSelected[0], "slash", publicChannels);
                 webAPI.views.push(update);
                 return
             }
-            const update = await updateGoals(payload, goalsSelected[0], "home")
+            const update = await updateGoals(payload, goalsSelected[0], "home", publicChannels)
             webAPI.views.open(update);
             return
         }
@@ -242,11 +242,11 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
             if(payload.view.callback_id === "homepage_modal") {
 
-                const score = await submitScore(payload, wod[0], "slash");
+                const score = await submitScore(payload, wod[0], "slash", publicChannels);
                 webAPI.views.push(score);
                 return
             }
-            const score = await submitScore(payload, wod[0], "home");
+            const score = await submitScore(payload, wod[0], "home", publicChannels);
             webAPI.views.open(score);
             return
         }  else if(value === "contact") {
@@ -279,71 +279,71 @@ console.log({payload})
             console.log("home_or_slash (complete created workouts): ", home_or_slash);
             if(workoutSelected[0].type === "Reps") {
                 if(home_or_slash === "slash") {
-                    const modal = await repsModal(payload, workoutSelected[0], "slash")
+                    const modal = await repsModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal);
                     return
 
                 }
-                const modal = await repsModal(payload, workoutSelected[0], "home")
+                const modal = await repsModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
-                    const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash")
+                    const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal);
                     return
 
                 }
-                const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "home")
+                const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Time") {
                 if(home_or_slash === "slash") {
-                    const modal = await timeModal(payload, workoutSelected[0], "slash")
+                    const modal = await timeModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await timeModal(payload, workoutSelected[0], "home")
+                const modal = await timeModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Load") {
 
                 if(home_or_slash === "slash") {
-                    const modal = await loadModal(payload, workoutSelected[0], "slash")
+                    const modal = await loadModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await loadModal(payload, workoutSelected[0], "home")
+                const modal = await loadModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
-                    const modal = await otherModal(payload, workoutSelected[0], "slash")
+                    const modal = await otherModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await otherModal(payload, workoutSelected[0], "home")
+                const modal = await otherModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Distance") {
                 if(home_or_slash === "slash") {
-                    const modal = await distanceModal(payload, workoutSelected[0], "slash")
+                    const modal = await distanceModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await distanceModal(payload, workoutSelected[0], "home")
+                const modal = await distanceModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Meters") {
                 if(home_or_slash === "slash") {
-                    const modal = await metersModal(payload, workoutSelected[0], "slash")
+                    const modal = await metersModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await metersModal(payload, workoutSelected[0], "home")
+                const modal = await metersModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             }
@@ -426,72 +426,72 @@ console.log({payload})
             //
             if(workoutSelected[0].type === "Reps") {
                 if(home_or_slash === "slash") {
-                    const modal = await repsModal(payload, workoutSelected[0], "slash")
+                    const modal = await repsModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal);
                     return
 
                 }
-                const modal = await repsModal(payload, workoutSelected[0], "home")
+                const modal = await repsModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Rounds + Reps") {
                 if(home_or_slash === "slash") {
                     console.log("whatever");
-                    const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash")
+                    const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal);
                     return
 
                 }
                 webAPI.views.push(modal);
-                const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "home")
+                const modal = await roundsPlusRepsModal(payload, workoutSelected[0], "home",publicChannels)
                 return
             } else if(workoutSelected[0].type === "Time") {
                 if(home_or_slash === "slash") {
-                    const modal = await timeModal(payload, workoutSelected[0], "slash")
+                    const modal = await timeModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await timeModal(payload, workoutSelected[0], "home")
+                const modal = await timeModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Load") {
 
                 if(home_or_slash === "slash") {
-                    const modal = await loadModal(payload, workoutSelected[0], "slash")
+                    const modal = await loadModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await loadModal(payload, workoutSelected[0], "home")
+                const modal = await loadModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Other / Text") {
 
                 if(home_or_slash === "slash") {
-                    const modal = await otherModal(payload, workoutSelected[0], "slash")
+                    const modal = await otherModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await otherModal(payload, workoutSelected[0], "home")
+                const modal = await otherModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
 
             } else if(workoutSelected[0].type === "Distance") {
                 if(home_or_slash === "slash") {
-                    const modal = await distanceModal(payload, workoutSelected[0], "slash")
+                    const modal = await distanceModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await distanceModal(payload, workoutSelected[0], "home")
+                const modal = await distanceModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             } else if(workoutSelected[0].type === "Meters") {
                 if(home_or_slash === "slash") {
-                    const modal = await metersModal(payload, workoutSelected[0], "slash")
+                    const modal = await metersModal(payload, workoutSelected[0], "slash",publicChannels)
                     webAPI.views.push(modal)
                     return
                 }
-                const modal = await metersModal(payload, workoutSelected[0], "home")
+                const modal = await metersModal(payload, workoutSelected[0], "home",publicChannels)
                 webAPI.views.push(modal);
                 return
             }
@@ -562,12 +562,12 @@ console.log({payload})
             buttonPressed = buttonPressed.replace("selected_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
             if(home_or_slash === "slash") {
-                const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "no");
+                const submitTimeView = await submitTime(payload, workoutSelected[0], "slash", "no", publicChannels);
                 webAPI.views.push(submitTimeView);
                 return
             } else {
 
-                const submitTimeView = await submitTime(payload, workoutSelected[0], "home", "no");
+                const submitTimeView = await submitTime(payload, workoutSelected[0], "home", "no", publicChannels);
                 webAPI.views.push(submitTimeView);
                 return
             }

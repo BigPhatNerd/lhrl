@@ -336,17 +336,14 @@ moreSlackInteractions.viewSubmission(
             const user = payload.user.id
             const userInfo = await webAPI.users.info({ user: user })
             const passUser = userInfo.user
-            const radioButton =
-                payload.view.state.values.radio['radio_buttons-action']
-                    .selected_option.value
-            if (radioButton === 'public') {
-                const webhook =
-                    process.env.NODE_ENV === 'production'
-                        ? findToken.webhook
-                        : slack.dev_lhrl_Webhook
-                const confirm = await axios.post(
-                    webhook,
-                    {
+            const { public_private } = payload.view.state.values.type
+
+            if (public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+                
+                const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
                         text: `${
                             passUser.real_name
                         } just added weekly goals of: \n  ${createGoalsMessage(
@@ -359,8 +356,8 @@ moreSlackInteractions.viewSubmission(
                             'Squats',
                             squats
                         )} ${createGoalsMessage('Miles', miles)}`,
-                    },
-                    config
+                    }
+                    
                 )
             }
             const allWorkouts = await axios.get(
@@ -459,17 +456,13 @@ moreSlackInteractions.viewSubmission(
             const allWorkouts = await axios.get(
                 `${urlString}/getEverything/${passUser.id}`
             )
-            const radioButton =
-                payload.view.state.values.radio['radio_buttons-action']
-                    .selected_option.value
-            if (radioButton === 'public') {
-                const webhook =
-                    process.env.NODE_ENV === 'production'
-                        ? findToken.webhook
-                        : slack.dev_lhrl_Webhook
-                const confirm = await axios.post(
-                    webhook,
-                    {
+             const { public_private } = payload.view.state.values.type
+            if (public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+                
+                const confirm = webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
                         text: `${
                             passUser.real_name
                         } just updated weekly goals to: \n ${createGoalsMessage(
@@ -482,8 +475,7 @@ moreSlackInteractions.viewSubmission(
                             'Squats',
                             squats
                         )} ${createGoalsMessage('Miles', miles)}`,
-                    },
-                    config
+                    }
                 )
             }
             // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
@@ -671,20 +663,15 @@ moreSlackInteractions.viewSubmission('cf_daily', async (payload, respond) => {
             data
         )
 
-        const radioButton =
-            payload.view.state.values.radio['radio_buttons-action']
-                .selected_option.value
-        if (radioButton === 'public') {
-            const webhook =
-                process.env.NODE_ENV === 'production'
-                    ? findToken.webhook
-                    : slack.dev_lhrl_Webhook
-            const confirm = await axios.post(
-                webhook,
-                {
+        const { public_private } = payload.view.state.values.type
+        if (public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
                     text: `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋`,
-                },
-                config
+                }
             )
         }
         const allWorkouts = await axios.get(

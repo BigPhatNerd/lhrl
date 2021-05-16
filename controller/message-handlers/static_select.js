@@ -19,6 +19,14 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
         const webAPI = web(findToken.access_token);
         var user_id = payload.user.id;
         const value = payload.actions[0].selected_option.value;
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private 🤫")
+
 
         //SELECT WORKOUT TYPE  to create a workout
         if(value === "reps" || value === "rounds_plus_reps" || value === "time" || value === "load" || value === "distance" || value === "meters") {
@@ -70,11 +78,11 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
 
             if(payload.view.callback_id === "homepage_modal") {
-                const fiveKIndex = await view5KProgram(payload, workouts, "slash");
+                const fiveKIndex = await view5KProgram(payload, workouts, "slash", publicChannels);
                 webAPI.views.push(fiveKIndex);
                 return
             }
-            const fiveKIndex = await view5KProgram(payload, workouts, "home");
+            const fiveKIndex = await view5KProgram(payload, workouts, "home", publicChannels);
             webAPI.views.open(fiveKIndex);
         }
 
@@ -83,11 +91,11 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
 
             if(payload.view.callback_id === "homepage_modal") {
-                const tenKIndex = await view10KProgram(payload, workouts, "slash");
+                const tenKIndex = await view10KProgram(payload, workouts, "slash", publicChannels);
                 webAPI.views.push(tenKIndex);
                 return
             }
-            const tenKIndex = await view10KProgram(payload, workouts, "home");
+            const tenKIndex = await view10KProgram(payload, workouts, "home", publicChannels);
             webAPI.views.open(tenKIndex);
         }
         // Half-Marathon Choose a plan
@@ -95,24 +103,24 @@ static_select.action({ type: "static_select" }, async (payload, respond) => {
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
 
             if(payload.view.callback_id === "homepage_modal") {
-                const tenKIndex = await viewHalfMarathon(payload, workouts, "slash");
-                webAPI.views.push(tenKIndex);
+                const half = await viewHalfMarathon(payload, workouts, "slash", publicChannels);
+                webAPI.views.push(half);
                 return
             }
-            const tenKIndex = await viewHalfMarathon(payload, workouts, "home");
-            webAPI.views.open(tenKIndex);
+            const half = await viewHalfMarathon(payload, workouts, "home", publicChannels);
+            webAPI.views.open(half);
         }
         // Half-Marathon Choose a plan
         else if(value === "marathon") {
             const workouts = await axios.get(`${urlString}/programs/selectedProgram/view-program/${value}`);
 
             if(payload.view.callback_id === "homepage_modal") {
-                const tenKIndex = await viewMarathon(payload, workouts, "slash");
-                webAPI.views.push(tenKIndex);
+                const marathon = await viewMarathon(payload, workouts, "slash", publicChannels);
+                webAPI.views.push(marathon);
                 return
             }
-            const tenKIndex = await viewMarathon(payload, workouts, "home");
-            webAPI.views.open(tenKIndex);
+            const marathon = await viewMarathon(payload, workouts, "home", publicChannels);
+            webAPI.views.open(marathon);
         }
     } catch (err) {
         console.error(err.message);

@@ -285,16 +285,20 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
                 notes: notes
             }
         }
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+        
 
 
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
         const user = payload.user.id;
         const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋` }, config)
+        const { public_private } = payload.view.state.values.type
+        if(public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value, "text": `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋` })
         }
 
         if(home_or_slash === "slash") {
@@ -612,16 +616,22 @@ slackInteractions.viewSubmission('calendar_workout', async (payload, respond) =>
                 notes: notes
             }
         }
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
+        
 
 
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
         const user = payload.user.id;
         const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋` }, config)
+
+        const { public_private } = payload.view.state.values.type
+        if( public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
+                     "text": `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋` })
         }
 
         if(home_or_slash === "slash") {
@@ -793,10 +803,14 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
             const updateHome = homepage(passUser, allWorkouts, wod[0])
             webAPI.views.publish(updateHome);
         }
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️` }, config)
+        const { public_private } = payload.view.state.values.type
+        if( public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
+                     "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️` })
         }
         return
     } catch (err) {
@@ -831,10 +845,14 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
             const updateHome = await homepage(passUser, allWorkouts, wod[0]);
             webAPI.views.publish(updateHome);
         }
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 10k program 🏃‍♂️` }, config)
+        const { public_private } = payload.view.state.values.type
+        if(public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
+                     "text": `🏃‍♀️ ${passUser.real_name} just signed up for the 10k program 🏃‍♂️` })
         }
         return
     } catch (err) {
@@ -868,10 +886,14 @@ slackInteractions.viewSubmission('subscribe_to_half_marathon', async (payload, r
             const updateHome = await homepage(passUser, allWorkouts, wod[0]);
             webAPI.views.publish(updateHome);
         }
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the half-marathon program 🏃‍♂️` }, config)
+        const { public_private } = payload.view.state.values.type
+        if(public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
+                     "text": `🏃‍♀️ ${passUser.real_name} just signed up for the half-marathon program 🏃‍♂️` })
         }
         return
     } catch (err) {
@@ -905,10 +927,14 @@ slackInteractions.viewSubmission('subscribe_to_marathon', async (payload, respon
             const updateHome = await homepage(passUser, allWorkouts, wod[0]);
             webAPI.views.publish(updateHome);
         }
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏃‍♀️ ${passUser.real_name} just signed up for the marathon program 🏃‍♂️` }, config)
+        const { public_private } = payload.view.state.values.type
+        if(public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value,
+                     "text": `🏃‍♀️ ${passUser.real_name} just signed up for the marathon program 🏃‍♂️` })
         }
         return
     } catch (err) {
@@ -1000,10 +1026,13 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
         const user = payload.user.id;
         const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
-        const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏃‍♀️ ${passUser.real_name} just finished a program workout 🏃‍♂️` }, config);
+        const { public_private } = payload.view.state.values.type
+        if( public_private.selected_option !== null &&
+                public_private.selected_option.value !== 'Keep Private 🤫' &&
+                public_private.selected_option.value !== null) {
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: public_private.selected_option.value, "text": `🏃‍♀️ ${passUser.real_name} just finished a program workout 🏃‍♂️` });
         }
         if(enter_score_slash === "yes") {
 

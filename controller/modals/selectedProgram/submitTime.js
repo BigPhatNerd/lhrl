@@ -1,7 +1,40 @@
 var dayjs = require("dayjs");
 
 
-const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash) => {
+const submitTime = (payload, workoutSelected, slashOrHome, enter_score_slash, publicChannels) => {
+const channelOptions = publicChannels.map(channel =>{
+        return {
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": channel,
+                                    "emoji": true
+                                },
+                                "value": channel,
+                            }
+    })
+
+const staticSelect = {
+                    "type": "section",
+                    "block_id": "type",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Keep private 🤫 or post to channel 🔊",
+                        "emoji": true
+                    },
+                    "accessory": {
+                        "type": "static_select",
+
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Keep private 🤫" ,
+
+                            "emoji": true
+                        },
+                        "options": channelOptions,
+                        "action_id": "public_private"
+                    }
+                }
+
     const { trigger_id } = payload;
     const { _id, name, week, day, startDate, type, description, minutes, seconds, completed, miles } = workoutSelected;
 const metadata = JSON.parse(payload.view.private_metadata);
@@ -41,45 +74,9 @@ const metadata = JSON.parse(payload.view.private_metadata);
                     "text": "Close",
                     "emoji": true
                 },
-                "blocks": [ {
-            "type": "input",
-            "block_id": "radio",
-            "element": {
-                "type": "radio_buttons",
-                "initial_option": {
-                    "text": {
-                             "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                        },
-                        "value": "private"
-                },
-                "options": [
-                    {
-                        "text": {
-                             "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                        },
-                        "value": "private"
-                    },
-                    {
-                       "text": {
-                           "type": "plain_text",
-                            "text": "Share with channel 🔊",
-                            "emoji":true
-                        },
-                        "value": "public"
-                    }
-                ],
-                "action_id": "radio_buttons-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Privacy Settings:",
-                "emoji": true
-            }
-        },{
+                "blocks": [ 
+                staticSelect,
+                {
                         type: "section",
                         text: {
                             type: "mrkdwn",
@@ -203,45 +200,8 @@ const metadata = JSON.parse(payload.view.private_metadata);
                     "text": "Close",
                     "emoji": true
                 },
-                "blocks": [ {
-            "type": "input",
-            "block_id": "radio",
-            "element": {
-                "type": "radio_buttons",
-                "initial_option": {
-                    "text": {
-                             "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                        },
-                        "value": "private"
-                },
-                "options": [
-                    {
-                        "text": {
-                              "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                        },
-                        "value": "private"
-                    },
-                    {
-                       "text": {
-                           "type": "plain_text",
-                            "text": "Share with channel 🔊",
-                            "emoji":true
-                        },
-                        "value": "public"
-                    }
-                ],
-                "action_id": "radio_buttons-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Privacy Settings:",
-                "emoji": true
-            }
-        },{
+                "blocks": [ 
+                staticSelect,{
                         type: "section",
                         text: {
                             "type": "mrkdwn",

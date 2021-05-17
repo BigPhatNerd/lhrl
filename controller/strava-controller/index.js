@@ -26,7 +26,7 @@ const stravaController = {
                 expires_in: expires_in
             }, { returnOriginal: false })
 
-            console.log("User autheticated and updated!");
+            console.log("User authenticated and updated!");
 
             //I THINK I return updateUser to have access to updateUser.accessToken?
             console.log("access_token: ", access_token);

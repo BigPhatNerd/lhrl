@@ -8,6 +8,11 @@ var UserSchema = new Schema({
         type: String,
         default: ''
     },
+    stravaChannel: {
+        type: String,
+        default: ''
+
+    },
 
     stravaId: {
         type: String,

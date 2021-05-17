@@ -56,7 +56,6 @@ module.exports = {
                         emoji: true,
                     },
                     value: "Authorize Strava",
-                    url: `${urlString}/strava/login`,
                     action_id: "Authorize Strava",
                 },
             ],

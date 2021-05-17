@@ -1,6 +1,7 @@
 const moreSlackInteractions = require('./../../config/slack-interactions.js')
 const web = require('../../config/slack-web-api.js')
-const homepage = require('../homepage/homeview.js')
+const homepage = require('../homepage/homeview.js');
+const open = require('open');
 const {
     User,
     Workout,
@@ -8,12 +9,14 @@ const {
     FinishedWorkout,
     CrossFit,
     OAuth,
+    Session
 } = require('../../models/')
 const { createGoalsMessage, intValidation } = require('./helpers')
 const { slack, sugarwod, url } = require('../../lib/keys')
 const sendGraphView = require('./helpers/sendGraphView')
 const updateHomeModal = require('../homepage/updateHomeModal')
-const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar')
+const updatedCalendarWorkouts = require('../modals/calendar/updateCalendar');
+const sendToStrava = require('../modals/stravaChannelSelect/sendToStrava');
 const {
     goalCount,
     goalSummary,
@@ -32,6 +35,60 @@ const urlString =
 console.log({ urlString })
 var viewId
 var value
+
+moreSlackInteractions.viewSubmission(
+    'strava_channel_select',
+    async(payload, respond) =>{
+        console.log("Strava thing is working");
+        console.log({payload})
+        const findToken = await OAuth.findOne({ team_id: payload.team.id })
+        const webAPI = web(findToken.access_token)
+        console.log({ payload })
+        const metadata = JSON.parse(payload.view.private_metadata)
+        const { home_or_slash } = metadata
+        const user = payload.user.id;
+            const userInfo = await webAPI.users.info({ user: user });
+            const passUser = userInfo.user;
+            const { id, team_id, name, real_name } = userInfo.user;
+            console.log("Still good?")
+            const api_app_id = payload.api_app_id;
+            const data = {
+                team_id: team_id,
+                user_id: id,
+                user_name: name,
+                api_app_id: api_app_id
+            }
+            
+const { public_private } = payload.view.state.values.type;
+var channel;
+if (public_private.selected_option !== null && public_private.selected_option.value !== 'Keep Private 🤫' && public_private.selected_option.value !== null) {
+    console.log("Anything in the if statement?")
+    channel = public_private.selected_option.value;
+    console.log({public_private})
+} else{
+    console.log("Anything in the else statement?");
+    channel = '';
+}
+            const deleteSessions = await Session.deleteMany({});
+            const createSession = await Session.create({ userId: id, team_id: team_id, api_app_id: api_app_id });
+            const createUser = await User.findOneAndUpdate({ user_id: id }, { $set: { team_id: team_id, user_name: name, stravaChannel: channel } }, { upsert: true, new: true });
+            console.log({createUser})
+            console.log("HERE");
+            console.log({home_or_slash})
+if(home_or_slash === "slash") {
+    console.log("Do I make it all the way down here?");
+                    // const modal = await sendToStrava(payload, "slash", urlString);
+                    // webAPI.views.push(modal);
+                    await open(`${urlString}/strava/login`);
+                    return
+
+                }
+                console.log("here?");
+                const modal = await sendToStrava(payload, "home", urlString)
+                webAPI.views.push(modal);
+                return
+
+    })
 
 moreSlackInteractions.viewSubmission(
     'confirm_remove',

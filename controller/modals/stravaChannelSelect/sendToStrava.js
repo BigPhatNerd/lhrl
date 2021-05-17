@@ -3,7 +3,7 @@
 const sendToStrava = async (payload, slashOrHome, urlString) => {
    console.log({payload})
     const { trigger_id } = payload;
-
+console.log({trigger_id})
     const view = {
 
         "trigger_id": trigger_id,

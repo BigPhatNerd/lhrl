@@ -25,6 +25,7 @@ const urlString =
 
 module.exports = {
     authorizePrograms: (allWorkouts) => {
+       
         //
         if (allWorkouts.data[0].authorizeStrava) {
             const stravaButton = {
@@ -56,6 +57,7 @@ module.exports = {
                         emoji: true,
                     },
                     value: "Authorize Strava",
+                    "url": `${urlString}/strava/login`,
                     action_id: "Authorize Strava",
                 },
             ],

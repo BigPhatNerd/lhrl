@@ -708,16 +708,21 @@ console.log({payload})
 
         //AUTHORIZE STRAVA (at the very top of the page)
         else if(value === 'Authorize Strava') {
-            if(payload.view.callback_id === "homepage_modal") {
-                const stravaSelect = await stravaChannelSelect(payload, 'slash', publicChannels);
-                webAPI.views.push(stravaSelect);
-                return
-
+            const user = payload.user.id;
+            const userInfo = await webAPI.users.info({ user: user });
+            const passUser = userInfo.user;
+            const { id, team_id, name, real_name } = userInfo.user;
+            const api_app_id = payload.api_app_id;
+            const data = {
+                team_id: team_id,
+                user_id: id,
+                user_name: name,
+                api_app_id: api_app_id
             }
-            const stravaSelect = await stravaChannelSelect(payload, 'slash', publicChannels);
-            webAPI.views.open(stravaSelect);
-            return
-   
+
+            const deleteSessions = await Session.deleteMany({});
+            const createSession = await Session.create({ userId: id, team_id: team_id, api_app_id: api_app_id });
+            const createUser = await User.findOneAndUpdate({ user_id: id }, { $set: { team_id: team_id, user_name: name } }, { upsert: true, new: true });
 
         }
         //DEAUTHORIZE STRAVA (at the very top of the page)

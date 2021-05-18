@@ -84,6 +84,14 @@ moreSlackInteractions.viewSubmission('homepage_modal', async (payload, respond) 
 
 moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respond) => {
     try {
+        //Will be better if I can get my dev working right
+        // console.log({payload})
+        // const userToken = await User.findOne({ user_id: payload.user.id});
+        // console.log({userToken})
+        // console.log("userToken:", userToken.oauth[0])
+       
+        // const findToken = await OAuth.findOne({ _id: userToken.oauth[0] });
+        //^^Look at this after I view authentication
         const findToken = await OAuth.findOne({ team_id: payload.team.id });
         const webAPI = web(findToken.access_token);
         const username = payload.user.username;
@@ -164,31 +172,67 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
 
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash } = metadata;
-        console.log("allWorkouts.data[0]: ", allWorkouts.data[0]);
+        
         const channel = allWorkouts.data[0].channel_to_post;
-        console.log("\n\n\n\n\n what \n\n\n\n\n")
-        console.log({channel});
+        
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
-            console.log({ findToken });
+            
             const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            console.log({webhook})
-            const confirm = await axios.post(webhook, {
-                "text": `${passUser.real_name} just did some work! 💪`,
-                "channel": channel,
-                "blocks": [{
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": `${passUser.real_name} just completed reps of: \n${createGoalsMessage("Pushups", pushups)}${createGoalsMessage("Situps", situps)}${createGoalsMessage("Squats", squats)}${createGoalsMessage("Miles", miles)}\n *Goal summary for this week:*${goalSummaryMessage("pushups", weeklyGoals.pushups, pushupSummary)}${goalSummaryMessage("situps", weeklyGoals.situps, situpSummary, username)}${goalSummaryMessage("squats", weeklyGoals.squats, squatSummary, username)}${goalSummaryMessage("miles", weeklyGoals.miles, mileSummary, username)}`
-                    },
-                    "accessory": {
-                        "type": "image",
-                        "image_url": sendGraphView(percentage),
-                        "alt_text": "Graph for weekly workouts/weekly goals"
-                    }
-                }]
-            }, config);
+            
+            const confirm = await webAPI.chat.postMessage({
+                    channel: channel,
+                    text: `${passUser.real_name} just did some work! 💪`,
+
+                    blocks: [
+                        {
+                            type: 'section',
+                            text: {
+                                type: 'mrkdwn',
+                                text: `${
+                                    passUser.real_name
+                                } just completed reps of: \n${createGoalsMessage(
+                                    'Pushups',
+                                    pushups
+                                )}${createGoalsMessage(
+                                    'Situps',
+                                    situps
+                                )}${createGoalsMessage(
+                                    'Squats',
+                                    squats
+                                )}${createGoalsMessage(
+                                    'Miles',
+                                    miles
+                                )}\n *Goal summary for this week:*${goalSummaryMessage(
+                                    'pushups',
+                                    weeklyGoals.pushups,
+                                    pushupSummary
+                                )}${goalSummaryMessage(
+                                    'situps',
+                                    weeklyGoals.situps,
+                                    situpSummary,
+                                    username
+                                )}${goalSummaryMessage(
+                                    'squats',
+                                    weeklyGoals.squats,
+                                    squatSummary,
+                                    username
+                                )}${goalSummaryMessage(
+                                    'miles',
+                                    weeklyGoals.miles,
+                                    mileSummary,
+                                    username
+                                )}`,
+                            },
+                            accessory: {
+                                type: 'image',
+                                image_url: sendGraphView(percentage),
+                                alt_text:
+                                    'Graph for weekly workouts/weekly goals',
+                            },
+                        },
+                    ],
+                })
         }
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
          const findChannels =  await webAPI.conversations.list();
@@ -281,11 +325,31 @@ moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) =>
         const userInfo = await webAPI.users.info({ user: user });
         const passUser = userInfo.user;
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
+          const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+
+        const channel = allWorkouts.data[0].channel_to_post;
+if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
             const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `${passUser.real_name} just added weekly goals of: \n  ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
-        }
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+            const confirm = await webAPI.chat.postMessage({
+                    channel: channel,
+                        text: `${
+                            passUser.real_name
+                        } just added weekly goals of: \n  ${createGoalsMessage(
+                            'Pushups',
+                            pushups
+                        )} ${createGoalsMessage(
+                            'Situps',
+                            situps
+                        )} ${createGoalsMessage(
+                            'Squats',
+                            squats
+                        )} ${createGoalsMessage('Miles', miles)}`,
+                    }
+                    
+                )
+            }
+        
+      
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash } = metadata;
@@ -383,10 +447,26 @@ moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `${passUser.real_name} just updated weekly goals to: \n ${createGoalsMessage("Pushups", pushups)} ${createGoalsMessage("Situps", situps)} ${createGoalsMessage("Squats", squats)} ${createGoalsMessage("Miles", miles)}` }, config);
-        }
+        const channel = allWorkouts.data[0].channel_to_post;
+if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
+            const confirm = webAPI.chat.postMessage({
+                    channel: channel,
+                        text: `${
+                            passUser.real_name
+                        } just updated weekly goals to: \n ${createGoalsMessage(
+                            'Pushups',
+                            pushups
+                        )} ${createGoalsMessage(
+                            'Situps',
+                            situps
+                        )} ${createGoalsMessage(
+                            'Squats',
+                            squats
+                        )} ${createGoalsMessage('Miles', miles)}`,
+                    }
+                )
+            }
+        
         // const wod = await axios.get('https://api.sugarwod.com/v2/workoutshq', { headers: sugarWodConfig });
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
          const findChannels =  await webAPI.conversations.list();
@@ -577,13 +657,17 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const view_id = payload.view.root_view_id;
 
         const sendWorkout = await axios.post(`${urlString}/finishedWorkouts/${user_id}`, data);
-
+   const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
-        if(radioButton === "public") {
-            const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;
-            const confirm = await axios.post(webhook, { "text": `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋` }, config);
+        const channel = allWorkouts.data[0].channel_to_post;
+if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
+           const confirm = await webAPI.chat.postMessage({
+                    channel: channel,
+                    text: `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋`,
+                }
+            )
         }
-        const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
+     
 
 
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });

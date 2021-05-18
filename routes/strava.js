@@ -19,7 +19,8 @@ const {
     testSlackBlock,
 } = require("../slack-templates/strava-templates");
 const post = { text: "booga booga" };
-const { getMiles } = require('../utils/strava')
+const { getMiles } = require('../utils/strava');
+const web = require('../config/slack-web-api.js');
 
 router.get("/find", async (req, res) => {
     const findUser = await User.findOne({ email: req.query.email });
@@ -43,8 +44,27 @@ router.put("/deauth/:stravaId", async (req, res) => {
     res.json(user);
 });
 
-//Create route for STRAVA webhook to go to Slack
+const test = async () =>{
+    
+}
+// const test = async () =>{
+//     const addFinishedWorkout = await User.findOneAndUpdate(
+//             { stravaId: "35520713" },
+//             { $push: { finishedWorkouts: [] } },
+//             { new: true }
+//         );
+//     // const auth = await OAuth.findOne({ team_id: "TA2JHTWKY" })
+//     console.log({addFinishedWorkout})
+//   console.log("\n\n\naddFinishedWorkout.oauth[0]\n\n\n", addFinishedWorkout.oauth[0])
+//   const authId = addFinishedWorkout.oauth[0];
+//   const auth = await OAuth.find({_id: authId})
+//   console.log({auth})
 
+
+// };
+// test();
+
+//Create route for STRAVA webhook to go to Slack
 router.post("/webhook", async (req, res) => {
     try {
         
@@ -93,6 +113,10 @@ const int = parseInt(distance)
             { $push: { finishedWorkouts: finishedWorkouts } },
             { new: true }
         );
+        const findToken = await OAuth.findOne({team_id: addFinishedWorkout.team_id})
+const webAPI = web(findToken.access_token);
+const channelToPost = addFinishedWorkout.channel_to_post;
+const oAuthId = addFinishedWorkout.oauth[0]
         //Save the information to mongoose by searching for stravaId
        
         const body = {
@@ -122,21 +146,14 @@ const int = parseInt(distance)
                     });
                     return;
                 }
-
-                const { name, stravaAvatar } = activityData;
-                //Trying to find the webhook from the users team_id but not sure If I am calling it right
-                OAuth.findOne({ team_id: addFinishedWorkout.team_id }).then(
-                    (response) => {
-                       
-                        //I think that stravaHook would be where I could map through however many workouts were added.
-                        axios.post(
-                            response.webhook,
-                            stravaHook(stravaData.data, name, stravaAvatar),
-                            config
-                        );
-                    }
-                );
+        
+                
             });
+            const { name, stravaAvatar } = activityData;
+                
+                        if(channelToPost !== '' && channelToPost !== 'Keep Private'){
+                      const postStrava = await  webAPI.chat.postMessage(stravaHook(stravaData.data, name, stravaAvatar, channelToPost))
+                  }
 
         res.status(200).send("EVENT_RECEIVED");
     } catch (err) {

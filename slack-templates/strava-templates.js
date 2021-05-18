@@ -6,7 +6,7 @@ const {
     avgMile
 } = require('../utils/strava');
 const slackTemplates = {
-    stravaHook(response, username, avatar) {
+    stravaHook(response, username, avatar, channel) {
         // response = JSON.stringify(response);
         const {
             athlete,
@@ -45,7 +45,7 @@ const slackTemplates = {
         }
 
         const stravaReturn = {
-
+"channel": channel,
             "text": username + " just entered a workout on Strava. ",
             "blocks": blockData(username, distance, elapsed_time, moving_time, average_speed, max_speed)
 

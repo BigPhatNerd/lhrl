@@ -112,7 +112,14 @@ const slackController = {
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-            const showHomepage = await homepage(passUser, allWorkouts, wod[0])
+             const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
+            const showHomepage = await homepage(passUser, allWorkouts, wod[0], publicChannels)
 
 
 const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slack.dev_lhrl_Webhook;

@@ -118,7 +118,14 @@ router.post('/lhrl', async (req, res) => {
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0])
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
+const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0], publicChannels)
         webAPI.views.open(homepage);
         return
 
@@ -164,7 +171,14 @@ if(req.body.text === 'help'){
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0])
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
+const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0], publicChannels)
         webAPI.views.open(homepage)
 return
 

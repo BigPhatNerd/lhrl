@@ -53,14 +53,21 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
 
-            const updatedWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+            const updatedWorkouts = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels)
             webAPI.views.update(updatedWorkouts);
             return
         }
 
-        const updateHome = await homepage(passUser, allWorkouts, wod[0])
+        const updateHome = await homepage(passUser, allWorkouts, wod[0], publicChannels)
         await webAPI.views.publish(updateHome);
 
     } catch (err) {
@@ -313,7 +320,14 @@ slackInteractions.viewSubmission('complete_workout', async (payload, respond) =>
         }
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-        const showHome = await homepage(passUser, allWorkouts, wod[0]);
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
+        const showHome = await homepage(passUser, allWorkouts, wod[0], publicChannels);
         return webAPI.views.publish(showHome);
 
 
@@ -638,9 +652,16 @@ slackInteractions.viewSubmission('calendar_workout', async (payload, respond) =>
             // webAPI.views.update(updated)
             // return
         }
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-        const showHome = await homepage(passUser, allWorkouts, wod[0]);
+        const showHome = await homepage(passUser, allWorkouts, wod[0], publicChannels);
         return webAPI.views.publish(showHome);
 
 
@@ -785,12 +806,19 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
         const passUser = userInfo.user
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
 
-            const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0]);
+            const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels);
             webAPI.views.update(update)
         } else {
-            const updateHome = homepage(passUser, allWorkouts, wod[0])
+            const updateHome = homepage(passUser, allWorkouts, wod[0], publicChannels)
             webAPI.views.publish(updateHome);
         }
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
@@ -822,13 +850,20 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
-            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publishChannels)
 
             webAPI.views.update(update);
 
         } else {
-            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            const updateHome = await homepage(passUser, allWorkouts, wod[0], publishChannels);
             webAPI.views.publish(updateHome);
         }
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
@@ -859,13 +894,20 @@ slackInteractions.viewSubmission('subscribe_to_half_marathon', async (payload, r
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
-            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels)
 
             webAPI.views.update(update);
 
         } else {
-            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            const updateHome = await homepage(passUser, allWorkouts, wod[0], publicChannels);
             webAPI.views.publish(updateHome);
         }
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
@@ -896,13 +938,20 @@ slackInteractions.viewSubmission('subscribe_to_marathon', async (payload, respon
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
-            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels)
 
             webAPI.views.update(update);
 
         } else {
-            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            const updateHome = await homepage(passUser, allWorkouts, wod[0], publicChannels);
             webAPI.views.publish(updateHome);
         }
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
@@ -938,13 +987,20 @@ slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
         const passUser = userInfo.user;
         const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
         const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+         const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
-            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0])
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels)
 
             webAPI.views.update(update);
             return
         } else {
-            const updateHome = await homepage(passUser, allWorkouts, wod[0]);
+            const updateHome = await homepage(passUser, allWorkouts, wod[0], publicChannels);
             webAPI.views.publish(updateHome);
             return
         }
@@ -1011,7 +1067,14 @@ slackInteractions.viewSubmission('selected_program_workouts', async (payload, re
             const allWorkouts = await axios.get(`${urlString}/getEverything/${passUser.id}`);
 
             const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-            webAPI.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0]))
+             const findChannels =  await webAPI.conversations.list();
+                const publicChannels = findChannels.channels.map(channel =>{
+                    if(!channel.is_private){
+                        return channel.name
+                    }
+                })
+                publicChannels.unshift("Keep Private")
+            webAPI.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels))
             return
         }
         const workouts = await axios.get(`${urlString}/programs/selectedProgram/get-workouts/${user_id}`);

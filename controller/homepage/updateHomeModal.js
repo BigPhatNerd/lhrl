@@ -12,7 +12,9 @@ const {
     stravaWorkout,
     calendar,
     divider,
-    requiredHelpers
+    requiredHelpers,
+     chooseChannelToPost,
+  
 
 
 
@@ -20,7 +22,7 @@ const {
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
+const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod, publicChannels) => {
     // const metadata = JSON.parse(payload.view.private_metadata)
 
     // console.log("payload in update home(find viewId): ",payload)
@@ -54,6 +56,8 @@ const updateHomeModal = (homeModal_view_id, user, allWorkouts, wod) => {
             },
             "blocks": [
                header("Welcome " + user.real_name),
+                chooseChannelToPost(publicChannels, allWorkouts),
+                  
                 authorizePrograms(allWorkouts),
                 divider(),
                 header("Activity Calendar"),

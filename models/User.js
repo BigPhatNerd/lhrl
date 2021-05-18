@@ -13,6 +13,11 @@ var UserSchema = new Schema({
         type: String,
 
     },
+    channel_to_post: {
+        type: String,
+        default: ''
+
+    },
     isAuthenticated: {
         type: Boolean,
         default: false

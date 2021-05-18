@@ -12,7 +12,9 @@ const {
     stravaWorkout,
     calendar,
     divider,
-    requiredHelpers
+    requiredHelpers,
+    chooseChannelToPost,
+    
 
 
 
@@ -50,6 +52,8 @@ const homepage = (user, allWorkouts, wod) => {
                     "alt_text": "logo"
                 },
 header("Welcome " + user.real_name),
+   chooseChannelToPost(publicChannels, allWorkouts),
+   
                 authorizePrograms(allWorkouts),
                 divider(),
                 header("Activity Calendar"),

@@ -12,14 +12,16 @@ const {
     stravaWorkout,
     calendar,
     divider,
-    requiredHelpers
+    requiredHelpers,
+    chooseChannelToPost, 
+    
 
 
 } = require('./helpers');
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homeModal = (trigger_id, user, allWorkouts, wod) => {
+const homeModal = (trigger_id, user, allWorkouts, wod, publicChannels) => {
 
 
     //user and userProgram is set in controller/slack-controller publishHomepage
@@ -56,6 +58,8 @@ const homeModal = (trigger_id, user, allWorkouts, wod) => {
             },
             "blocks": [
                 header("Welcome " + user.real_name),
+                chooseChannelToPost(publicChannels, allWorkouts),
+                
                 authorizePrograms(allWorkouts),
                 divider(),
                 header("Activity Calendar"),

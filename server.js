@@ -37,7 +37,7 @@ const slackEvents = createEventAdapter(slackSigningSecret);
 mongoose.set('debug', true);
 
 app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware, static_select.middleware, buttons.middleware]);
-app.use('/slack/events', slackEvents.expressMiddleware());
+// app.use('/slack/events', slackEvents.expressMiddleware());
 
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development

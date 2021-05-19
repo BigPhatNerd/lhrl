@@ -128,7 +128,7 @@ router.post('/webhook', async (req, res) => {
             { new: true }
         )
         const findToken = await OAuth.findOne({
-            authed_user_id: addFinishedWorkout.user_id,
+            team_id: addFinishedWorkout.team_id,
         })
         const webAPI = web(findToken.access_token)
         const channelToPost = addFinishedWorkout.channel_to_post

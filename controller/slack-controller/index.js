@@ -77,8 +77,9 @@ const slackController = {
           
             var { user } = req.body.event;
           res.send(200);
-            
-             const findToken = await OAuth.findOne({ authed_user_id: req.body.event.user });
+            console.log("\n\n\n\nreq.body:\n\n\n\n\n ", req.body);
+            console.log("I am in publishHomepage of slack controller")
+             const findToken = await OAuth.findOne({ team_id: req.body.team_id });
 
              //WHEN GETTING invalid_auth do the script below
             // const findToken = await OAuth.findOneAndUpdate({ team_id: 'T012RRU3P3R' }, {

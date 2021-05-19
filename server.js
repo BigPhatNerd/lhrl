@@ -26,13 +26,16 @@ const slackInteractions = require('./controller/message-handlers/slack-interacti
 const moreSlackInteractions = require('./controller/message-handlers/more-slack-interactions.js');
 const static_select = require('./controller/message-handlers/static_select.js');
 const buttons = require('./controller/message-handlers/buttons.js');
-// const { createEventAdapter } = require('@slack/events-api');
 
-// const slackSigningSecret =
-//     process.env.NODE_ENV === 'production'
-//         ? process.env.SLACK_SIGNING_SECRET
-//         : process.env.DEV_SLACK_SIGNING_SECRET
-// const slackEvents = createEventAdapter(slackSigningSecret);
+//ALL THIS SLACK EVENTS
+const { createEventAdapter } = require('@slack/events-api');
+
+const slackSigningSecret =
+    process.env.NODE_ENV === 'production'
+        ? process.env.SLACK_SIGNING_SECRET
+        : process.env.DEV_SLACK_SIGNING_SECRET
+const slackEvents = createEventAdapter(slackSigningSecret);
+
 const signVerification = require('./config/middleware/signVerification')
 
 mongoose.set('debug', true);
@@ -40,7 +43,8 @@ mongoose.set('debug', true);
 app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware, static_select.middleware, buttons.middleware]);
 // app.use('/slack/events', slackEvents.expressMiddleware());
 // app.use('/slack/events', signVerification)
-// app.use('/slack/events', slackEvents.requestListener());
+app.use('/slack/events', slackEvents.requestListener());
+
 
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development

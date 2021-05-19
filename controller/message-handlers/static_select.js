@@ -28,7 +28,7 @@ const urlString =
 static_select.action({ type: 'static_select' }, async (payload, respond) => {
     try {
         console.log('payload.actions: ', payload.actions)
-        const findToken = await OAuth.findOne({ team_id: payload.team.id })
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token)
         var user_id = payload.user.id
 

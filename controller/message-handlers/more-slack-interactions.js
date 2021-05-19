@@ -26,7 +26,7 @@ var viewId;
 var value;
 
 moreSlackInteractions.viewSubmission('confirm_remove', async (payload, respond) => {
-    const findToken = await OAuth.findOne({ team_id: payload.team.id });
+    const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
     const webAPI = web(findToken.access_token);
     console.log({ payload })
     const metadata = JSON.parse(payload.view.private_metadata);
@@ -53,7 +53,7 @@ moreSlackInteractions.viewSubmission('confirm_remove', async (payload, respond) 
     return
 })
 moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (payload, respond) => {
-    const findToken = await OAuth.findOne({ team_id: payload.team.id });
+   const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
     const webAPI = web(findToken.access_token);
     const metadata = JSON.parse(payload.view.private_metadata);
     const { home_or_slash, homeModal_view_id } = metadata;
@@ -84,15 +84,8 @@ moreSlackInteractions.viewSubmission('homepage_modal', async (payload, respond) 
 
 moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respond) => {
     try {
-        //Will be better if I can get my dev working right
-        // console.log({payload})
-        // const userToken = await User.findOne({ user_id: payload.user.id});
-        // console.log({userToken})
-        // console.log("userToken:", userToken.oauth[0])
-       
-        // const findToken = await OAuth.findOne({ _id: userToken.oauth[0] });
-        //^^Look at this after I view authentication
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+      
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const username = payload.user.username;
         const user_id = payload.user.id
@@ -261,7 +254,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
 })
 moreSlackInteractions.viewSubmission("create_goals", async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const username = payload.user.username;
         const user_id = payload.user.id;
@@ -379,7 +372,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 });
 moreSlackInteractions.viewSubmission("update_goals", async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash, homeModal_view_id, id } = metadata;
@@ -493,7 +486,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 
 moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
 
         const metadata = JSON.parse(payload.view.private_metadata);
@@ -699,9 +692,9 @@ moreSlackInteractions.viewSubmission("view_calendar_workouts", async (payload, r
 
 moreSlackInteractions.viewSubmission("send_email", async (payload, respond) => {
     try {
-console.log({payload})
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
-        console.log({findToken})
+
+       const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
+       
         const webAPI = web(findToken.access_token);
         const username = payload.user.username;
         const user_id = payload.user.id;

@@ -47,7 +47,7 @@ buttons.action({ type: 'datepicker' }, async (payload, respond) => {
     try {
 
 
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const user = payload.user.id;
         const userInfo = await webAPI.users.info({ user: user });
@@ -96,7 +96,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
     try {
 
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
 
         var buttonPressed = payload.actions[0].action_id.replace("updated", "");

@@ -25,8 +25,8 @@ var value;
 slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
     try {
 
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
-              console.log({findToken})
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
+              
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { score_type, homeModal_view_id, home_or_slash } = metadata;
@@ -80,7 +80,7 @@ slackInteractions.viewSubmission('create_workout', async (payload, respond) => {
 
 slackInteractions.viewSubmission('edit_created_workout', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
 
         const metadata = JSON.parse(payload.view.private_metadata);
@@ -122,7 +122,7 @@ slackInteractions.viewSubmission('edit_created_workout', async (payload, respond
 // COMPLETE WORKOUT
 slackInteractions.viewSubmission('complete_workout', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         console.log("metadata: ", metadata)
@@ -344,7 +344,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 // EDIT WORKOUT in completedWorkouts/editCompletedWorkouts
 slackInteractions.viewSubmission('edit_completed_workout', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { id, score_type, home_or_slash } = metadata;
@@ -543,7 +543,7 @@ slackInteractions.viewSubmission('edit_completed_workout', async (payload, respo
 // COMPLETE CALENDAR WORKOUT
 slackInteractions.viewSubmission('calendar_workout', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
 
         const metadata = JSON.parse(payload.view.private_metadata);
@@ -681,7 +681,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 // EDIT WORKOUT in calendarWorkouts/editCalendardWorkouts
 slackInteractions.viewSubmission('edit_calendar_workout', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { id, score_type, home_or_slash } = metadata;
@@ -799,7 +799,7 @@ slackInteractions.viewSubmission('edit_calendar_workout', async (payload, respon
 //5k MODAL SUBMISSION
 slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { distance, home_or_slash, homeModal_view_id } = metadata;
@@ -845,7 +845,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 
 slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { distance, home_or_slash, homeModal_view_id } = metadata;
@@ -891,7 +891,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 //Half-marathon modal submission
 slackInteractions.viewSubmission('subscribe_to_half_marathon', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+       const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { distance, home_or_slash, homeModal_view_id } = metadata;
@@ -937,7 +937,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 //Marathon modal submission
 slackInteractions.viewSubmission('subscribe_to_marathon', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         const { distance, home_or_slash, homeModal_view_id } = metadata;
@@ -989,11 +989,9 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 //??
 slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
-        console.log("payload: ", payload);
-        console.log("\n\n\n\n\n DO I NEED TO ADD A SLASH OR HOME HERE!!");
-        console.log("payload: ", payload.view.blocks.length);
+        
         //TEST THIS
         const metadata = JSON.parse(payload.view.private_metadata);
         const { home_or_slash, homeModal_view_id } = metadata;
@@ -1034,7 +1032,7 @@ slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
 // SUBMIT for Selected Program Modal selectedProgram/submitTime.js
 slackInteractions.viewSubmission('selected_program_workouts', async (payload, respond) => {
     try {
-        const findToken = await OAuth.findOne({ team_id: payload.team.id });
+       const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
         console.log("metadata: ", metadata);

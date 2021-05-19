@@ -94,9 +94,11 @@ router.post('/lhrl', async (req, res) => {
     try {
 
         const { user_id, api_app_id, trigger_id, response_url } = req.body;
+       
         if(req.body.text === 'help'){
     res.send(200, "Opening LHRL® Help Modal");
-     const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+     // const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+     const findToken = await OAuth.findOne({ authed_user_id: user_id });
         const webAPI = web(findToken.access_token)
         const userInfo = await webAPI.users.info({ user: user_id });
         const passUser = userInfo.user;
@@ -107,7 +109,7 @@ router.post('/lhrl', async (req, res) => {
     return
 }
         res.send(200, "Opening LHRL® Modal");
-        const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+        const findToken = await OAuth.findOne({ authed_user_id: user_id });
         const webAPI = web(findToken.access_token)
         const userInfo = await webAPI.users.info({ user: user_id });
         const passUser = userInfo.user;
@@ -143,10 +145,11 @@ router.post('/dev_lhrl', async (req, res) => {
     try {
 
 const { user_id, api_app_id, trigger_id, response_url } = req.body;
-
+ 
 if(req.body.text === 'help'){
     res.send(200, "Opening LHRL® Help Modal");
-     const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+
+     const findToken = await OAuth.findOne({ authed_user_id: user_id });
         const webAPI = web(findToken.access_token)
         const userInfo = await webAPI.users.info({ user: user_id });
         const passUser = userInfo.user;
@@ -158,7 +161,7 @@ if(req.body.text === 'help'){
 }
        
         res.send(200, "Opening DEV_LHRL® Modal");
-        const findToken = await OAuth.findOne({ team_id: req.body.team_id })
+       const findToken = await OAuth.findOne({ authed_user_id: user_id });
        
         const webAPI = web(findToken.access_token)
         const userInfo = await webAPI.users.info({ user: user_id });

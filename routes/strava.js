@@ -44,9 +44,7 @@ router.put("/deauth/:stravaId", async (req, res) => {
     res.json(user);
 });
 
-const test = async () =>{
-    
-}
+
 // const test = async () =>{
 //     const addFinishedWorkout = await User.findOneAndUpdate(
 //             { stravaId: "35520713" },
@@ -113,7 +111,7 @@ const int = parseInt(distance)
             { $push: { finishedWorkouts: finishedWorkouts } },
             { new: true }
         );
-        const findToken = await OAuth.findOne({team_id: addFinishedWorkout.team_id})
+        const findToken = await OAuth.findOne({authed_user_id: addFinishedWorkout.user_id})
 const webAPI = web(findToken.access_token);
 const channelToPost = addFinishedWorkout.channel_to_post;
 const oAuthId = addFinishedWorkout.oauth[0]

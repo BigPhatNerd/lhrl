@@ -78,7 +78,8 @@ const slackController = {
             var { user } = req.body.event;
           res.send(200);
             
-             const findToken = await OAuth.findOne({ team_id: req.body.team_id });
+             const findToken = await OAuth.findOne({ authed_user_id: req.body.event.user });
+
              //WHEN GETTING invalid_auth do the script below
             // const findToken = await OAuth.findOneAndUpdate({ team_id: 'T012RRU3P3R' }, {
             //                 $set: {
@@ -95,6 +96,7 @@ const slackController = {
             //             }, { upsert: true, new: true });
             //^^ RUN THE SCRIPT ABOVE FOR INVALID AUTHS WHEN REINSTALLING IN DEV SPACE
            
+           // const addToUser = await User.findOneAndUpdate({ user_id: 'U012ZRTR2P8' }, { $set: { oauth: findToken } }, { upsert: true, new: true })
             const webAPI = web(findToken.access_token);
             const api_app_id = req.body.api_app_id;
             user = user.trim();

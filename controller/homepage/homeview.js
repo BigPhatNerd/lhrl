@@ -22,7 +22,7 @@ const {
 const { cfWOD } = require('./helpers/sugarWod');
 const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
-const homepage = (user, allWorkouts, wod) => {
+const homepage = (user, allWorkouts, wod, publicChannels) => {
 
 
     //user and userProgram is set in controller/slack-controller publishHomepage

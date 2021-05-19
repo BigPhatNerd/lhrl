@@ -34,7 +34,7 @@ router.route("/")
                     body = JSON.parse(body);
                     // const createUser = await User.findOneAndUpdate({ user_id: user_id }, { $set: { team_id: team_id, user_name: user_name } }, { upsert: true, new: true });
                     if(body.is_enterprise_install === false) {
-                        const createToken = await OAuth.findOneAndUpdate({ team_id: body.team.id }, {
+                        const createToken = await OAuth.findOneAndUpdate({ authed_user_id: body.authed_user.id }, {
                             $set: {
                                 app_id: body.app_id,
                                 authed_user_id: body.authed_user.id,
@@ -54,7 +54,7 @@ router.route("/")
                         //  const weeklyGoal = await WeeklyGoal.create(body);
                         // const addGoal = await User.findOneAndUpdate({ user_id: user_id }, { $push: { weeklyGoals: weeklyGoal } }, { new: true });
                     } else {
-                        const createToken = await OAuth.findOneAndUpdate({ team_id: body.team.id }, {
+                        const createToken = await OAuth.findOneAndUpdate({ authed_user_id: body.authed_user.id }, {
                             $set: {
                                 app_id: body.app_id,
                                 authed_user_id: body.authed_user.id,

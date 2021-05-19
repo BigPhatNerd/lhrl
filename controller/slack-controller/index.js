@@ -128,7 +128,7 @@ const webhook = process.env.NODE_ENV === "production" ? findToken.webhook : slac
 
 
 if(!req.body.event.view){
-const confirm = await axios.post(webhook,{
+const confirm = await webAPI.chat.postEphemeral({
     channel: findToken.webhook_channel_id,
     user: req.body.event.user,
    
@@ -217,8 +217,9 @@ const confirm = await axios.post(webhook,{
         
     ]
 
-}, config)
+})
 }
+
             webAPI.views.publish(showHomepage)
             return
         } catch (err) {

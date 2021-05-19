@@ -867,12 +867,12 @@ slackInteractions.viewSubmission('subscribe_to_10k', async (payload, respond) =>
                 })
                 publicChannels.unshift("Keep Private")
         if(home_or_slash === "slash") {
-            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publishChannels)
+            const update = await updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels)
 
             webAPI.views.update(update);
 
         } else {
-            const updateHome = await homepage(passUser, allWorkouts, wod[0], publishChannels);
+            const updateHome = await homepage(passUser, allWorkouts, wod[0], publicChannels);
             webAPI.views.publish(updateHome);
         }
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;

@@ -5,10 +5,12 @@ const view5KProgram = require('../modals/fiveK/viewProgram')
 const view10KProgram = require('../modals/tenK/viewProgram')
 const viewHalfMarathon = require('../modals/halfMarathon/viewProgram')
 const viewMarathon = require('../modals/marathon/viewProgram')
-
+const updateHomeModal = require('../homepage/updateHomeModal')
+const homeModal = require('../homepage/homeModal')
 const createWorkoutModal = require('../modals/createWorkout/createWorkoutModal')
 const viewWorkouts = require('../modals/createWorkout/viewWorkouts.js')
-const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedWorkouts')
+const viewFinishedWorkouts = require('../modals/completedWorkouts/viewCompletedWorkouts');
+const homepage = require('../homepage/homeview.js');
 const {
     User,
     Workout,
@@ -27,22 +29,116 @@ const urlString =
 
 static_select.action({ type: 'static_select' }, async (payload, respond) => {
     try {
-        console.log('payload.actions: ', payload.actions)
-        const findToken = await OAuth.findOne({ authed_user_id: payload.user.id });
+        // console.log('payload.actions: ', payload.actions)
+        const findToken = await OAuth.findOne({
+            authed_user_id: payload.user.id,
+        })
         const webAPI = web(findToken.access_token)
         var user_id = payload.user.id
 
         const value = payload.actions[0].selected_option.value
         if (payload.actions[0].action_id === 'public_private') {
-            const userInfo = await webAPI.users.info({ user: user_id })
-            const passUser = userInfo.user
-            const channel = payload.actions[0].selected_option.value
-            const user = await User.updateOne(
-                { user_id },
-                { $set: { channel_to_post: channel } }
+            const setChannel = await User.findOneAndUpdate(
+                { user_id: user_id },
+                {
+                    $set: {
+                        channel_to_post:
+                            payload.actions[0].selected_option.value,
+                    },
+                }
             )
+            console.log(
+                '\n\n\npayload.view.private_metadata:',
+                payload.view.private_metadata === ''
+            )
+           
+            if (payload.view.private_metadata !== '') {
+                const metadata = JSON.parse(payload.view.private_metadata)
+                const { home_or_slash, homeModal_view_id } = metadata
+            } else {
+                console.log("payload.view.private_metadata: ", payload.view.private_metadata);
 
-            return
+            }
+          
+            console.log('\n\n\n\n\nYOOOOO\n\n\n\n')
+            console.log({payload})
+            const theUser = payload.user.id
+            const getUser = await webAPI.users.info({ user: theUser })
+            const passTheUser = getUser.user
+            const allWorkouts = await axios.get(
+                `${urlString}/getEverything/${passTheUser.id}`
+            )
+            const wod = await CrossFit.find().limit(1).sort({ date: -1 })
+            const findChannels = await webAPI.conversations.list()
+
+            const { trigger_id } = payload
+            const publicChannels = findChannels.channels.map(channel => {
+                if (!channel.is_private) {
+                    return channel.name
+                }
+            })
+            
+            publicChannels.unshift('Keep Private');
+            console.log("\n\n\n\nALL THE WAY DOWN\n\n\n\n")
+            if (
+                
+                payload.view.previous_view_id === null && payload.view.callback_id !== 'homepage_menu'
+            ) {
+                console.log('Do I make it here')
+            console.log("previous_view_id was null and NOT homepage_menu")
+                const update = await updateHomeModal(
+                    payload.view.id,
+                    passTheUser,
+                    allWorkouts,
+                    wod[0],
+                    publicChannels
+                )
+
+                webAPI.views.update(update)
+                return
+
+            }  else if(payload.view.previous_view_id === null && payload.view.callback_id === 'homepage_menu'){
+                console.log("previous_view_id was null and it WAS homepage_menu");
+                const updateHome = await homepage(
+                    passTheUser,
+                    allWorkouts,
+                    wod[0],
+                    publicChannels
+                )
+                webAPI.views.publish(updateHome)
+                return
+            }
+            else if(home_or_slash === 'slash'){
+const update = await updateHomeModal(
+                    homeModal_view_id,
+                    passTheUser,
+                    allWorkouts,
+                    wod[0],
+                    publicChannels
+                )
+            }else {
+                console.log('\n\n\nDo I make it to the else?\n\n\n\n')
+                const updateHome = await homepage(
+                    passTheUser,
+                    allWorkouts,
+                    wod[0],
+                    publicChannels
+                )
+                webAPI.views.publish(updateHome)
+                return
+            }
+
+            //
+
+            // const userInfo = await webAPI.users.info({ user: user_id })
+            // const passUser = userInfo.user
+            // const channel = payload.actions[0].selected_option.value
+            // const user = await User.updateOne(
+            //     { user_id },
+            //     { $set: { channel_to_post: channel } }
+            // )
+
+            // return
         }
 
         //SELECT WORKOUT TYPE  to create a workout

@@ -4,6 +4,7 @@ const helpModal = (trigger_id, passUser) => {
     console.log({trigger_id})
     const help = {
         "trigger_id": trigger_id,
+        "response_action": "close",
         "view": {
             "type": "modal",
             "callback_id": "help",

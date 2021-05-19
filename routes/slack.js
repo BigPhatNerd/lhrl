@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const signVerification = require('../config/middleware/signVerification');
 
 const {
     editWorkout,

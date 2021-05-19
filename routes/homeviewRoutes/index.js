@@ -7,6 +7,7 @@ const homeModal = require('../../controller/homepage/homeModal.js');
 const helpModal = require('../../controller/modals/help');
 const { User, CrossFit, OAuth } = require('../../models');
 const slashSubscribeToProgram = require('../../controller/slashMessageBlocks/subscribeToProgram');
+const signVerification = require('../../config/middleware/signVerification');
 const {
     divider,
     welcome,
@@ -90,7 +91,7 @@ router.post('/cf-wod', async (req, res) => {
     })
 });
 
-router.post('/lhrl', async (req, res) => {
+router.post('/lhrl',signVerification, async (req, res) => {
     try {
 
         const { user_id, api_app_id, trigger_id, response_url } = req.body;
@@ -142,7 +143,7 @@ const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0], publ
 
 });
 
-router.post('/dev_lhrl', async (req, res) => {
+router.post('/dev_lhrl',signVerification, async (req, res) => {
     try {
 
 const { user_id, api_app_id, trigger_id, response_url } = req.body;

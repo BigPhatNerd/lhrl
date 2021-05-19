@@ -42,6 +42,8 @@ This Privacy Policy is effective as of 3/23/2021 and will remain in effect excep
 We reserve the right to update or change our Privacy Policy at any time and you should check this Privacy Policy periodically. Your continued use of the Service after we post any modifications to the Privacy Policy on this page will constitute your acknowledgment of the modifications and your consent to abide and be bound by the modified Privacy Policy.
 
 If we make any material changes to this Privacy Policy, we will notify you either through the email address you have provided us, or by placing a prominent notice on our website.
+<div class="large">Changes To This Privacy Policy</div>
+If you would like to access your personal data that is collected by the app or would like it modified/deleted. Please feel free to reach out anytime to <a style={{fontSize:"1rem"}}href = "mailto: app@liftheavyrunlong.com">app@liftheavyrunlong.com</a>.
 
 <div class="large">Contact Us</div>
 

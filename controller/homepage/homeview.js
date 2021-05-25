@@ -33,11 +33,14 @@ const homepage = (user, allWorkouts, wod, publicChannels) => {
 
         "user_id": user.id,
         "external_id": "whatever",
-        "private_metadata": "something",
+        
 
         view: {
             "type": "home",
             "callback_id": "homepage_menu",
+             "private_metadata": JSON.stringify({
+                "home_or_slash": "home"
+            }),
             "blocks": [{
                     "type": "header",
                     "text": {

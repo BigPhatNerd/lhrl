@@ -1,6 +1,7 @@
 var dayjs = require("dayjs");
 
 const view5KProgram = async (payload, workouts, slashOrHome) => {
+    console.log({slashOrHome})
     const { trigger_id } = payload;
 
     const shortData = workouts.data;

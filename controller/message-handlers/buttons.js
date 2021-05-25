@@ -148,6 +148,8 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
 
             buttonPressed = buttonPressed.replace("daily_program_score", "");
             const workoutSelected = await Program.find({ _id: buttonPressed });
+            console.log("\n\n\nIn buttons.js daily_program_score about to hit payload.")
+            console.log({payload})
             const metadata = JSON.parse(payload.view.private_metadata);
             const { home_or_slash } = metadata;
             console.log("metadata: ", metadata);
@@ -179,7 +181,7 @@ buttons.action({ type: 'button' }, async (payload, respond) => {
                 return
 
             }
-            const sendConfirm = await confirmRemove(payload, 'slash');
+            const sendConfirm = await confirmRemove(payload, 'home');
             webAPI.views.open(sendConfirm);
             return
 

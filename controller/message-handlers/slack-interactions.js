@@ -825,6 +825,7 @@ slackInteractions.viewSubmission('subscribe_to_5k', async (payload, respond) => 
             const update = updateHomeModal(homeModal_view_id, passUser, allWorkouts, wod[0], publicChannels);
             webAPI.views.update(update)
         } else {
+            console.log({payload})
             const updateHome = homepage(passUser, allWorkouts, wod[0], publicChannels)
             webAPI.views.publish(updateHome);
         }
@@ -1032,6 +1033,7 @@ slackInteractions.viewSubmission('view_workouts', async (payload, respond) => {
 // SUBMIT for Selected Program Modal selectedProgram/submitTime.js
 slackInteractions.viewSubmission('selected_program_workouts', async (payload, respond) => {
     try {
+        
        const findToken = await OAuth.findOne({ team_id: payload.team.id });
         const webAPI = web(findToken.access_token);
         const metadata = JSON.parse(payload.view.private_metadata);
@@ -1076,19 +1078,16 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
             const confirm = await webAPI.chat.postMessage({
                     channel: public_private.selected_option.value, "text": `🏃‍♀️ ${passUser.real_name} just finished a program workout 🏃‍♂️` });
         }
-        if(enter_score_slash === "yes") {
-
-
-            
-
-            const wod = await CrossFit.find().limit(1).sort({ date: -1 });
-             const findChannels =  await webAPI.conversations.list();
+                    const wod = await CrossFit.find().limit(1).sort({ date: -1 });
+                    const findChannels =  await webAPI.conversations.list();
                 const publicChannels = findChannels.channels.map(channel =>{
                     if(!channel.is_private){
                         return channel.name
                     }
                 })
                 publicChannels.unshift("Keep Private")
+        if(enter_score_slash === "yes") {
+
             webAPI.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels))
             return
         }
@@ -1100,8 +1099,10 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
             webAPI.views.update(updated)
             return
         }
-        const updated = await updatedProgramWorkouts(payload, payload.view.previous_view_id, workouts, "home");
-        webAPI.views.update(updated)
+        // const updated = await updatedProgramWorkouts(payload, payload.view.previous_view_id, workouts, "home");
+        // webAPI.views.update(updated)
+        webAPI.views.publish(homepage(passUser, allWorkouts, wod[0], publicChannels))
+    return
 
 
 

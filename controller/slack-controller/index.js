@@ -9,7 +9,26 @@ const welcome = require('../modals/welcome');
 const config = { 'Content-Type': 'application/json' };
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
+  //TESTING
+            const qs = require('querystring');
+const crypto = require('crypto');
 
+
+const secret = process.env.NODE_ENV === 'production' ? process.env.SLACK_SIGNING_SECRET : process.env.DEV_SLACK_SIGNING_SECRET;
+const verifySignature = function(req) {
+    const signature = req.headers['x-slack-signature'];
+    const timestamp = req.headers['x-slack-request-timestamp'];
+    const hmac = crypto.createHmac('sha256', secret );
+    const [version, hash] = signature.split('=');
+    hmac.update(`${version}:${timestamp}:${req.rawBody}`);
+
+const left = hmac.digest('hex');
+const right = hash;
+
+    return left === right
+}
+
+// END TESTING
 const slackController = {
     async editWorkout({ body, params }, res) {
         try {
@@ -70,16 +89,20 @@ const slackController = {
 
     },
     async publishHomepage(req, res) {
+
         try {
 
             //I think I just comment this out since the url has already been registered?
             // res.send(req.body)
           
+if(verifySignature(req)){
+console.log("\n\nSignature verified\n\n");          
             var { user } = req.body.event;
           res.send(200);
          
              const findToken = await OAuth.findOne({ team_id: req.body.team_id });
 console.log({findToken})
+
              //WHEN GETTING invalid_auth do the script below
             // const findToken = await OAuth.findOneAndUpdate({ team_id: 'T012RRU3P3R' }, {
             //                 $set: {
@@ -222,6 +245,10 @@ const confirm = await webAPI.chat.postEphemeral({
 
             webAPI.views.publish(showHomepage)
             return
+        }  else {
+            console.log("could not verify in publishHomepage slack-controller");
+            res.status(500).send('Could not verify')
+        }
         } catch (err) {
 
             console.error(err.message);

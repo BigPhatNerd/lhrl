@@ -28,35 +28,29 @@ const static_select = require('./controller/message-handlers/static_select.js');
 const buttons = require('./controller/message-handlers/buttons.js');
 
 //ALL THIS SLACK EVENTS
-const { createEventAdapter } = require('@slack/events-api');
 
-const slackSigningSecret =
-    process.env.NODE_ENV === 'production'
-        ? process.env.SLACK_SIGNING_SECRET
-        : process.env.DEV_SLACK_SIGNING_SECRET
-const slackEvents = createEventAdapter(slackSigningSecret);
 
-const signVerification = require('./config/middleware/signVerification')
+const newVerification = require('./config/middleware/newVerification');
 
 mongoose.set('debug', true);
-
-app.use('/slack/actions', [slackInteractions.middleware, moreSlackInteractions.middleware, static_select.middleware, buttons.middleware]);
-// app.use('/slack/events', slackEvents.expressMiddleware());
-// app.use('/slack/events', signVerification)
-app.use('/slack/events', slackEvents.requestListener());
 
 
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
 console.log("urlString: ", urlString);
 var MongoStore = require("connect-mongo")(session);
-
+const rawBodySaver = function(req, res, buf, encoding) {
+    if(buf && buf.length) {
+        req.rawBody = buf.toString(encoding || 'utf8')
+    }
+}
 const cookieParser = require("cookie-parser");
 app.use(express.static("public"));
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
+app.use(express.urlencoded({ verify: rawBodySaver,extended: true }));
+app.use(express.json({ verify: rawBodySaver }));
+app.use('/slack/events', newVerification);
+app.use('/slack/actions', [newVerification, slackInteractions.middleware, moreSlackInteractions.middleware, static_select.middleware, buttons.middleware]);
 
 
 app.use(session({

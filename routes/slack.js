@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const signVerification = require('../config/middleware/signVerification');
-const { createEventAdapter } = require('@slack/events-api');
+
 
 
 
@@ -27,7 +26,7 @@ router.post('/slash-commands/send-me-buttons', (req, res) => {
 })
 
 router.post('/external-data', (req, res) => {
-    res.send("I think someone is typing on my app.")
+    res.status(500).send('Not in use');
 });
 
 

@@ -8,8 +8,12 @@ const clientId = process.env.NODE_ENV === "production" ? slack.clientID : slack.
 const clientSecret = process.env.NODE_ENV === "production" ? slack.clientSecret : slack.dev_clientSecret;
 const { OAuth, User } = require('../models');
 
+//oauth/test for redirect
+router.route('/test').get((req, res) =>{
+    console.log({urlString})
+    res.redirect("https://www.lhrlapp.com/successful_install")
 
-
+})
 
 router.route("/")
     .get((req, res) => {
@@ -18,6 +22,7 @@ router.route("/")
             res.status(500);
             res.send({ "Error": "Looks like we're not getting code." });
             console.log("Looks like we are not getting code.");
+            return
         } else {
  
             request({
@@ -29,6 +34,7 @@ router.route("/")
                 console.log("\n\nbody: ", JSON.parse(body));
                 if(error) {
                     console.log(error);
+                    return
                 } else {
                     body = JSON.parse(body);
                     // const createUser = await User.findOneAndUpdate({ user_id: user_id }, { $set: { team_id: team_id, user_name: user_name } }, { upsert: true, new: true });
@@ -72,7 +78,7 @@ router.route("/")
                       
 
                     }
-                    res.json({ msg: "Successfully installed LHRL® App" });
+                   res.redirect("https://www.lhrlapp.com/successful_install")
                 }
             })
         }

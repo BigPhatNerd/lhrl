@@ -11,6 +11,7 @@ import Privacy from './components/pages/Privacy';
 import Support from './components/pages/Support';
 import EmailUs from './components/pages/EmailUs';
 import TermsOfService from './components/pages/TermsOfService';
+import SuccessfulInstall from './components/pages/SuccessfulInstall';
 
 
 
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/auth" component={Authed} />
                 <Route path="/contact" component={EmailUs} />
                 <Route path="/terms_of_service" component={TermsOfService} />
+                <Route path="/successful_install" component={SuccessfulInstall} />
 
             </Switch>
            

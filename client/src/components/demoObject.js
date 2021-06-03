@@ -8,7 +8,7 @@ const demoObject =[
 {
 	img: home,
 	title: `LHRL® App Home Page`,
-	text: [`• LHRL® App allows you to connect your Strava accounts, create workouts, sign up for various distance programs, and set weekly goals.`, `• Use the "Home tab" of the App or simply enter /lhrl to bring up app modal`, `• All of your info stored in one place and delivered straight to your slack workspace.`, `• Each morning there will be a new CrossFit style WOD loaded into the app which you can track your score.`, `• Choose to follow any one of a few distance running plans.`, `• Keep motivated by involving your friends and co-workers`],
+	text: [`• LHRL® App allows you to connect your Strava accounts, create workouts, sign up for various distance programs, and set weekly goals.`, `• Use the "Home tab" of the App or simply enter /lhrl to bring up app modal`, `• All of your info stored in one place and delivered straight to your Slack workspace.`, `• Each morning there will be a new CrossFit style WOD loaded into the app which you can track your score.`, `• Choose to follow any one of a few distance running plans.`, `• Keep motivated by involving your friends and co-workers`],
 	alt: `Pic of App homepage`
 },
 {

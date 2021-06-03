@@ -9,11 +9,7 @@ const clientSecret = process.env.NODE_ENV === "production" ? slack.clientSecret 
 const { OAuth, User } = require('../models');
 
 //oauth/test for redirect
-router.route('/test').get((req, res) =>{
-    console.log({urlString})
-    res.redirect("https://www.lhrlapp.com/successful_install")
 
-})
 
 router.route("/")
     .get((req, res) => {

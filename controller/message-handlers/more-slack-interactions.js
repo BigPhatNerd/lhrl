@@ -2,7 +2,7 @@ const moreSlackInteractions = require('./../../config/slack-interactions.js');
 const web = require('../../config/slack-web-api.js');
 const homepage = require('../homepage/homeview.js');
 const { User, Workout, Program, FinishedWorkout, CrossFit, OAuth } = require('../../models/');
-const { createGoalsMessage, intValidation } = require('./helpers');
+const { createGoalsMessage, intValidation, postString } = require('./helpers');
 const { slack, sugarwod, url } = require('../../lib/keys');
 const sendGraphView = require('./helpers/sendGraphView');
 const updateHomeModal = require('../homepage/updateHomeModal');
@@ -659,23 +659,11 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const channel = allWorkouts.data[0].channel_to_post;
 if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
 
-    const postString = (data) => {
-      var string = `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋\n`;
-      for (const [key, value] of Object.entries(data)) {
-        if (key === "description") {
-          string += `*${key}:*\n ${value}\n\n`;
-        } else {
-          string += `*${key}:* ${value}\n\n`;
-        }
-      }
-      return string;
-    };
+   
+     var text = `🏋️‍♀️ ${passUser.real_name} just finished a workout 🏋\n`;
+     const confirm = webAPI.chat.postMessage(postString(channel, text, data));
     
-           const confirm = await webAPI.chat.postMessage({
-                    channel: channel,
-                    text: postString(data),
-                }
-            )
+           
         }
      
 

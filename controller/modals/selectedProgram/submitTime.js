@@ -18,7 +18,11 @@ const metadata = JSON.parse(payload.view.private_metadata);
                 "private_metadata": JSON.stringify({
                     "id": _id,
                     "home_or_slash": slashOrHome,
-
+                    "name": name,
+                    "week": week,
+                    "day": day,
+                    "type": type,
+                    "description": description,
                     "enter_score_slash": enter_score_slash,
                     "score_type": type,
                     "selected_program_paginate": String(selected_program_paginate)

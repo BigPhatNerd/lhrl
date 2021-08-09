@@ -25,6 +25,36 @@ module.exports = {
                 }
             })
         }
-    }
+    },
+    postString: (channel, text, data) => {
+//   var string = `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋\n`;
+  var string = ''
+  string += text;
+  for (const [key, value] of Object.entries(data)) {
+	   if (key === "description") {
+        string += `*${key.toUpperCase()}:*\n ${value}\n\n`;
+     } else {
+		  string += `*${key.toUpperCase()}:* ${value}\n`;
+	 }
+   
+  }
+  
+
+ return {	
+	 channel: channel,
+	text: text,
+	blocks: [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": string
+				
+			}
+		}
+	]
+}
+}
+
 
 }

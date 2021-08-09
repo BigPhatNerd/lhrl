@@ -11,6 +11,7 @@ const {
   CrossFit,
   OAuth,
 } = require("../../models/");
+const {  postString } = require("./helpers");
 const editWorkoutResponse = require("../responses/successful-edit");
 const updatedWorkouts = require("../modals/createWorkout/updatedWorkouts.js");
 const updatedCompletedWorkouts = require("../modals/completedWorkouts/updatedCompletedWorkouts");
@@ -355,21 +356,9 @@ slackInteractions.viewSubmission(
         channel !== "" &&
         channel !== "Keep Private"
       ) {
-          const postString = (data) => {
-            var string = `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋\n`;
-            for (const [key, value] of Object.entries(data)) {
-              if (key === "description") {
-                string += `*${key}:*\n ${value}\n\n`;
-              } else {
-                string += `*${key}:* ${value}\n\n`;
-              }
-            }
-            return string;
-          };
-        const confirm = webAPI.chat.postMessage({
-          channel: channel,
-          text: postString(data),
-        });
+          
+          var text = `🏋️‍♀️ ${passUser.real_name} just finished a workout 🏋\n`;
+        const confirm = webAPI.chat.postMessage(postString(channel, text, data))
       }
 
       if (home_or_slash === "slash") {
@@ -760,21 +749,10 @@ slackInteractions.viewSubmission(
         channel !== "" &&
         channel !== "Keep Private"
       ) {
-          const postString = (data) => {
-            var string = `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋\n`;
-           for (const [key, value] of Object.entries(data)) {
-             if (key === "description") {
-               string += `*${key}:*\n ${value}\n\n`;
-             } else {
-               string += `*${key}:* ${value}\n\n`;
-             }
-           }
-            return string;
-          };
-        const confirm = webAPI.chat.postMessage({
-          channel: channel,
-          text: postString(data),
-        });
+         var text = `🏋️‍♀️ ${passUser.real_name} just finished a workout 🏋\n`;
+         const confirm = webAPI.chat.postMessage(
+           postString(channel, text, data)
+         );
       }
 
       if (home_or_slash === "slash") {
@@ -1024,7 +1002,6 @@ slackInteractions.viewSubmission(
         channel !== "" &&
         channel !== "Keep Private"
       ) {
-          
         const confirm = await webAPI.chat.postMessage({
           channel: channel,
           text: `🏃‍♀️ ${passUser.real_name} just signed up for the 5k program 🏃‍♂️`,
@@ -1311,11 +1288,15 @@ slackInteractions.viewSubmission(
       const metadata = JSON.parse(payload.view.private_metadata);
       console.log("metadata: ", metadata);
       var { minutes, seconds, miles, notes } = payload.view.state.values;
+      console.log("payload.view.state.value: ", payload.view.state.values);
       const {
         id,
+        name, 
+        description,
         home_or_slash,
         homeModal_view_id,
         enter_score_slash,
+        type,
         score_type,
       } = metadata;
       //id is workoutId
@@ -1361,21 +1342,16 @@ slackInteractions.viewSubmission(
         channel !== "" &&
         channel !== "Keep Private"
       ) {
-          const postString = (data) => {
-            var string = `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋\n`;
-           for (const [key, value] of Object.entries(data)) {
-             if (key === "description") {
-               string += `*${key}:*\n ${value}\n\n`;
-             } else {
-               string += `*${key}:* ${value}\n\n`;
-             }
-           }
-            return string;
-          };
-        const confirm = await webAPI.chat.postMessage({
-          channel: public_private.selected_option.value,
-          text: postString(data),
-        });
+        const allData = {
+          name, 
+          type,
+          description,
+          ...data
+        }
+          var text = `🏋️‍♀️ ${passUser.real_name} just finished a program workout 🏋\n`;
+          const confirm = webAPI.chat.postMessage(
+            postString(channel, text, allData)
+          );
       }
       const wod = await CrossFit.find().limit(1).sort({ date: -1 });
       const findChannels = await webAPI.conversations.list();

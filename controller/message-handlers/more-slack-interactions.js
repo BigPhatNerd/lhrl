@@ -658,9 +658,22 @@ moreSlackInteractions.viewSubmission("cf_daily", async (payload, respond) => {
         const radioButton = payload.view.state.values.radio['radio_buttons-action'].selected_option.value;
         const channel = allWorkouts.data[0].channel_to_post;
 if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
+
+    const postString = (data) => {
+      var string = `🏋️‍♀️ ${passUser.real_name} just finished a new workout 🏋\n`;
+      for (const [key, value] of Object.entries(data)) {
+        if (key === "description") {
+          string += `*${key}:*\n ${value}\n\n`;
+        } else {
+          string += `*${key}:* ${value}\n\n`;
+        }
+      }
+      return string;
+    };
+    
            const confirm = await webAPI.chat.postMessage({
                     channel: channel,
-                    text: `🏋️‍♀️ ${passUser.real_name} just finished a CrossFit workout 🏋`,
+                    text: postString(data),
                 }
             )
         }

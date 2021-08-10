@@ -41,14 +41,14 @@ const calendarReps = (payload, workout, slashOrHome) => {
                     "block_id": "radio",
                     "element": {
                         "type": "radio_buttons",
-                        "initial_option": {
-                            "text": {
-                                "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                            },
-                            "value": "private"
+                         "initial_option": {
+                       "text": {
+                            "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                         },
+                        "value": "public"
+                    },
                         "options": [{
                                 "text": {
                                     "type": "plain_text",

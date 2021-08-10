@@ -77,7 +77,7 @@ static_select.action({ type: 'static_select' }, async (payload, respond) => {
             })
             
             publicChannels.unshift('Keep Private');
-            console.log("\n\n\n\nALL THE WAY DOWN\n\n\n\n")
+            
             if (
                 
                 payload.view.previous_view_id === null && payload.view.callback_id !== 'homepage_menu'

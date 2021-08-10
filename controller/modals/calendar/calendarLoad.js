@@ -42,13 +42,13 @@ const calendarLoad = (payload, workout, slashOrHome) => {
                     "element": {
                         "type": "radio_buttons",
                         "initial_option": {
-                            "text": {
-                                  "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
-                            },
-                            "value": "private"
+                       "text": {
+                            "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                         },
+                        "value": "public"
+                    },
                         "options": [{
                                 "text": {
                                     "type": "plain_text",

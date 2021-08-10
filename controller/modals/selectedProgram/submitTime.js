@@ -51,13 +51,13 @@ const metadata = JSON.parse(payload.view.private_metadata);
             "element": {
                 "type": "radio_buttons",
                 "initial_option": {
-                    "text": {
-                             "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
+                       "text": {
+                            "type": "plain_text",
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                         },
-                        "value": "private"
-                },
+                        "value": "public"
+                    },
                 "options": [
                     {
                         "text": {

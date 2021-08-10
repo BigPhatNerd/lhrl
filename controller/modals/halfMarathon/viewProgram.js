@@ -41,14 +41,14 @@ array.push({
             "block_id": "radio",
             "element": {
                 "type": "radio_buttons",
-                "initial_option": {
-                    "text": {
+                 "initial_option": {
+                       "text": {
                             "type": "plain_text",
-                            "text": "Keep this private. 🤫",
-                            "emoji": true
+                            "text": "Share with channel 🔊",
+                            "emoji":true
                         },
-                        "value": "private"
-                },
+                        "value": "public"
+                    },
                 "options": [
                     {
                         "text": {

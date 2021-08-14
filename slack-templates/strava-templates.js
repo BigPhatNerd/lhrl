@@ -1,4 +1,7 @@
 var dayjs = require("dayjs");
+console.log(
+  dayjs(new Date("Sat, 14 Aug 2021 13:37:32 GMT")).format("dddd MMMM D YYYY")
+);
 const {
   activityType,
   getMiles,
@@ -21,6 +24,9 @@ const slackTemplates = {
       start_date,
     } = response;
     array = [];
+    console.log("\n\n\nHERE IS THE DATE:")
+    console.log({start_date});
+    console.log(dayjs(start_date).format("dddd MMMM D YYYY"));
 
     const blockData = (
       start_date,

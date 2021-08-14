@@ -21,16 +21,17 @@ const slackTemplates = {
       average_speed,
       max_speed,
       map,
-      start_date,
+      start_date
     } = response;
     array = [];
     console.log("\n\n\nHERE IS THE DATE:")
     console.log({start_date});
     console.log(dayjs(start_date).format("dddd MMMM D YYYY"));
+    console.log({username})
     const date = dayjs(start_date).format("dddd MMMM D YYYY");
 
     const blockData = (
-      start_date,
+      date,
       username,
       distance,
       elapsed_time,
@@ -82,6 +83,7 @@ const slackTemplates = {
       channel: channel,
       text: username + " just entered a workout on Strava. ",
       blocks: blockData(
+        date,
         username,
         distance,
         elapsed_time,

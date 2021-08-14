@@ -27,6 +27,7 @@ const slackTemplates = {
     console.log("\n\n\nHERE IS THE DATE:")
     console.log({start_date});
     console.log(dayjs(start_date).format("dddd MMMM D YYYY"));
+    const date = dayjs(start_date).format("dddd MMMM D YYYY");
 
     const blockData = (
       start_date,
@@ -47,7 +48,7 @@ const slackTemplates = {
               username +
               "\n" +
               "Date: " +
-              dayjs(start_date).format("dddd MMMM D YYYY") +
+              date +
               "\n" +
               "Type of Exercise: " +
               activityType(type) +

@@ -84,7 +84,7 @@ router.put('/deauth/:stravaId', async (req, res) => {
 router.post('/webhook', async (req, res) => {
     try {
         const { aspect_type, object_id, owner_id, object_type } = req.body
-        if (aspect_type === 'delete') {
+        if (aspect_type === 'delete' || aspect_type === 'update') {
             console.log(`${owner_id} deleted an activity`)
             return
         }

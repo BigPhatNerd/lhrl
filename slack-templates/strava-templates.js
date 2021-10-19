@@ -24,10 +24,7 @@ const slackTemplates = {
       start_date
     } = response;
     array = [];
-    console.log("\n\n\nHERE IS THE DATE:")
-    console.log({start_date});
-    console.log(dayjs(start_date).format("dddd MMMM D YYYY"));
-    console.log({username})
+  
     const date = dayjs(start_date).format("dddd MMMM D YYYY");
 
     const blockData = (

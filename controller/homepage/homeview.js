@@ -91,6 +91,7 @@ console.log("ITS ALL IN THE HOMEPAGE")
         }
     }
 
+    console.log("WHY ALL THE BLOCK ERRORS", view)
     return view
 }
 module.exports = homepage

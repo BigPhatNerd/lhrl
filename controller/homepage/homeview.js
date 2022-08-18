@@ -24,10 +24,9 @@ const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
 const homepage = (user, allWorkouts, wod, publicChannels) => {
 
-console.log({user, allWorkouts, wod, publicChannels})
+console.log({userTeamID: user.team_id,  publicChannels})
 console.log("ITS ALL IN THE HOMEPAGE")
     //user and userProgram is set in controller/slack-controller publishHomepage
-
 
 
     const view = {
@@ -56,7 +55,7 @@ console.log("ITS ALL IN THE HOMEPAGE")
                     "alt_text": "logo"
                 },
 header("Welcome " + user.real_name),
-   chooseChannelToPost(publicChannels, allWorkouts),
+//    chooseChannelToPost(publicChannels, allWorkouts),
    
                 authorizePrograms(allWorkouts),
                 divider(),
@@ -92,7 +91,7 @@ header("Welcome " + user.real_name),
             ]
         }
     }
-    console.log("What is up with this view?", view);
+
     return view
 }
 module.exports = homepage

@@ -32,12 +32,13 @@ const buttons = require('./controller/message-handlers/buttons.js');
 
 const newVerification = require('./config/middleware/newVerification');
 
-mongoose.set('debug', true);
+// mongoose will log all of our database queries to the console
+// mongoose.set('debug', true);
 
 
 
 const urlString = process.env.NODE_ENV === "production" ? url.production : url.development
-console.log("urlString: ", urlString);
+
 var MongoStore = require("connect-mongo")(session);
 const rawBodySaver = function(req, res, buf, encoding) {
     if(buf && buf.length) {

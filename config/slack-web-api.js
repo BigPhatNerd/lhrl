@@ -10,6 +10,7 @@ const web = (token) => {
             logLevel: LogLevel.DEBUG,
             retries: 0
         });
+        
     return getToken
 }
 

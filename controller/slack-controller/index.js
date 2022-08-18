@@ -107,7 +107,6 @@ const slackController = {
         res.send(200);
 
         const findToken = await OAuth.findOne({ team_id: req.body.team_id });
-        console.log({ findToken });
 
         //WHEN GETTING invalid_auth do the script below
         // const findToken = await OAuth.findOneAndUpdate({ team_id: 'T012RRU3P3R' }, {
@@ -171,7 +170,6 @@ const slackController = {
           process.env.NODE_ENV === "production"
             ? findToken.webhook
             : slack.dev_lhrl_Webhook;
-console.log({isThereAView: req.body.event.view})
         if (!req.body.event.view) {
           const confirm = await webAPI.chat.postEphemeral({
             channel: findToken.webhook_channel_id,
@@ -258,7 +256,6 @@ console.log({isThereAView: req.body.event.view})
             ],
           });
         }
-console.log("ABOUT TO HIT DIS");
         webAPI.views.publish(showHomepage);
         return;
       } else {

@@ -69,28 +69,29 @@ header("Welcome " + user.real_name),
                 header("Workout of the Day"),
                 cfWOD(wod),
                 divider(),
-                header("Latest Strava Workout"),
-                stravaWorkout(allWorkouts),
-                divider(),
-                header("Subscribe to Program"),
-                choosePlan(),
-                divider(),
-                currentlySubscribed(allWorkouts),
-                divider(),
-                todaysWorkout(allWorkouts),
-                divider(),
-                removeFromProgram(allWorkouts),
-                divider(),
-                header("Workouts Section"),
-                divider(),
-                createWorkout(),
-                viewOrComplete(),
-                divider(),
-                requiredHelpers()
+                // header("Latest Strava Workout"),
+                // stravaWorkout(allWorkouts),
+                // divider(),
+                // header("Subscribe to Program"),
+                // choosePlan(),
+                // divider(),
+                // currentlySubscribed(allWorkouts),
+                // divider(),
+                // todaysWorkout(allWorkouts),
+                // divider(),
+                // removeFromProgram(allWorkouts),
+                // divider(),
+                // header("Workouts Section"),
+                // divider(),
+                // createWorkout(),
+                // viewOrComplete(),
+                // divider(),
+                // requiredHelpers()
 
             ]
         }
     }
+    console.log("What is up with this view?", view);
     return view
 }
 module.exports = homepage

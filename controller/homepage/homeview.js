@@ -54,9 +54,8 @@ console.log("ITS ALL IN THE HOMEPAGE")
                     "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
                     "alt_text": "logo"
                 },
-header("Welcome " + user.real_name),
-//    chooseChannelToPost(publicChannels, allWorkouts),
-   
+                header("Welcome " + user.real_name),
+                chooseChannelToPost(publicChannels, allWorkouts),
                 authorizePrograms(allWorkouts),
                 divider(),
                 header("Activity Calendar"),

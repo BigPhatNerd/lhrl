@@ -35,6 +35,8 @@ const oauthSchema = new Schema({
 
 })
 
+oauthSchema.index({ team_id: 1}, { unique: true })
+
 const OAuth = model("OAuth", oauthSchema);
 
 module.exports = OAuth;

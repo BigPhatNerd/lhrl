@@ -41,9 +41,7 @@ const cfFunction = async () => {
             console.log('addCFWod: ', addCFWods);
         }
     } catch (err) {
-
         console.error(err.message);
-
     }
 
 }

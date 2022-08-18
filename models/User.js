@@ -142,6 +142,11 @@ var UserSchema = new Schema({
     id: false
 });
 
+UserSchema.index({user_id: 1}, {unique: true});
+UserSchema.index({stravaId: 1}, {unique: true});
+UserSchema.index({email: 1});
+
+
 // UserSchema.pre('save', async function(next) {
 //     if(this.isNew || this.isModified('password')) {
 //         const saltRounds = 10;

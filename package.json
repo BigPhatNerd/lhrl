@@ -9,6 +9,7 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "seed": "node seeders/seed.js",
+    "test": "jest",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
@@ -55,6 +56,7 @@
     "react-bootstrap": "^0.32.4",
     "request": "^2.88.2",
     "slack-block-builder": "^1.9.0",
+    "slack-mock": "^1.1.1",
     "slackbots": "^1.2.0",
     "strava-v3": "^2.0.5",
     "url": "^0.11.0",

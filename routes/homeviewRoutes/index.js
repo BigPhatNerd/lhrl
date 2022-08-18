@@ -128,7 +128,7 @@ router.post('/lhrl',newVerification, async (req, res) => {
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+               
 const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0], publicChannels)
         webAPI.views.open(homepage);
         return
@@ -184,7 +184,7 @@ if(req.body.text === 'help'){
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+               
 const homepage = await homeModal(trigger_id, passUser, allWorkouts, wod[0], publicChannels)
         webAPI.views.open(homepage)
 return

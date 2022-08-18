@@ -73,7 +73,7 @@ slackInteractions.viewSubmission("create_workout", async (payload, respond) => {
         return channel.name;
       }
     });
-    publicChannels.unshift("Keep Private");
+    
     if (home_or_slash === "slash") {
       const updatedWorkouts = await updateHomeModal(
         homeModal_view_id,
@@ -397,7 +397,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
       const showHome = await homepage(
         passUser,
         allWorkouts,
@@ -780,7 +780,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
 
       const wod = await CrossFit.find().limit(1).sort({ date: -1 });
       const showHome = await homepage(
@@ -973,7 +973,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
       if (home_or_slash === "slash") {
         const update = updateHomeModal(
           homeModal_view_id,
@@ -1045,7 +1045,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
       if (home_or_slash === "slash") {
         const update = await updateHomeModal(
           homeModal_view_id,
@@ -1116,7 +1116,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
       if (home_or_slash === "slash") {
         const update = await updateHomeModal(
           homeModal_view_id,
@@ -1187,7 +1187,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
       if (home_or_slash === "slash") {
         const update = await updateHomeModal(
           homeModal_view_id,
@@ -1250,7 +1250,7 @@ slackInteractions.viewSubmission("view_workouts", async (payload, respond) => {
         return channel.name;
       }
     });
-    publicChannels.unshift("Keep Private");
+    
     if (home_or_slash === "slash") {
       const update = await updateHomeModal(
         homeModal_view_id,
@@ -1360,7 +1360,7 @@ slackInteractions.viewSubmission(
           return channel.name;
         }
       });
-      publicChannels.unshift("Keep Private");
+      
       if (enter_score_slash === "yes") {
         webAPI.views.update(
           updateHomeModal(

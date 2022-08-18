@@ -76,14 +76,11 @@ static_select.action({ type: 'static_select' }, async (payload, respond) => {
                 }
             })
             
-            publicChannels.unshift('Keep Private');
-            
             if (
                 
                 payload.view.previous_view_id === null && payload.view.callback_id !== 'homepage_menu'
             ) {
-                console.log('Do I make it here')
-            console.log("previous_view_id was null and NOT homepage_menu")
+
                 const update = await updateHomeModal(
                     payload.view.id,
                     passTheUser,

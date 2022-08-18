@@ -24,8 +24,6 @@ const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
 const homepage = (user, allWorkouts, wod, publicChannels) => {
 
-console.log({userTeamID: user.team_id,  publicChannels})
-console.log("ITS ALL IN THE HOMEPAGE")
     //user and userProgram is set in controller/slack-controller publishHomepage
 
 

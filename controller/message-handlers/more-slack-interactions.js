@@ -47,7 +47,7 @@ moreSlackInteractions.viewSubmission('confirm_remove', async (payload, respond) 
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
     if(home_or_slash === 'slash') {
         const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels)
         webAPI.views.update(update);
@@ -72,7 +72,7 @@ moreSlackInteractions.viewSubmission('selected_program_workouts_index', async (p
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
     if(home_or_slash === "slash") {
         webAPI.views.update(updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels))
         return
@@ -238,7 +238,7 @@ moreSlackInteractions.viewSubmission('add_reps_to_goals', async (payload, respon
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
         if(home_or_slash === "slash") {
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels);
@@ -357,7 +357,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
         if(home_or_slash === "slash") {
 
 
@@ -472,7 +472,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
         if(home_or_slash === "slash") {
 
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels)
@@ -675,7 +675,7 @@ if(radioButton === "public" && channel !== '' && channel !== 'Keep Private') {
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
         if(home_or_slash === "slash") {
             const update = await updateHomeModal(payload.view.root_view_id, passUser, allWorkouts, wod[0], publicChannels)
             webAPI.views.update(update)
@@ -754,7 +754,7 @@ const confirm = await axios.post(webhook,{
                         return channel.name
                     }
                 })
-                publicChannels.unshift("Keep Private")
+                
         if(home_or_slash === "slash") {
 
 

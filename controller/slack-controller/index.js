@@ -158,7 +158,7 @@ const slackController = {
             return channel.name;
           }
         });
-        publicChannels.unshift("Keep Private");
+        
         const showHomepage = await homepage(
           passUser,
           allWorkouts,

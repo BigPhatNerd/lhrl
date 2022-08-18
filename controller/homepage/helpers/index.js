@@ -40,8 +40,14 @@ module.exports = {
             } else {
                 return `(currently set to #${selectedChannel})`
             }
-        }
-        const channelOptions = publicChannels.map(channel => {
+        }    
+          const reversedPublicChannels = publicChannels.reverse().slice(0, 80)
+           
+          reversedPublicChannels.unshift('Keep Private')
+           console.log({reversedPublicChannels})
+      
+        
+        const channelOptions = reversedPublicChannels.map(channel => {
             return {
                 text: {
                     type: 'plain_text',
@@ -51,6 +57,7 @@ module.exports = {
                 value: channel,
             }
         })
+  
         const staticSelect = {
             type: 'section',
             block_id: 'type',

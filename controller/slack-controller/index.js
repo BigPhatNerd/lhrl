@@ -173,7 +173,8 @@ const slackController = {
             : slack.dev_lhrl_Webhook;
 
         if (!req.body.event.view) {
-          const confirm = await webAPI.chat.postEphemeral({
+          // const confirm = await webAPI.chat.postEphemeral({
+           return await webAPI.chat.postEphemeral({
             channel: findToken.webhook_channel_id,
             user: req.body.event.user,
 

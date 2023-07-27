@@ -61,7 +61,7 @@
     "puppeteer": "^5.5.0",
     "qs": "^6.10.1",
     "react-bootstrap": "^0.32.4",
-    "react-scripts": "5.0.0",
+    "react-scripts": "3.0.1",
     "request": "^2.88.2",
     "slack-block-builder": "^1.9.0",
     "slack-mock": "^1.1.1",

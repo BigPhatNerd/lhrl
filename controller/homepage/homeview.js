@@ -14,7 +14,7 @@ const {
     divider,
     requiredHelpers,
     chooseChannelToPost,
-    
+
 
 
 
@@ -24,74 +24,73 @@ const saveAndCreateCFWods = require('./helpers/saveAndCreateCFWods');
 
 const homepage = (user, allWorkouts, wod, publicChannels) => {
 
-console.log({userTeamID: user.team_id,  publicChannels})
-console.log("ITS ALL IN THE HOMEPAGE")
+
     //user and userProgram is set in controller/slack-controller publishHomepage
+
 
 
     const view = {
 
         "user_id": user.id,
         "external_id": "whatever",
-        
+
 
         view: {
             "type": "home",
             "callback_id": "homepage_menu",
-             "private_metadata": JSON.stringify({
+            "private_metadata": JSON.stringify({
                 "home_or_slash": "home"
             }),
             "blocks": [{
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Lift Heavy Run Long®",
-                        "emoji": true
-                    }
-                },
-                {
-                    "type": "image",
-                    "image_url": "https://ibb.co/mJWBt2S",
-                    "alt_text": "logo"
-                },
-                header("Welcome " + user.real_name),
-                chooseChannelToPost(publicChannels, allWorkouts),
-                authorizePrograms(allWorkouts),
-                divider(),
-                header("Activity Calendar"),
-                calendar(allWorkouts),
-                divider(),
-                header("Here is your goal summary for this week"),
-                weeklyGoals(allWorkouts),
-                enterGoalReps(allWorkouts),
-                divider(),
-                header("Workout of the Day"),
-                cfWOD(wod),
-                divider(),
-                header("Latest Strava Workout"),
-                stravaWorkout(allWorkouts),
-                divider(),
-                header("Subscribe to Program"),
-                choosePlan(),
-                divider(),
-                currentlySubscribed(allWorkouts),
-                divider(),
-                todaysWorkout(allWorkouts),
-                divider(),
-                removeFromProgram(allWorkouts),
-                divider(),
-                header("Workouts Section"),
-                divider(),
-                createWorkout(),
-                viewOrComplete(),
-                divider(),
-                requiredHelpers()
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Lift Heavy Run Long®",
+                    "emoji": true
+                }
+            },
+            {
+                "type": "image",
+                "image_url": "https://ibb.co/mJWBt2S",
+                "alt_text": "logo"
+            },
+            header("Welcome " + user.real_name),
+            chooseChannelToPost(publicChannels, allWorkouts),
+
+            authorizePrograms(allWorkouts),
+            divider(),
+            header("Activity Calendar"),
+            calendar(allWorkouts),
+            divider(),
+            header("Here is your goal summary for this week"),
+            weeklyGoals(allWorkouts),
+            enterGoalReps(allWorkouts),
+            divider(),
+            header("Workout of the Day"),
+            cfWOD(wod),
+            divider(),
+            header("Latest Strava Workout"),
+            stravaWorkout(allWorkouts),
+            divider(),
+            header("Subscribe to Program"),
+            choosePlan(),
+            divider(),
+            currentlySubscribed(allWorkouts),
+            divider(),
+            todaysWorkout(allWorkouts),
+            divider(),
+            removeFromProgram(allWorkouts),
+            divider(),
+            header("Workouts Section"),
+            divider(),
+            createWorkout(),
+            viewOrComplete(),
+            divider(),
+            requiredHelpers()
 
             ]
         }
     }
-
-    console.log("WHY ALL THE BLOCK ERRORS", view)
     return view
 }
 module.exports = homepage

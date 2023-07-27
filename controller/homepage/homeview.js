@@ -51,7 +51,7 @@ console.log("ITS ALL IN THE HOMEPAGE")
                 },
                 {
                     "type": "image",
-                    "image_url": "https://www.liftheavyrunlong.com/wp-content/uploads/2020/05/icon-e1590360608988.png",
+                    "image_url": "https://ibb.co/mJWBt2S",
                     "alt_text": "logo"
                 },
                 header("Welcome " + user.real_name),

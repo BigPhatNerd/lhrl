@@ -51,7 +51,7 @@ const homepage = (user, allWorkouts, wod, publicChannels) => {
             },
             {
                 "type": "image",
-                "image_url": "https://ibb.co/mJWBt2S",
+                "image_url": "https://ibb.co/5kR53Cs",
                 "alt_text": "logo"
             },
             header("Welcome " + user.real_name),

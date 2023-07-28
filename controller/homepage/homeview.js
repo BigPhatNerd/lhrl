@@ -49,7 +49,7 @@ const homepage = (user, allWorkouts, wod, publicChannels) => {
                 },
                 {
                     "type": "image",
-                    "image_url": "https://ibb.co/5kR53Cs",
+                    "image_url": "https://i.ibb.co/Sc3KgHV/red-lhrl.png",
                     "alt_text": "logo"
                 },
                 header("Welcome " + user.real_name),
